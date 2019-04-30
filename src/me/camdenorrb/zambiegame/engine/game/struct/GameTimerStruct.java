@@ -3,13 +3,22 @@ package me.camdenorrb.zambiegame.engine.game.struct;
 import me.camdenorrb.zambiegame.engine.game.base.GameTimerBase;
 
 
+/**
+ * A strict setup for game timers
+ */
 public abstract class GameTimerStruct implements GameTimerBase {
 
 	private boolean isRunning;
 
 
+	/**
+	 * Handles start
+	 */
 	protected abstract void onStart();
 
+	/**
+	 * Handles stop
+	 */
 	protected abstract void onStop();
 
 

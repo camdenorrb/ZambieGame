@@ -11,6 +11,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 
+/**
+ * A zambie game implementation
+ */
 public class ZambieGame extends GameStruct {
 
 	private final Set<EntityBase> entities = new HashSet<>();
@@ -35,7 +38,7 @@ public class ZambieGame extends GameStruct {
 
 		spawnEntity(new Huemin(this, new Pos<>(0f, 0f)));
 
-		/*
+
 		for (float i = 0; i <= 100; i += 10) {
 			spawnEntity(new Huemin(this, new Pos<>(i, i)));
 		}
@@ -46,7 +49,7 @@ public class ZambieGame extends GameStruct {
 
 		for (float i = 0; i < 200; i += 10) {
 			spawnEntity(new Huemin(this, new Pos<>(i - 100, 100f)));
-		}*/
+		}
 
 	}
 
@@ -61,11 +64,21 @@ public class ZambieGame extends GameStruct {
 	}
 
 
+	/**
+	 * Gets the GUI
+	 *
+	 * @return The GUI
+	 */
 	public ProcGui getGui() {
 		return gui;
 	}
 
 
+	/**
+	 * Spawns an entity
+	 *
+	 * @param entity The entity to spawn
+	 */
 	public void spawnEntity(EntityBase entity) {
 		entities.add(entity);
 		gui.addElements(entity.getParts());

@@ -9,6 +9,9 @@ import me.camdenorrb.zambiegame.impl.pos.Pos;
 import java.util.List;
 
 
+/**
+ * A Zambie entity that acts as the enemy in the game.
+ */
 public class Zambie implements EntityBase {
 
 	private int health = 20;

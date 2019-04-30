@@ -6,6 +6,9 @@ import me.camdenorrb.zambiegame.utils.TimerUtils;
 import java.util.Timer;
 
 
+/**
+ * Handles the TPS (Ticks Per Second) of the game
+ */
 public class GameTimer extends GameTimerStruct {
 
 	private long tempo;
@@ -31,6 +34,11 @@ public class GameTimer extends GameTimerStruct {
 	}
 
 
+	/**
+	 * Sets the tempo to the new rate
+	 *
+	 * @param tempo The tempo the game should run
+	 */
 	public void setTempo(long tempo) {
 
 		if (isRunning()) {

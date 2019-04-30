@@ -14,6 +14,9 @@ import java.util.HashSet;
 import java.util.Map;
 
 
+/**
+ * Processing implementation of a GUI
+ */
 public class ProcGui extends GuiStruct {
 
 	private String title;
@@ -56,6 +59,9 @@ public class ProcGui extends GuiStruct {
 	}
 
 
+	/**
+	 * The Applet used in the backend of the GUI
+	 */
 	private class Applet extends PApplet {
 
 		@Override
@@ -65,11 +71,16 @@ public class ProcGui extends GuiStruct {
 
 		@Override
 		public void draw() {
-			background(color(255, 0, 0));
+			background(128, 218, 235);
 			new HashSet<>(getElements()).forEach(this::draw);
 		}
 
 
+		/**
+		 * Draws an ambiguous element
+		 *
+		 * @param element The ambiguous element
+		 */
 		void draw(Element element) {
 
 			if (element instanceof Element.Text) {
@@ -129,13 +140,17 @@ public class ProcGui extends GuiStruct {
 			else if (element instanceof Element.Image) {
 
 				final Element.Image image = (Element.Image) element;
+
 				final Pos<Float> position = image.getPosition();
+				final Dimension dimension = image.getDimension();
 
 				final PImage pImage = imageCache.computeIfAbsent(image.getPath(), (path) -> {
 					if (!path.endsWith(".gif")) return loadImage(path);
 					return JavaUtils.apply(new Gif(this, path), Gif::play);
 				});
 
+
+				pImage.resize(dimension.width, dimension.height);
 				image(pImage, position.getX(), position.getY());
 			}
 		}
@@ -143,15 +158,30 @@ public class ProcGui extends GuiStruct {
 	}
 
 
+	/**
+	 * Gets the title of the GUI
+	 *
+	 * @return The title
+	 */
 	public String getTitle() {
 		return title;
 	}
 
+	/**
+	 * Gets the size of the GUI
+	 *
+	 * @return The size
+	 */
 	public Dimension getSize() {
 		return size;
 	}
 
 
+	/**
+	 * Sets the title of the GUI
+	 *
+	 * @param title The new Title
+	 */
 	public void setTitle(String title) {
 		applet.getSurface().setTitle(title);
 		this.title = title;

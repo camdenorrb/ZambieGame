@@ -2,13 +2,23 @@ package me.camdenorrb.zambiegame.engine.net.struct.db;
 
 import me.camdenorrb.zambiegame.engine.net.base.db.DBBase;
 
+
+/**
+ * A strict structure for databases
+ */
 public abstract class DBStruct implements DBBase {
 
     private boolean isConnected = false;
 
 
+    /**
+     * Handles connections
+     */
     protected abstract void onConnect();
 
+    /**
+     * Handles disconnecting
+     */
     protected abstract void onDisconnect();
 
 

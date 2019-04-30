@@ -3,6 +3,9 @@ package me.camdenorrb.zambiegame.engine.physics.struct;
 import me.camdenorrb.zambiegame.engine.physics.base.PhysicsEngineBase;
 
 
+/**
+ * A strict structure for physic engines
+ */
 public abstract class PhysicsEngineStruct implements PhysicsEngineBase {
 
 	/**
@@ -18,39 +21,68 @@ public abstract class PhysicsEngineStruct implements PhysicsEngineBase {
 	/**
 	 * The amount of pixels to equal one meter
 	 */
-	private int pixelPerMeter;
+	private int pixelsPerMeter;
 
 
-	public PhysicsEngineStruct(int fps, double gravity, int pixelPerMeter) {
+	public PhysicsEngineStruct(int fps, double gravity, int pixelsPerMeter) {
 		this.fps = fps;
 		this.gravity = gravity;
-		this.pixelPerMeter = pixelPerMeter;
+		this.pixelsPerMeter = pixelsPerMeter;
 	}
 
 
+	/**
+	 * Gets the FPS for the physics engine
+	 *
+	 * @return The engine's FPS
+	 */
 	public int getFps() {
 		return fps;
 	}
 
+	/**
+	 * Gets the value for gravity in (meters/second)
+	 *
+	 * @return The acceleration of gravity
+	 */
 	public double getGravity() {
 		return gravity;
 	}
 
-	public int getPixelPerMeter() {
-		return pixelPerMeter;
+	/**
+	 * Gets the pixel to meter conversion used in the backend
+	 *
+	 * @return The conversion ratio
+	 */
+	public int getPixelsPerMeter() {
+		return pixelsPerMeter;
 	}
 
-
+	/**
+	 * Sets the FPS for the physics engine
+	 *
+	 * @param fps The new FPS for the engine
+	 */
 	public void setFps(int fps) {
 		this.fps = fps;
 	}
 
+	/**
+	 * Sets the gravity for the physics engine (meters/second)
+	 *
+	 * @param gravity The new gravity for the engine
+	 */
 	public void setGravity(double gravity) {
 		this.gravity = gravity;
 	}
 
-	public void setPixelPerMeter(int pixelPerMeter) {
-		this.pixelPerMeter = pixelPerMeter;
+	/**
+	 * Sets the pixels per meter ratio
+	 *
+	 * @param pixelsPerMeter The new ratio
+	 */
+	public void setPixelsPerMeter(int pixelsPerMeter) {
+		this.pixelsPerMeter = pixelsPerMeter;
 	}
 
 }

@@ -4,13 +4,14 @@ import java.nio.ByteBuffer;
 
 
 /**
- * The base for strategies for sending {@link me.camdenorrb.zambiegame.engine.net.base.packet.PacketBase}
+ * The basics for strategies for sending {@link me.camdenorrb.zambiegame.engine.net.base.packet.PacketBase}
  */
 public interface StrategyBase {
 
 	/**
+	 * Handles the packet
 	 *
-	 * @param packet
+	 * @param packet The packet to handle
 	 */
 	void handle(ByteBuffer packet);
 

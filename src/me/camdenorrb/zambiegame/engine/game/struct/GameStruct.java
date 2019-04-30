@@ -4,6 +4,9 @@ import me.camdenorrb.zambiegame.engine.game.base.GameBase;
 import me.camdenorrb.zambiegame.engine.game.impl.GameTimer;
 
 
+/**
+ * A strict setup for games
+ */
 public abstract class GameStruct implements GameBase {
 
 	protected long tps;
@@ -22,10 +25,19 @@ public abstract class GameStruct implements GameBase {
 	}
 
 
+	/**
+	 * Handles start
+	 */
 	protected abstract void onStart();
 
+	/**
+	 * Handles stop
+	 */
 	protected abstract void onStop();
 
+	/**
+	 * Handles tick
+	 */
 	protected abstract void onTick();
 
 
@@ -52,10 +64,20 @@ public abstract class GameStruct implements GameBase {
 	}
 
 
+	/**
+	 * Tells whether or not it's started
+	 *
+	 * @return If it's started
+	 */
 	public final boolean isStarted() {
 		return isStarted;
 	}
 
+	/**
+	 * The TPS (Ticks Per Second) of the game
+	 *
+	 * @param tps The new tps
+	 */
 	public final void setTps(long tps) {
 		timer.setTempo(MILLIS_IN_SEC / tps);
 		this.tps = tps;

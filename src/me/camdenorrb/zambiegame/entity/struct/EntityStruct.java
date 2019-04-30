@@ -7,6 +7,9 @@ import me.camdenorrb.zambiegame.impl.pos.MutablePos;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
 
 
+/**
+ * The strict structure of the entity
+ */
 public abstract class EntityStruct implements EntityBase {
 
 	private static final int DEFAULT_HEALTH = 20;
@@ -22,8 +25,14 @@ public abstract class EntityStruct implements EntityBase {
 	protected final MutableVelocity velocity = new MutableVelocity(0, 0);
 
 
+	/**
+	 * Handles death of the entity
+	 */
 	protected abstract void onKill();
 
+	/**
+	 * Handles spawn of the entity
+	 */
 	protected abstract void onSpawn();
 
 

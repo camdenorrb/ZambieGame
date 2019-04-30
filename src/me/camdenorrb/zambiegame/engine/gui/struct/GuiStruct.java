@@ -6,6 +6,9 @@ import me.camdenorrb.zambiegame.engine.gui.impl.element.Element;
 import java.util.*;
 
 
+/**
+ * The strict structure for GUI's
+ */
 public abstract class GuiStruct implements GuiBase {
 
 	private boolean isVisible, isInitialized;
@@ -13,14 +16,26 @@ public abstract class GuiStruct implements GuiBase {
 	private final Set<Element> elements = new HashSet<>();
 
 
+	/**
+	 * Handles initialization
+	 */
 	protected void onInit() {}
 
 
+	/**
+	 * Handles the showing of the GUI
+	 */
 	protected abstract void onShow();
 
+	/**
+	 * Handles the hiding of the GUI
+	 */
 	protected abstract void onHide();
 
 
+	/**
+	 * Initiates the GUI
+	 */
 	private void init() {
 
 		if (isInitialized) return;
@@ -54,28 +69,56 @@ public abstract class GuiStruct implements GuiBase {
 		return isVisible;
 	}
 
+	/**
+	 * Tells whether or not the GUI is initialized
+	 *
+	 * @return If the GUI is initialized
+	 */
 	public final boolean isInitialized() {
 		return isInitialized;
 	}
 
-
+	/**
+	 * Retrieves the elements in the GUI
+	 *
+	 * @return The elements of the GUI
+	 */
 	public final Set<Element> getElements() {
 		return Collections.unmodifiableSet(elements);
 	}
 
-
+	/**
+	 * Adds elements to the GUI
+	 *
+	 * @param elements The elements to add to the GUI
+	 */
 	public final void addElements(List<Element> elements) {
 		this.elements.addAll(elements);
 	}
 
+	/**
+	 * Adds elements to the GUI
+	 *
+	 * @param elements The elements to add to the GUI
+	 */
 	public final void addElements(Element... elements) {
 		this.elements.addAll(Arrays.asList(elements));
 	}
 
+	/**
+	 * Removes elements to the GUI
+	 *
+	 * @param elements The elements to remove from the GUI
+	 */
 	public final void remElements(List<Element> elements) {
 		this.elements.removeAll(elements);
 	}
 
+	/**
+	 * Removes elements to the GUI
+	 *
+	 * @param elements The elements to remove from the GUI
+	 */
 	public final void remElements(Element... elements) {
 		this.elements.removeAll(Arrays.asList(elements));
 	}

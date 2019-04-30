@@ -1,5 +1,10 @@
 package me.camdenorrb.zambiegame.impl.pos;
 
+/**
+ * A position implementation
+ *
+ * @param <N> The number type
+ */
 public class Pos<N extends Number> {
 
 	protected N x, y;
@@ -11,15 +16,30 @@ public class Pos<N extends Number> {
 	}
 
 
+	/**
+	 * Gets the 'X' position
+	 *
+	 * @return The 'X' position
+	 */
 	public N getX() {
 		return x;
 	}
 
+	/**
+	 * Gets the 'Y' position
+	 *
+	 * @return The 'Y' position
+	 */
 	public N getY() {
 		return y;
 	}
 
 
+	/**
+	 * Converts to a mutable state
+	 *
+	 * @return The mutable state
+	 */
 	public MutablePos<N> toMutable() {
 		return new MutablePos<>(x, y);
 	}

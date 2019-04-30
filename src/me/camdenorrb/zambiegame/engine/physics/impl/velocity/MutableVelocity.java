@@ -1,5 +1,8 @@
 package me.camdenorrb.zambiegame.engine.physics.impl.velocity;
 
+/**
+ * Velocity in a mutable state
+ */
 public class MutableVelocity extends Velocity {
 
 	public MutableVelocity(double x, double y) {
@@ -7,10 +10,20 @@ public class MutableVelocity extends Velocity {
 	}
 
 
+	/**
+	 * Sets the 'X' velocity
+	 *
+	 * @param x The new 'X' velocity
+	 */
 	public void setX(double x) {
 		this.x = x;
 	}
 
+	/**
+	 * Sets the 'Y' velocity
+	 *
+	 * @param y The new 'Y' velocity
+	 */
 	public void setY(double y) {
 		this.y = y;
 	}

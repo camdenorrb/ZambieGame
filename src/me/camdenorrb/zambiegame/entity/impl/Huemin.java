@@ -7,11 +7,15 @@ import me.camdenorrb.zambiegame.entity.struct.EntityStruct;
 import me.camdenorrb.zambiegame.impl.pos.MutablePos;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
 
+import java.awt.*;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
 
+/**
+ * A Huemin entity that acts as the good guy in the game.
+ */
 public class Huemin extends EntityStruct {
 
 	private static final String LEFT_IMAGE_PATH = "/resources/human/left";
@@ -33,7 +37,7 @@ public class Huemin extends EntityStruct {
 		super(pos);
 		this.game = game;
 		//final InputStream inputStream = getClass().getResource("resources/robotcat.jpeg").openStream();
-		this.body = new Element.Image(pos, new File("/home/camdenorrb/Documents/Programming/Intellij/Games/ZambieGame/src/resources/giphy.gif"));
+		this.body = new Element.Image(pos, new Dimension(10, 10), new File("/home/camdenorrb/Documents/Programming/Intellij/Games/ZambieGame/src/resources/giphy.gif"));
 		//this.body = new Element.Rectangle(Color.BLACK, pos, new Dimension(10, 10));
 	}
 
@@ -67,7 +71,7 @@ public class Huemin extends EntityStruct {
 	public void tick() {
 
 		final MutablePos<Float> pos = body.getPosition();
-		//pos.setX(pos.getX() + 10);
+		pos.setX(pos.getX() + 10);
 
 		if (pos.getX() >= game.getGui().getSize().width) {
 			pos.setX(0f);
