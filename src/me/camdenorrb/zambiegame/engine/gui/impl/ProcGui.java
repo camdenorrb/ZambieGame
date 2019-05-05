@@ -9,8 +9,8 @@ import processing.core.PApplet;
 import processing.core.PImage;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 
@@ -21,18 +21,18 @@ public class ProcGui extends GuiStruct {
 
 	private String title;
 
+	private final Applet applet;
 
 	private final Dimension size;
 
 
-	private final Applet applet = new Applet();
-
 	private final Map<String, PImage> imageCache = new HashMap<>();
 
 
-	public ProcGui(String title, Dimension size) {
-		this.title = title;
+	public ProcGui(String title, float frameRate, Dimension size) {
 		this.size = size;
+		this.title = title;
+		this.applet = new Applet(frameRate);
 	}
 
 
@@ -59,10 +59,26 @@ public class ProcGui extends GuiStruct {
 	}
 
 
+	public void setFrameRate(float frameRate) {
+		applet.setFrameRate(frameRate);
+	}
+
+	public float getFrameRate() {
+		return applet.getFrameRate();
+	}
+
 	/**
 	 * The Applet used in the backend of the GUI
 	 */
 	private class Applet extends PApplet {
+
+		private float frameRate;
+
+
+		public Applet(float frameRate) {
+			this.frameRate = frameRate;
+		}
+
 
 		@Override
 		public void settings() {
@@ -71,9 +87,12 @@ public class ProcGui extends GuiStruct {
 
 		@Override
 		public void draw() {
+			frameRate(frameRate);
 			background(128, 218, 235);
-			new HashSet<>(getElements()).forEach(this::draw);
+			new ArrayList<>(getElements()).forEach(this::draw);
 		}
+
+
 
 
 		/**
@@ -133,6 +152,8 @@ public class ProcGui extends GuiStruct {
 				final Pos<Float> position = rectangle.getPosition();
 				final Dimension dimension = rectangle.getDimension();
 
+				noStroke();
+
 				fill(rectangle.getColor().getRGB());
 				rect(position.getX(), position.getY(), (float) dimension.getWidth(), (float) dimension.getHeight());
 			}
@@ -150,11 +171,22 @@ public class ProcGui extends GuiStruct {
 				});
 
 
-				pImage.resize(dimension.width, dimension.height);
+				if (dimension != null) {
+					pImage.resize(dimension.width, dimension.height);
+				}
+
 				image(pImage, position.getX(), position.getY());
 			}
 		}
 
+		public void setFrameRate(float frameRate) {
+			this.frameRate = frameRate;
+			if (isVisible()) frameRate(frameRate);
+		}
+
+		public float getFrameRate() {
+			return frameRate;
+		}
 	}
 
 

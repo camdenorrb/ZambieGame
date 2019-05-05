@@ -349,6 +349,10 @@ public abstract class Element implements Named {
 		private final MutablePos<Float> position;
 
 
+		public Image(Pos<Float> position, File file) {
+			this(position, null, file);
+		}
+
 		public Image(Pos<Float> position, Dimension dimension, File file) {
 			this.path = file.getPath();
 			this.dimension = dimension;

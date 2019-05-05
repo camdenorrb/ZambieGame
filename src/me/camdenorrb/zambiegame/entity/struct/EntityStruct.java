@@ -47,6 +47,17 @@ public abstract class EntityStruct implements EntityBase {
 
 
 	@Override
+	public int getHealth() {
+		return health;
+	}
+
+	@Override
+	public void setHealth(int health) {
+		this.health = health;
+		if (health <= 0 && !isSpawned) kill();
+	}
+
+	@Override
 	public final void spawn() {
 
 		if (isSpawned) return;
@@ -85,18 +96,6 @@ public abstract class EntityStruct implements EntityBase {
 	public void setVelocity(Velocity velocity) {
 		this.velocity.setX(velocity.getX());
 		this.velocity.setY(velocity.getY());
-	}
-
-
-	@Override
-	public final int getHealth() {
-		return health;
-	}
-
-	@Override
-	public void setHealth(int health) {
-		this.health = health;
-		if (health <= 0 && isSpawned) kill();
 	}
 
 }

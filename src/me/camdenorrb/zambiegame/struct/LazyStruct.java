@@ -1,8 +1,5 @@
 package me.camdenorrb.zambiegame.struct;
 
-import com.sun.istack.internal.NotNull;
-
-
 /**
  * A strict structure for lazy values
  *
@@ -18,7 +15,6 @@ public abstract class LazyStruct<T> {
      *
      * @return The handled value
      */
-    @NotNull
     protected abstract T onGet();
 
 

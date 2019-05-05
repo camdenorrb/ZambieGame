@@ -18,13 +18,13 @@ import java.util.List;
  */
 public class Huemin extends EntityStruct {
 
-	private static final String LEFT_IMAGE_PATH = "/resources/human/left";
+	private static final String LEFT_WALK_PATH = "resources/huemin/left-walk.gif";
 
-	private static final String RIGHT_IMAGE_PATH = "/resources/human/right";
+	private static final String RIGHT_WALK_PATH = "resources/huemin/right-walk.gif";
 
-	private static final String HUMAN_FRONT_PATH = "/resources/human-front";
+	private static final String FORWARD_WALK_PATH = "resources/huemin/front-walk.gif";
 
-	private static final String HUMAN_BACK_PATH = "/resources/human-back";
+	private static final String BACKWARDS_WALK_PATH = "resources/huemin/back-walk.gif";
 
 
 
@@ -37,7 +37,7 @@ public class Huemin extends EntityStruct {
 		super(pos);
 		this.game = game;
 		//final InputStream inputStream = getClass().getResource("resources/robotcat.jpeg").openStream();
-		this.body = new Element.Image(pos, new Dimension(10, 10), new File("/home/camdenorrb/Documents/Programming/Intellij/Games/ZambieGame/src/resources/giphy.gif"));
+		this.body = new Element.Image(pos, new File(RIGHT_WALK_PATH));
 		//this.body = new Element.Rectangle(Color.BLACK, pos, new Dimension(10, 10));
 	}
 
@@ -45,7 +45,6 @@ public class Huemin extends EntityStruct {
 	public String getName() {
 		return "Huemin";
 	}
-
 
 	@Override
 	protected void onSpawn() {
@@ -62,6 +61,7 @@ public class Huemin extends EntityStruct {
 		return Collections.singletonList(body);
 	}
 
+
 	@Override
 	public void teleport(Pos pos) {
 
@@ -72,11 +72,28 @@ public class Huemin extends EntityStruct {
 
 		final MutablePos<Float> pos = body.getPosition();
 		pos.setX(pos.getX() + 10);
+		//pos.setX(pos.getX() + ((int) (Math.random() * 20 - 10)));
+		//pos.setY(pos.getY() + ((int) (Math.random() * 20 - 10)));
 
-		if (pos.getX() >= game.getGui().getSize().width) {
+		final Dimension size = game.getGui().getSize();
+
+		if (pos.getX() >= size.width) {
 			pos.setX(0f);
 		}
 
+		if (pos.getY() >= size.height) {
+			pos.setY(0f);
+		}
+
+		/*
+		if (pos.getX() < 0) {
+			pos.setX((float) size.width);
+		}
+
+		if (pos.getY() < 0) {
+			pos.setY((float) size.height);
+		}
+		 */
 	}
 
 }

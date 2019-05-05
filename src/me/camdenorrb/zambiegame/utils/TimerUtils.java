@@ -22,7 +22,6 @@ public final class TimerUtils {
 	/**
 	 * Schedules a repeating task
 	 *
-	 * @param timer The timer to run it on
 	 * @param delay The delay to run the task with
 	 * @param period The period to run the task
 	 * @param block The task
@@ -40,7 +39,7 @@ public final class TimerUtils {
 	/**
 	 * Schedules a repeating task
 	 *
-	 * @param timer The timer to run it on
+	 * @param time The time to start at
 	 * @param period The period to run the task
 	 * @param block The task
 	 */

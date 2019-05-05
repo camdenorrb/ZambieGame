@@ -1,8 +1,5 @@
 package me.camdenorrb.zambiegame.struct;
 
-import com.sun.istack.internal.NotNull;
-
-
 /**
  * A strict structure for lazy calls
  */
@@ -14,7 +11,6 @@ public abstract class LazyCallStruct {
 	/**
 	 * Handles calls
 	 */
-	@NotNull
 	protected abstract void onCall();
 
 

@@ -3,7 +3,10 @@ package me.camdenorrb.zambiegame.engine.gui.struct;
 import me.camdenorrb.zambiegame.engine.gui.base.GuiBase;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.Element;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 
 /**
@@ -13,7 +16,8 @@ public abstract class GuiStruct implements GuiBase {
 
 	private boolean isVisible, isInitialized;
 
-	private final Set<Element> elements = new HashSet<>();
+	//private final Set<Element> elements = new HashSet<>();
+	private final List<Element> elements = new ArrayList<>();
 
 
 	/**
@@ -83,8 +87,8 @@ public abstract class GuiStruct implements GuiBase {
 	 *
 	 * @return The elements of the GUI
 	 */
-	public final Set<Element> getElements() {
-		return Collections.unmodifiableSet(elements);
+	public final List<Element> getElements() {
+		return Collections.unmodifiableList(elements);
 	}
 
 	/**

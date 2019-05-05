@@ -2,7 +2,7 @@ package me.camdenorrb.zambiegame;
 
 public class Main {
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) {
 
 		//final SwingGui gui = new SwingGui("Meow", new Dimension(1000, 1000));
 
