@@ -66,7 +66,7 @@ public class Zambie implements EntityBase {
 	}
 
 	@Override
-	public void teleport(Pos<Float> pos) {
+	public void teleport(Pos<Double> pos) {
 
 	}
 

@@ -23,11 +23,15 @@ public abstract class Element implements Named {
 
 		private String data;
 
-		private MutablePos<Float> position;
+
+		private final Dimension size;
+
+		private final MutablePos<Double> position;
 
 
-		public Text(String data, Pos<Float> position) {
+		public Text(String data, Dimension size, Pos<Double> position) {
 			this.data = data;
+			this.size = size;
 			this.position = position.toMutable();
 		}
 
@@ -48,11 +52,20 @@ public abstract class Element implements Named {
 		}
 
 		/**
+		 * Gets the size of the text
+		 *
+		 * @return The size of the text
+		 */
+		public Dimension getSize() {
+			return size;
+		}
+
+		/**
 		 * Gets the position of the text
 		 *
 		 * @return The position of the text
 		 */
-		public MutablePos<Float> getPosition() {
+		public MutablePos<Double> getPosition() {
 			return position;
 		}
 
@@ -75,10 +88,10 @@ public abstract class Element implements Named {
 
 		private Color color;
 
-		private final MutablePos<Float> a, b;
+		private final MutablePos<Double> a, b;
 
 
-		public Line(Color color, Pos<Float> a, Pos<Float> b) {
+		public Line(Color color, Pos<Double> a, Pos<Double> b) {
 			this.a = a.toMutable();
 			this.b = b.toMutable();
 			this.color = color;
@@ -96,7 +109,7 @@ public abstract class Element implements Named {
 		 *
 		 * @return Position A
 		 */
-		public Pos<Float> getA() {
+		public Pos<Double> getA() {
 			return a;
 		}
 
@@ -105,7 +118,7 @@ public abstract class Element implements Named {
 		 *
 		 * @return Position B
 		 */
-		public Pos<Float> getB() {
+		public Pos<Double> getB() {
 			return b;
 		}
 
@@ -140,14 +153,14 @@ public abstract class Element implements Named {
 		private Color color;
 
 
-		private final Dimension dimension;
+		private final Dimension size;
 
-		private final MutablePos<Float> position;
+		private final MutablePos<Double> position;
 
 
-		public Oval(Pos<Float> position, Dimension dimension) {
+		public Oval(Pos<Double> position, Dimension size) {
+			this.size = size;
 			this.position = position.toMutable();
-			this.dimension = dimension;
 		}
 
 
@@ -162,7 +175,7 @@ public abstract class Element implements Named {
 		 *
 		 * @return The position of the oval
 		 */
-		public MutablePos<Float> getPosition() {
+		public MutablePos<Double> getPosition() {
 			return position;
 		}
 
@@ -171,8 +184,8 @@ public abstract class Element implements Named {
 		 *
 		 * @return The dimensions of the oval
 		 */
-		public Dimension getDimension() {
-			return dimension;
+		public Dimension getSize() {
+			return size;
 		}
 
 
@@ -205,14 +218,14 @@ public abstract class Element implements Named {
 		private Color color;
 
 
-		private final Dimension dimension;
+		private final Dimension size;
 
-		private final MutablePos<Float> position;
+		private final MutablePos<Double> position;
 
 
-		public Rectangle(Color color, Pos<Float> position, Dimension dimension) {
+		public Rectangle(Color color, Pos<Double> position, Dimension size) {
+			this.size = size;
 			this.color = color;
-			this.dimension = dimension;
 			this.position = position.toMutable();
 		}
 
@@ -228,7 +241,7 @@ public abstract class Element implements Named {
 		 *
 		 * @return The position of the rectangle
 		 */
-		public MutablePos<Float> getPosition() {
+		public MutablePos<Double> getPosition() {
 			return position;
 		}
 
@@ -237,8 +250,8 @@ public abstract class Element implements Named {
 		 *
 		 * @return The dimensions of the rectangle
 		 */
-		public Dimension getDimension() {
-			return dimension;
+		public Dimension getSize() {
+			return size;
 		}
 
 
@@ -271,10 +284,10 @@ public abstract class Element implements Named {
 		private Color color;
 
 
-		private final MutablePos<Float> left, middle, right;
+		private final MutablePos<Double> left, middle, right;
 
 
-		public Triangle(MutablePos<Float> left, MutablePos<Float> middle, MutablePos<Float> right) {
+		public Triangle(MutablePos<Double> left, MutablePos<Double> middle, MutablePos<Double> right) {
 			this.left = left;
 			this.middle = middle;
 			this.right = right;
@@ -292,7 +305,7 @@ public abstract class Element implements Named {
 		 *
 		 * @return The left most point
 		 */
-		public MutablePos<Float> getLeft() {
+		public MutablePos<Double> getLeft() {
 			return left;
 		}
 
@@ -301,7 +314,7 @@ public abstract class Element implements Named {
 		 *
 		 * @return The middle point
 		 */
-		public MutablePos<Float> getMiddle() {
+		public MutablePos<Double> getMiddle() {
 			return middle;
 		}
 
@@ -310,7 +323,7 @@ public abstract class Element implements Named {
 		 *
 		 * @return The right most point
 		 */
-		public MutablePos<Float> getRight() {
+		public MutablePos<Double> getRight() {
 			return right;
 		}
 
@@ -344,18 +357,18 @@ public abstract class Element implements Named {
 		private String path;
 
 
-		private final Dimension dimension;
+		private final Dimension size;
 
-		private final MutablePos<Float> position;
+		private final MutablePos<Double> position;
 
 
-		public Image(Pos<Float> position, File file) {
+		public Image(Pos<Double> position, File file) {
 			this(position, null, file);
 		}
 
-		public Image(Pos<Float> position, Dimension dimension, File file) {
+		public Image(Pos<Double> position, Dimension size, File file) {
+			this.size = size;
 			this.path = file.getPath();
-			this.dimension = dimension;
 			this.position = position.toMutable();
 		}
 
@@ -380,17 +393,17 @@ public abstract class Element implements Named {
 		 *
 		 * @return The position of the image
 		 */
-		public MutablePos<Float> getPosition() {
+		public MutablePos<Double> getPosition() {
 			return position;
 		}
 
 		/**
 		 * Gets the dimensions of the image
 		 *
-		 * @return The dimension of the image
+		 * @return The size of the image
 		 */
-		public Dimension getDimension() {
-			return dimension;
+		public Dimension getSize() {
+			return size;
 		}
 
 	}

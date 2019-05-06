@@ -5,6 +5,8 @@ import me.camdenorrb.zambiegame.engine.gui.impl.ProcGui;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.Element;
 import me.camdenorrb.zambiegame.entity.base.EntityBase;
 import me.camdenorrb.zambiegame.entity.impl.Huemin;
+import me.camdenorrb.zambiegame.fort.base.FortBase;
+import me.camdenorrb.zambiegame.fort.impl.HueminFort;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
 
 import java.awt.*;
@@ -48,21 +50,23 @@ public class ZambieGame extends GameStruct {
 		}*/
 
 		//gui.addElements(new Element.Rectangle(new Color(155, 118, 83), new Pos<>(0f, (float) size.height - 125), new Dimension(size.width, 125)));
-		gui.addElements(new Element.Text("Hello", new Pos<>(0f, 0f)));
-		gui.addElements(new Element.Rectangle(new Color(63, 122, 77), new Pos<>(0f, (float) size.height - 250), new Dimension(size.width, 250)));
+		//gui.addElements(new Element.Text("Hello how are you?", new Dimension(1000, 100), new Pos<>(0f, 0f)));
+		gui.addElements(new Element.Rectangle(new Color(63, 122, 77), new Pos<>(0.0, size.height - 250.0), new Dimension(size.width, 250)));
+
+		spawnFort(new HueminFort(new Pos<>(-200.0, 0.0)));
 
 		int startingY = 500;
 
-		for (float i = 0; i <= 100; i += 10) {
+		for (double i = 0; i <= 100; i += 10) {
 			spawnEntity(new Huemin(this, new Pos<>(i, i + startingY)));
 		}
 
-		for (float i = 100; i <= 200; i += 10) {
+		for (double i = 100; i <= 200; i += 10) {
 			spawnEntity(new Huemin(this, new Pos<>(i - 100, (300 - i) + startingY)));
 		}
 
-		for (float i = 0; i < 200; i += 10) {
-			spawnEntity(new Huemin(this, new Pos<>(i - 100, 100f + startingY)));
+		for (double i = 0; i < 200; i += 10) {
+			spawnEntity(new Huemin(this, new Pos<>(i - 100, 100.0 + startingY)));
 		}
 
 	}
@@ -88,6 +92,12 @@ public class ZambieGame extends GameStruct {
 		return gui;
 	}
 
+
+
+	public void spawnFort(FortBase fort) {
+		// TODO: Set fort in list, possibly make foreground/background stuff in Fort class
+		gui.addElements(fort.getParts());
+	}
 
 	/**
 	 * Spawns an entity

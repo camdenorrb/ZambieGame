@@ -2,8 +2,7 @@ package me.camdenorrb.zambiegame.fort.struct;
 
 import me.camdenorrb.zambiegame.fort.base.FortBase;
 import me.camdenorrb.zambiegame.impl.pos.MutablePos;
-
-import java.nio.file.Path;
+import me.camdenorrb.zambiegame.impl.pos.Pos;
 
 
 public abstract class FortStruct implements FortBase {
@@ -13,21 +12,21 @@ public abstract class FortStruct implements FortBase {
 	private boolean isSpawned;
 
 
-	protected final MutablePos<Float> pos;
+	protected final MutablePos<Double> pos;
 
 
-	protected abstract void onKill();
+	protected void onKill() {}
 
-	protected abstract void onSpawn();
+	protected void onSpawn() {}
 
-	protected abstract void onDamage();
-
-
-	protected abstract Path getImagePath();
+	protected void onDamage() {}
 
 
-	public FortStruct(MutablePos<Float> pos) {
-		this.pos = pos;
+	//protected abstract Path getImagePath();
+
+
+	public FortStruct(Pos<Double> pos) {
+		this.pos = pos.toMutable();
 	}
 
 
@@ -40,6 +39,13 @@ public abstract class FortStruct implements FortBase {
 	public final void setHealth(int health) {
 		this.health = health;
 		if (health <= 0 && isSpawned()) kill();
+	}
+
+
+	@Override
+	public void teleport(Pos<Double> pos) {
+		this.pos.setX(pos.getX());
+		this.pos.setY(pos.getY());
 	}
 
 	@Override

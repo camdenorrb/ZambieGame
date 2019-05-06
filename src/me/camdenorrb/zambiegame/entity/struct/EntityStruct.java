@@ -20,7 +20,7 @@ public abstract class EntityStruct implements EntityBase {
 	private boolean isSpawned;
 
 
-	protected final MutablePos<Float> pos;
+	protected final MutablePos<Double> pos;
 
 	protected final MutableVelocity velocity = new MutableVelocity(0, 0);
 
@@ -36,12 +36,12 @@ public abstract class EntityStruct implements EntityBase {
 	protected abstract void onSpawn();
 
 
-	public EntityStruct(int initHealth, Pos<Float> pos) {
+	public EntityStruct(int initHealth, Pos<Double> pos) {
 		this.health = initHealth;
 		this.pos = pos.toMutable();
 	}
 
-	public EntityStruct(Pos<Float> pos) {
+	public EntityStruct(Pos<Double> pos) {
 		this(DEFAULT_HEALTH, pos);
 	}
 
@@ -78,7 +78,7 @@ public abstract class EntityStruct implements EntityBase {
 	}
 
 	@Override
-	public final Pos<Float> getPosition() {
+	public final Pos<Double> getPosition() {
 		return pos;
 	}
 

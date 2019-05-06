@@ -13,6 +13,6 @@ public interface Teleportable {
 	 *
 	 * @param pos The new position
 	 */
-	void teleport(Pos<Float> pos);
+	void teleport(Pos<Double> pos);
 
 }

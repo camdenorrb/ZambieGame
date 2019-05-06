@@ -77,7 +77,7 @@ public class SwingGui extends GuiStruct {
 			final Element.Oval oval = (Element.Oval) element;
 
 			final Pos<Integer> topLeft = oval.getPosition();
-			final Dimension dimension = oval.getDimension();
+			final Dimension dimension = oval.getSize();
 
 			graphics2D.get().drawOval(topLeft.getX(), topLeft.getY(), dimension.width, dimension.height);
 		}
@@ -101,7 +101,7 @@ public class SwingGui extends GuiStruct {
 			final Element.Rectangle rectangle = (Element.Rectangle) element;
 
 			final Pos<Integer> topLeft = rectangle.getPosition();
-			final Dimension dimension = rectangle.getDimension();
+			final Dimension dimension = rectangle.getSize();
 
 			graphics2D.get().drawRect(topLeft.getX(), topLeft.getY(), dimension.width, dimension.height);
 		}

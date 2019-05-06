@@ -5,6 +5,7 @@ import me.camdenorrb.zambiegame.engine.gui.impl.element.Element;
 import me.camdenorrb.zambiegame.engine.gui.struct.GuiStruct;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
 import me.camdenorrb.zambiegame.utils.JavaUtils;
+import me.camdenorrb.zambiegame.utils.PosUtils;
 import processing.core.PApplet;
 import processing.core.PImage;
 
@@ -93,8 +94,6 @@ public class ProcGui extends GuiStruct {
 		}
 
 
-
-
 		/**
 		 * Draws an ambiguous element
 		 *
@@ -106,17 +105,18 @@ public class ProcGui extends GuiStruct {
 
 				final Element.Text text = (Element.Text) element;
 
-				final Pos<Float> pos = text.getPosition();
+				final Dimension size = text.getSize();
+				final Pos<Float> pos = PosUtils.toFloat(text.getPosition());
 
-				text(text.getData(), pos.getX(), pos.getY());
+				text(text.getData(), pos.getX(), pos.getY(), (float) size.width, (float) size.height);
 			}
 
 			else if (element instanceof Element.Line) {
 
 				final Element.Line line = (Element.Line) element;
 
-				final Pos<Float> posA = line.getA();
-				final Pos<Float> posB = line.getB();
+				final Pos<Float> posA = PosUtils.toFloat(line.getA());
+				final Pos<Float> posB = PosUtils.toFloat(line.getB());
 
 				stroke(line.getColor().getRGB());
 				line(posA.getX(), posA.getY(), posB.getX(), posB.getY());
@@ -126,8 +126,8 @@ public class ProcGui extends GuiStruct {
 
 				final Element.Oval oval = (Element.Oval) element;
 
-				final Pos<Float> position = oval.getPosition();
-				final Dimension dimension = oval.getDimension();
+				final Pos<Float> position = PosUtils.toFloat(oval.getPosition());
+				final Dimension dimension = oval.getSize();
 
 				fill(oval.getColor().getRGB());
 				ellipse(position.getX(), position.getY(), dimension.width, dimension.height);
@@ -137,9 +137,9 @@ public class ProcGui extends GuiStruct {
 
 				final Element.Triangle triangle = (Element.Triangle) element;
 
-				final Pos<Float> left = triangle.getLeft();
-				final Pos<Float> middle = triangle.getMiddle();
-				final Pos<Float> right = triangle.getRight();
+				final Pos<Float> left = PosUtils.toFloat(triangle.getLeft());
+				final Pos<Float> middle = PosUtils.toFloat(triangle.getMiddle());
+				final Pos<Float> right = PosUtils.toFloat(triangle.getRight());
 
 				fill(triangle.getColor().getRGB());
 				triangle(left.getX(), left.getY(), middle.getX(), middle.getY(), right.getX(), right.getY());
@@ -149,8 +149,8 @@ public class ProcGui extends GuiStruct {
 
 				final Element.Rectangle rectangle = (Element.Rectangle) element;
 
-				final Pos<Float> position = rectangle.getPosition();
-				final Dimension dimension = rectangle.getDimension();
+				final Pos<Float> position = PosUtils.toFloat(rectangle.getPosition());
+				final Dimension dimension = rectangle.getSize();
 
 				noStroke();
 
@@ -162,8 +162,8 @@ public class ProcGui extends GuiStruct {
 
 				final Element.Image image = (Element.Image) element;
 
-				final Pos<Float> position = image.getPosition();
-				final Dimension dimension = image.getDimension();
+				final Pos<Float> position = PosUtils.toFloat(image.getPosition());
+				final Dimension dimension = image.getSize();
 
 				final PImage pImage = imageCache.computeIfAbsent(image.getPath(), (path) -> {
 					if (!path.endsWith(".gif")) return loadImage(path);

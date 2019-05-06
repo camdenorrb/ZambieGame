@@ -33,7 +33,7 @@ public class Huemin extends EntityStruct {
 	private Element.Image body;
 
 
-	public Huemin(ZambieGame game, Pos<Float> pos) {
+	public Huemin(ZambieGame game, Pos<Double> pos) {
 		super(pos);
 		this.game = game;
 		//final InputStream inputStream = getClass().getResource("resources/robotcat.jpeg").openStream();
@@ -70,7 +70,7 @@ public class Huemin extends EntityStruct {
 	@Override
 	public void tick() {
 
-		final MutablePos<Float> pos = body.getPosition();
+		final MutablePos<Double> pos = body.getPosition();
 		pos.setX(pos.getX() + 10);
 		//pos.setX(pos.getX() + ((int) (Math.random() * 20 - 10)));
 		//pos.setY(pos.getY() + ((int) (Math.random() * 20 - 10)));
@@ -78,11 +78,11 @@ public class Huemin extends EntityStruct {
 		final Dimension size = game.getGui().getSize();
 
 		if (pos.getX() >= size.width) {
-			pos.setX(0f);
+			pos.setX(0.0);
 		}
 
 		if (pos.getY() >= size.height) {
-			pos.setY(0f);
+			pos.setY(0.0);
 		}
 
 		/*
