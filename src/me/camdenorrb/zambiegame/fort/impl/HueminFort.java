@@ -24,7 +24,7 @@ public class HueminFort extends FortStruct {
 
 	@Override
 	public List<Element> getParts() {
-		return Collections.singletonList(new Element.Image(pos, new File("resources/fort/huemin-castle.png")));
+		return Collections.singletonList(new Element.Image(pos, new File("fort/huemin-castle.png")));
 	}
 
 }

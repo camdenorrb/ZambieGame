@@ -165,7 +165,7 @@ public class ProcGui extends GuiStruct {
 				final Pos<Float> position = PosUtils.toFloat(image.getPosition());
 				final Dimension dimension = image.getSize();
 
-				final PImage pImage = imageCache.computeIfAbsent(image.getPath(), (path) -> {
+				final PImage pImage = imageCache.computeIfAbsent(image.getFile().getPath(), (path) -> {
 					if (!path.endsWith(".gif")) return loadImage(path);
 					return JavaUtils.apply(new Gif(this, path), Gif::play);
 				});

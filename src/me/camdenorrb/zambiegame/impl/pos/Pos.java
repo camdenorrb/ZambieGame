@@ -7,7 +7,7 @@ package me.camdenorrb.zambiegame.impl.pos;
  */
 public class Pos<N extends Number> {
 
-	protected N x, y;
+	protected volatile N x, y;
 
 
 	public Pos(N x, N y) {
@@ -44,4 +44,8 @@ public class Pos<N extends Number> {
 		return new MutablePos<>(x, y);
 	}
 
+	@Override
+	public String toString() {
+		return "Pos(" + x + ", " + y + ")";
+	}
 }

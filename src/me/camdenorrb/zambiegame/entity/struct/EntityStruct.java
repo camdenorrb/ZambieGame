@@ -1,10 +1,18 @@
 package me.camdenorrb.zambiegame.entity.struct;
 
+import me.camdenorrb.zambiegame.ZambieGame;
 import me.camdenorrb.zambiegame.engine.physics.impl.velocity.MutableVelocity;
 import me.camdenorrb.zambiegame.engine.physics.impl.velocity.Velocity;
 import me.camdenorrb.zambiegame.entity.base.EntityBase;
 import me.camdenorrb.zambiegame.impl.pos.MutablePos;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
+import me.camdenorrb.zambiegame.type.Ranged;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
 
 /**
@@ -20,34 +28,85 @@ public abstract class EntityStruct implements EntityBase {
 	private boolean isSpawned;
 
 
+	protected final ZambieGame game;
+
 	protected final MutablePos<Double> pos;
 
 	protected final MutableVelocity velocity = new MutableVelocity(0, 0);
 
+	protected final Map<Class, Set<Consumer<?>>> collisionHandlers = new HashMap<>();
+
+
+	/**
+	 * Handles tick of the entity
+	 */
+	protected abstract void onTick();
 
 	/**
 	 * Handles death of the entity
 	 */
 	protected abstract void onKill();
 
+
 	/**
 	 * Handles spawn of the entity
 	 */
-	protected abstract void onSpawn();
+	protected void onSpawn() {
+		game.spawnEntity(this);
+	}
+
+	/**
+	 * Handles spawn of the entity
+	 */
+	protected void onRemove() {
+		game.getGui().remElements(getParts());
+	}
 
 
-	public EntityStruct(int initHealth, Pos<Double> pos) {
+	/**
+	 * Handles teleporting of the entity
+	 */
+	protected void onTeleport(Pos<Double> newPos) {
+
+		remove();
+
+		pos.setX(newPos.getX());
+		pos.setX(newPos.getY());
+
+		spawn();
+	}
+
+
+	public EntityStruct(Pos<Double> pos, ZambieGame game) {
+		this(DEFAULT_HEALTH, pos, game);
+	}
+
+	public EntityStruct(int initHealth, Pos<Double> pos, ZambieGame game) {
 		this.health = initHealth;
 		this.pos = pos.toMutable();
+		this.game = game;
 	}
 
-	public EntityStruct(Pos<Double> pos) {
-		this(DEFAULT_HEALTH, pos);
+
+	public final void remove() {
+		onRemove();
 	}
 
+	public final <S extends Ranged> void addCollideHandler(Class<S> clazz, Consumer<S> handler) {
+		collisionHandlers.computeIfAbsent(clazz, (ignored) -> new HashSet<>()).add(handler);
+	}
+
+	@SuppressWarnings("unchecked")
+	public final <S extends Ranged> void callCollideHandlers(S input) {
+
+		final Set<Consumer<?>> consumers = collisionHandlers.get(input.getClass());
+		if (consumers == null) return;
+
+		consumers.stream().map(it -> (Consumer<S>) it).forEach(it -> it.accept(input));
+	}
 
 	@Override
-	public int getHealth() {
+	public final int getHealth() {
 		return health;
 	}
 
@@ -55,6 +114,16 @@ public abstract class EntityStruct implements EntityBase {
 	public void setHealth(int health) {
 		this.health = health;
 		if (health <= 0 && !isSpawned) kill();
+	}
+
+	public final void tick() {
+
+		onTick();
+
+		for (EntityBase entity : game.getEntities()) {
+			if (entity == this || !entity.isInRange(pos)) continue;
+			callCollideHandlers(entity);
+		}
 	}
 
 	@Override
@@ -75,6 +144,12 @@ public abstract class EntityStruct implements EntityBase {
 
 		onKill();
 		isSpawned = false;
+	}
+
+
+	@Override
+	public final void teleport(Pos<Double> pos) {
+		onTeleport(pos);
 	}
 
 	@Override

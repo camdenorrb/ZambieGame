@@ -2,18 +2,29 @@ package me.camdenorrb.zambiegame.engine.gui.impl.element;
 
 import me.camdenorrb.zambiegame.impl.pos.MutablePos;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
+import me.camdenorrb.zambiegame.struct.LazyStruct;
 import me.camdenorrb.zambiegame.type.Named;
+import me.camdenorrb.zambiegame.type.Ranged;
+import me.camdenorrb.zambiegame.utils.LazyUtils;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+
+import static java.lang.Math.abs;
 
 
 /**
  * The element structure for all elements placed on the GUI
  */
-public abstract class Element implements Named {
+public abstract class Element implements Named, Ranged {
 
 	private Element() {}
+
+
+	public abstract Pos<Double> getCenter();
 
 
 	/**
@@ -39,6 +50,11 @@ public abstract class Element implements Named {
 		@Override
 		public String getName() {
 			return "Text";
+		}
+
+		@Override
+		public boolean isInRange(Pos<Double> pos) {
+			return abs(position.getX() - pos.getX()) >= size.width && abs(position.getY() - pos.getY()) >= size.height;
 		}
 
 
@@ -79,6 +95,11 @@ public abstract class Element implements Named {
 			this.data = data;
 		}
 
+		@Override
+		public Pos<Double> getCenter() {
+			// TODO
+			return null;
+		}
 	}
 
 	/**
@@ -103,6 +124,18 @@ public abstract class Element implements Named {
 			return "Line";
 		}
 
+
+		@Override
+		public boolean isInRange(Pos<Double> pos) {
+
+			final double distX1 = a.getX() - pos.getX();
+			final double distX2 = b.getX() - a.getX();
+
+			final double distY1 = a.getY() - pos.getY();
+			final double distY2 = b.getY() - a.getY();
+
+			return distX1 * distY2 - distY1 * distX2 == 0;
+		}
 
 		/**
 		 * Gets position 'A' for the line
@@ -141,6 +174,11 @@ public abstract class Element implements Named {
 			this.color = color;
 		}
 
+		@Override
+		public Pos<Double> getCenter() {
+			// TODO
+			return null;
+		}
 	}
 
 
@@ -169,6 +207,11 @@ public abstract class Element implements Named {
 			return "Oval";
 		}
 
+		@Override
+		public boolean isInRange(Pos<Double> pos) {
+			// Can just be distance from center
+			return false;
+		}
 
 		/**
 		 * Gets the position of the oval
@@ -207,6 +250,11 @@ public abstract class Element implements Named {
 			this.color = color;
 		}
 
+		@Override
+		public Pos<Double> getCenter() {
+			// TODO
+			return null;
+		}
 	}
 
 
@@ -273,12 +321,24 @@ public abstract class Element implements Named {
 			this.color = color;
 		}
 
+		@Override
+		public boolean isInRange(Pos<Double> pos) {
+			// TODO
+			return false;
+		}
+
+		@Override
+		public Pos<Double> getCenter() {
+			// TODO
+			return null;
+		}
 	}
 
 
 	/**
 	 * The Triangle Element
 	 */
+	// TODO: Make filled and outline
 	public final static class Triangle extends Element {
 
 		private Color color;
@@ -346,6 +406,18 @@ public abstract class Element implements Named {
 			this.color = color;
 		}
 
+		@Override
+		public boolean isInRange(Pos<Double> pos) {
+			// TODO
+			return false;
+		}
+
+		@Override
+		public Pos<Double> getCenter() {
+			// TODO
+			return null;
+		}
+
 	}
 
 
@@ -354,7 +426,7 @@ public abstract class Element implements Named {
 	 */
 	public final static class Image extends Element {
 
-		private String path;
+		private File imageFile;
 
 
 		private final Dimension size;
@@ -362,13 +434,28 @@ public abstract class Element implements Named {
 		private final MutablePos<Double> position;
 
 
+		private final LazyStruct<BufferedImage> image = LazyUtils.lazy(() -> {
+			try {
+				return ImageIO.read(imageFile);
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+				return null;
+			}
+		});
+
+
 		public Image(Pos<Double> position, File file) {
-			this(position, null, file);
+
+			this.imageFile = file;
+			this.position = position.toMutable();
+
+			this.size = new Dimension(image.get().getWidth(), image.get().getHeight());
 		}
 
 		public Image(Pos<Double> position, Dimension size, File file) {
 			this.size = size;
-			this.path = file.getPath();
+			this.imageFile = file;
 			this.position = position.toMutable();
 		}
 
@@ -378,14 +465,33 @@ public abstract class Element implements Named {
 			return "Image";
 		}
 
+		@Override
+		public boolean isInRange(Pos<Double> pos) {
+			// TODO
+			return true;
+		}
+
+		public boolean isInPixelRange(Pos<Double> pos) {
+			// TODO
+			return true;
+		}
+
+		@Override
+		public Pos<Double> getCenter() {
+
+			final double halfWidth = size.getWidth() / 2;
+			final double halfHeight = size.getHeight() / 2;
+
+			return new Pos<>(position.getX() + halfWidth, position.getY() + halfHeight);
+		}
 
 		/**
-		 * Gets the path for the image
+		 * Gets the file for the image
 		 *
-		 * @return The path of the image
+		 * @return The file for the image
 		 */
-		public String getPath() {
-			return path;
+		public File getFile() {
+			return imageFile;
 		}
 
 		/**

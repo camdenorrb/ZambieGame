@@ -18,38 +18,37 @@ import java.util.List;
  */
 public class Huemin extends EntityStruct {
 
-	private static final String LEFT_WALK_PATH = "resources/huemin/left-walk.gif";
+	private static final String LEFT_WALK_PATH = "huemin/left-walk.gif";
 
-	private static final String RIGHT_WALK_PATH = "resources/huemin/right-walk.gif";
+	private static final String RIGHT_WALK_PATH = "huemin/right-walk.gif";
 
-	private static final String FORWARD_WALK_PATH = "resources/huemin/front-walk.gif";
+	private static final String FORWARD_WALK_PATH = "huemin/front-walk.gif";
 
-	private static final String BACKWARDS_WALK_PATH = "resources/huemin/back-walk.gif";
+	private static final String BACKWARDS_WALK_PATH = "huemin/back-walk.gif";
 
-
-
-	private final ZambieGame game;
 
 	private Element.Image body;
 
+	private boolean isMoving = true;
 
 	public Huemin(ZambieGame game, Pos<Double> pos) {
-		super(pos);
-		this.game = game;
+		super(pos, game);
 		//final InputStream inputStream = getClass().getResource("resources/robotcat.jpeg").openStream();
 		this.body = new Element.Image(pos, new File(RIGHT_WALK_PATH));
 		//this.body = new Element.Rectangle(Color.BLACK, pos, new Dimension(10, 10));
 	}
+
+
+	{
+		addCollideHandler(Zambie.class, zambie -> isMoving = false);
+	}
+
 
 	@Override
 	public String getName() {
 		return "Huemin";
 	}
 
-	@Override
-	protected void onSpawn() {
-		game.spawnEntity(this);
-	}
 
 	@Override
 	public void onKill() {
@@ -63,26 +62,27 @@ public class Huemin extends EntityStruct {
 
 
 	@Override
-	public void teleport(Pos pos) {
+	public void onTick() {
 
-	}
+		final MutablePos<Double> bodyPos = body.getPosition();
 
-	@Override
-	public void tick() {
-
-		final MutablePos<Double> pos = body.getPosition();
-		pos.setX(pos.getX() + 10);
+		if (!isMoving) return;
+		bodyPos.setX(bodyPos.getX() + 10);
+		pos.setX(bodyPos.getX() + 10);
 		//pos.setX(pos.getX() + ((int) (Math.random() * 20 - 10)));
 		//pos.setY(pos.getY() + ((int) (Math.random() * 20 - 10)));
 
 		final Dimension size = game.getGui().getSize();
 
-		if (pos.getX() >= size.width) {
+		if (bodyPos.getX() >= size.width) {
+			bodyPos.setX(0.0);
 			pos.setX(0.0);
+
 		}
 
-		if (pos.getY() >= size.height) {
-			pos.setY(0.0);
+		if (bodyPos.getY() >= size.height) {
+			bodyPos.setY(0.0);
+			pos.setX(0.0);
 		}
 
 		/*
@@ -94,6 +94,20 @@ public class Huemin extends EntityStruct {
 			pos.setY((float) size.height);
 		}
 		 */
+	}
+
+	@Override
+	public boolean isInRange(Pos<Double> pos) {
+
+		final Dimension size = body.getSize();
+
+		final Double x1 = this.pos.getX();
+		final Double x2 = pos.getX();
+
+		final Double y1 = this.pos.getY();
+		final Double y2 = pos.getY();
+
+		return Math.abs(x1 - x2) <= size.width && Math.abs(y1 - y2) <= size.height;
 	}
 
 }
