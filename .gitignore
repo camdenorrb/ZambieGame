@@ -1,8 +1,5 @@
-# IntelliJ project files
-.idea
-*.iml
-out
-gen
+# Ignore Gradle project-specific cache directory
+.gradle
 
-# Resource Images
-/src/resources/
+# Ignore Gradle build output directory
+build
