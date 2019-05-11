@@ -2,7 +2,7 @@ package me.camdenorrb.zambiegame;
 
 import me.camdenorrb.zambiegame.engine.game.struct.GameStruct;
 import me.camdenorrb.zambiegame.engine.gui.impl.ProcGui;
-import me.camdenorrb.zambiegame.engine.gui.impl.element.Element;
+import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
 import me.camdenorrb.zambiegame.entity.base.EntityBase;
 import me.camdenorrb.zambiegame.entity.impl.Huemin;
 import me.camdenorrb.zambiegame.entity.impl.Zambie;
@@ -10,7 +10,6 @@ import me.camdenorrb.zambiegame.fort.impl.HueminFort;
 import me.camdenorrb.zambiegame.fort.impl.ZambieFort;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
 import me.camdenorrb.zambiegame.utils.DisplayUtils;
-import me.camdenorrb.zambiegame.utils.JavaUtils;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -25,10 +24,11 @@ public class ZambieGame extends GameStruct {
 	private final Set<EntityBase> entities = new HashSet<>();
 
 	private final ProcGui gui = new ProcGui("ZambieGame", DisplayUtils.getRefreshRate(), new Dimension(1500, 750));
+	//private final OpenGLGui gui = new OpenGLGui("ZambieGame", new Dimension(1500, 750), false);
 
 
 	public ZambieGame() {
-		super(240);
+		super(60);
 	}
 
 
@@ -105,9 +105,8 @@ public class ZambieGame extends GameStruct {
 
 
 
-		new HueminFort(this).spawn(new Pos(-200.0, 0.0));
-		JavaUtils.apply(new ZambieFort(this), (it) -> it.spawn(new Pos(gui.getSize().width - (it.getWidth() - 200.0), 0.0)));
-
+		hueminFort.spawn(new Pos(-200.0, 0.0));
+		zambieFort.spawn(new Pos(gui.getSize().width - (zambieFort.getWidth() - 200.0), 0.0));
 
 		gui.show();
 	}

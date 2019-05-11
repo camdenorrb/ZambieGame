@@ -1,6 +1,8 @@
 package me.camdenorrb.zambiegame.engine.gui.impl;
 
-import me.camdenorrb.zambiegame.engine.gui.impl.element.Element;
+
+import me.camdenorrb.zambiegame.engine.gif.processing.PGif;
+import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
 import me.camdenorrb.zambiegame.engine.gui.struct.GuiStruct;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
 import processing.core.PApplet;
@@ -10,21 +12,27 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+
+import static me.camdenorrb.zambiegame.utils.JavaUtils.apply;
 
 
 /**
  * Processing implementation of a GUI
  */
+
 public class ProcGui extends GuiStruct {
 
 	private String title;
+
 
 	private final Applet applet;
 
 	private final Dimension size;
 
 
-	private final Map<String, PImage> imageCache = new HashMap<>();
+	private final Map<UUID, PImage> imageCache = new HashMap<>();
+
 
 
 	public ProcGui(String title, float frameRate, Dimension size) {
@@ -65,6 +73,42 @@ public class ProcGui extends GuiStruct {
 		return applet.getFrameRate();
 	}
 
+
+	/**
+	 * Gets the title of the GUI
+	 *
+	 * @return The title
+	 */
+	public String getTitle() {
+		return title;
+	}
+
+	/**
+	 * Gets the size of the GUI
+	 *
+	 * @return The size
+	 */
+	public Dimension getSize() {
+		return size;
+	}
+
+
+	/**
+	 * Sets the title of the GUI
+	 *
+	 * @param title The new Title
+	 */
+
+	public void setTitle(String title) {
+		applet.getSurface().setTitle(title);
+		this.title = title;
+	}
+
+	public Applet getApplet() {
+		return applet;
+	}
+
+
 	/**
 	 * The Applet used in the backend of the GUI
 	 */
@@ -80,7 +124,7 @@ public class ProcGui extends GuiStruct {
 
 		@Override
 		public void settings() {
-			size(size.width, size.height, P2D);
+			size(size.width, size.height/*, FX2D*/);
 		}
 
 		@Override
@@ -130,7 +174,7 @@ public class ProcGui extends GuiStruct {
 		}
 
 
-		/**
+        /**
 		 * Draws an ambiguous element
 		 *
 		 * @param element The ambiguous element
@@ -182,16 +226,32 @@ public class ProcGui extends GuiStruct {
 
 				final Dimension dimension = image.getSize();
 
-				final PImage pImage = new PImage(image.getImage());
-				/*final PImage pImage = imageCache.computeIfAbsent(image, (path) -> {
-					if (!path.endsWith(".gif")) return loadImage(path);
-					return JavaUtils.apply(new Gif(this, path), Gif::play);
-				});*/
-				if (dimension != null) {
+				final PImage pImage = imageCache.computeIfAbsent(image.getUUID(), (id) ->
+					new PImage(image.getImage())
+				);
+
+				if (image.isResized()) {
 					pImage.resize(dimension.width, dimension.height);
 				}
 
 				drawImage(image.getPosition(), pImage);
+			}
+
+			else if (element instanceof Element.GifElem) {
+
+				final Element.GifElem gifElem = (Element.GifElem) element;
+
+				final Dimension dimension = gifElem.getSize();
+
+				final PImage pImage = imageCache.computeIfAbsent(gifElem.getUUID(), (id) ->
+					apply(new PGif(gifElem.getGif(), this), PGif::start)
+				);
+
+				if (gifElem.isResized()) {
+					pImage.resize(dimension.width, dimension.height);
+				}
+
+				drawImage(gifElem.getPosition(), pImage);
 			}
 		}
 
@@ -203,36 +263,6 @@ public class ProcGui extends GuiStruct {
 		public float getFrameRate() {
 			return frameRate;
 		}
-	}
-
-
-	/**
-	 * Gets the title of the GUI
-	 *
-	 * @return The title
-	 */
-	public String getTitle() {
-		return title;
-	}
-
-	/**
-	 * Gets the size of the GUI
-	 *
-	 * @return The size
-	 */
-	public Dimension getSize() {
-		return size;
-	}
-
-
-	/**
-	 * Sets the title of the GUI
-	 *
-	 * @param title The new Title
-	 */
-	public void setTitle(String title) {
-		applet.getSurface().setTitle(title);
-		this.title = title;
 	}
 
 }

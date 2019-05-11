@@ -1,7 +1,7 @@
 package me.camdenorrb.zambiegame.engine.gui.struct;
 
 import me.camdenorrb.zambiegame.engine.gui.base.GuiBase;
-import me.camdenorrb.zambiegame.engine.gui.impl.element.Element;
+import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,6 +17,7 @@ public abstract class GuiStruct implements GuiBase {
 	private boolean isVisible, isInitialized;
 
 	//private final Set<Element> elements = new HashSet<>();
+	// TODO: Make layers List<List<Element>>, 0 being background
 	protected final List<Element> elements = new ArrayList<>();
 
 

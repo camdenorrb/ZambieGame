@@ -1,36 +1,31 @@
 package me.camdenorrb.zambiegame.utils;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-
-
+/*
 public final class ImageUtils {
 
 	private ImageUtils() {}
 
 
 	public static BufferedImage load(File file) {
-		try {
-			return ImageIO.read(file);
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
+
+		TryUtils.attemptOrDefault(null, () -> ImageIO.read(file));
+
+		tryblock { return ImageIO.read(file); }
+		catch (IOException e) { e.printStackTrace(); }
+		return null;
+	}
+
+	public static ImageInputStream createImageInputStream(Object input) {
+		tryblock { return ImageIO.createImageInputStream(input); }
+		catch (IOException e) { e.printStackTrace(); }
+		return null;
 	}
 
 	public static BufferedImage load(InputStream inputStream) {
-		try {
-			return ImageIO.read(inputStream);
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
+		tryblock { return ImageIO.read(inputStream); }
+		catch (IOException e) { e.printStackTrace(); }
+		return null;
 	}
 
-
 }
+*/

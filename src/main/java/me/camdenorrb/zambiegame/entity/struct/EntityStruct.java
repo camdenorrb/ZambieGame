@@ -49,8 +49,7 @@ public abstract class EntityStruct implements EntityBase {
 	 * Handles death of the entity
 	 */
 	protected void onKill() {
-		game.getEntities().remove(this);
-		game.getGui().remElements(getParts());
+		onRemove();
 	}
 
 	/**
@@ -63,7 +62,7 @@ public abstract class EntityStruct implements EntityBase {
 
 
 	/**
-	 * Handles spawn of the entity
+	 * Handles removal of the entity parts and self
 	 */
 	protected void onRemove() {
 		game.getGui().remElements(getParts());

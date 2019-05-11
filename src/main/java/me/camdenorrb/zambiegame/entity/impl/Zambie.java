@@ -1,7 +1,7 @@
 package me.camdenorrb.zambiegame.entity.impl;
 
 import me.camdenorrb.zambiegame.ZambieGame;
-import me.camdenorrb.zambiegame.engine.gui.impl.element.Element;
+import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
 import me.camdenorrb.zambiegame.entity.struct.EntityStruct;
 import me.camdenorrb.zambiegame.impl.Pair;
 import me.camdenorrb.zambiegame.impl.pos.MutablePos;
@@ -18,6 +18,11 @@ import java.util.List;
  */
 public class Zambie extends EntityStruct {
 
+	public static final int HITBOX_WIDTH = 15;
+
+	public static final int HITBOX_HEIGHT = 23;
+
+
 	private static final String LEFT_WALK_GIF = "zambie/left-walk.gif";
 
 	private static final String RIGHT_WALK_GIF = "zambie/right-walk.gif";
@@ -27,15 +32,18 @@ public class Zambie extends EntityStruct {
 	private static final String BACKWARDS_WALK_GIF = "zambie/back-walk.gif";
 
 
-	private Element.Image body;
+	private Element body;
 
 	private boolean isMoving = true;
+
+
+	private final MutablePos hitboxCenterPos = new MutablePos(0, 0);
 
 
 	public Zambie(ZambieGame game) {
 		super(game);
 		//final InputStream inputStream = getClass().getResource("resources/robotcat.jpeg").openStream();
-		this.body = new Element.Image(pos, ResourceUtils.get(LEFT_WALK_GIF));
+		this.body = new Element.GifElem(pos, ResourceUtils.get(LEFT_WALK_GIF));
 		//this.body = new Element.Rectangle(Color.BLACK, pos, new Dimension(10, 10));
 	}
 
@@ -79,8 +87,9 @@ public class Zambie extends EntityStruct {
 
 		if (!isMoving) return;
 
-		bodyPos.setX(bodyPos.getX() - 1);
-		pos.setX(bodyPos.getX() - 1);
+		pos.sub(1, 0);
+		bodyPos.sub(1, 0);
+		hitboxCenterPos.sub(1, 0);
 
 		//pos.setX(pos.getX() + ((int) (Math.random() * 20 - 10)));
 		//pos.setY(pos.getY() + ((int) (Math.random() * 20 - 10)));
@@ -111,13 +120,19 @@ public class Zambie extends EntityStruct {
 
 	@Override
 	public boolean isInRange(Pos pos) {
-		final Pair<Double, Double> distance = body.getCenter().distTo(pos);
-		return distance.getValue1() <= body.getSize().width && distance.getValue2() == 0;//<= Math.max(body.getSize().width, body.getSize().height);
+		final Pair<Double, Double> distance = hitboxCenterPos.distTo(pos);
+		return distance.getValue1() <= (HITBOX_WIDTH / 2) && distance.getValue2() <= (HITBOX_HEIGHT / 2);//<= Math.max(body.getSize().width, body.getSize().height);
 	}
+
 
 	@Override
 	protected void onSpawn(Pos pos) {
+
+		hitboxCenterPos.setX(pos.getX() + (getWidth() / 2));
+		hitboxCenterPos.setY(pos.getY() + (getHeight() / 2));
+
 		body.getPosition().setXY(pos.getX(), pos.getY());
+
 		super.onSpawn(pos);
 	}
 

@@ -3,13 +3,34 @@ package me.camdenorrb.zambiegame.impl.pos;
 /**
  * A mutable version of the position
  *
- * @param <N> The number type
  */
 
 public class MutablePos extends Pos {
 
 	public MutablePos(double x, double y) {
 		super(x, y);
+	}
+
+
+	public void add(double x, double y) {
+		this.x += x;
+		this.y += y;
+	}
+
+	public void sub(double x, double y) {
+		this.x -= x;
+		this.y -= y;
+	}
+
+
+	public void divide(double x, double y) {
+		this.x /= x;
+		this.y /= y;
+	}
+
+	public void multiply(double x, double y) {
+		this.x *= x;
+		this.y *= y;
 	}
 
 

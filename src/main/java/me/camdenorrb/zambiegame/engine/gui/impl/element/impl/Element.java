@@ -1,29 +1,46 @@
-package me.camdenorrb.zambiegame.engine.gui.impl.element;
+package me.camdenorrb.zambiegame.engine.gui.impl.element.impl;
 
+import me.camdenorrb.zambiegame.engine.gif.Gif;
+import me.camdenorrb.zambiegame.engine.gui.impl.element.base.ElementBase;
 import me.camdenorrb.zambiegame.impl.pos.MutablePos;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
 import me.camdenorrb.zambiegame.struct.LazyStruct;
-import me.camdenorrb.zambiegame.type.Named;
-import me.camdenorrb.zambiegame.type.Ranged;
-import me.camdenorrb.zambiegame.utils.ImageUtils;
 import me.camdenorrb.zambiegame.utils.LazyUtils;
+import me.camdenorrb.zambiegame.utils.TryUtils;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
+import java.util.UUID;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.max;
+import static java.util.Objects.requireNonNull;
+import static me.camdenorrb.zambiegame.utils.JavaUtils.apply;
 
 
 /**
  * The element structure for all elements placed on the GUI
  */
-public abstract class Element implements Named, Ranged {
+public abstract class Element implements ElementBase {
 
 	private Element() {}
 
 
+	private final UUID uuid = UUID.randomUUID();
+
+
 	public abstract Pos getCenter();
+
+	public abstract Dimension getSize();
+
+
+	public UUID getUUID() {
+		return uuid;
+	}
+
+	public abstract MutablePos getPosition();
 
 
 	/**
@@ -141,7 +158,7 @@ public abstract class Element implements Named, Ranged {
 		 *
 		 * @return Position A
 		 */
-		public Pos getStart() {
+		public MutablePos getStart() {
 			return start;
 		}
 
@@ -150,10 +167,18 @@ public abstract class Element implements Named, Ranged {
 		 *
 		 * @return Position B
 		 */
-		public Pos getEnd() {
+		public MutablePos getEnd() {
 			return end;
 		}
 
+
+		private double getWidth() {
+			return end.getX() - start.getX();
+		}
+
+		private double getHeight() {
+			return end.getY() - start.getY();
+		}
 
 		/**
 		 * Gets the color for the line
@@ -173,10 +198,21 @@ public abstract class Element implements Named, Ranged {
 			this.color = color;
 		}
 
+
+		@Override
+		public MutablePos getPosition() {
+			return getStart();
+		}
+
+
+		@Override
+		public Dimension getSize() {
+			return new Dimension((int) getWidth(), (int) getHeight());
+		}
+
 		@Override
 		public Pos getCenter() {
-			// TODO
-			return null;
+			return new Pos(start.getX() + (getWidth() / 2), start.getY() + (getHeight() / 2));
 		}
 	}
 
@@ -320,6 +356,28 @@ public abstract class Element implements Named, Ranged {
 			this.color = color;
 		}
 
+
+		public Pos getTopLeft() {
+			return position;
+		}
+
+		public Pos getTopRight() {
+			return new Pos(position.getX() + size.width, position.getY());
+		}
+
+		public Pos getBottomLeft() {
+			return new Pos(position.getX(), position.getY() + size.height);
+		}
+
+		public Pos getBottomRight() {
+			return new Pos(position.getX() + size.getWidth(), position.getY() + size.getHeight());
+		}
+
+		public Pos[] getCorners() {
+			return new Pos[] { getTopLeft(), getTopRight(), getBottomLeft(), getBottomRight() };
+		}
+
+
 		@Override
 		public boolean isInRange(Pos pos) {
 			// TODO
@@ -417,6 +475,15 @@ public abstract class Element implements Named, Ranged {
 			return null;
 		}
 
+		@Override
+		public MutablePos getPosition() {
+			return getLeft();
+		}
+
+		@Override
+		public Dimension getSize() {
+			return new Dimension((int) (right.getX() - left.getX()), (int) (max(left.getY(), right.getY()) - middle.getY()));
+		}
 	}
 
 
@@ -424,6 +491,8 @@ public abstract class Element implements Named, Ranged {
 	 * The Image Element
 	 */
 	public final static class Image extends Element {
+
+		private boolean isResized;
 
 		private InputStream imageStream;
 
@@ -433,7 +502,9 @@ public abstract class Element implements Named, Ranged {
 		private final MutablePos position;
 
 
-		private final LazyStruct<BufferedImage> image = LazyUtils.lazy(() -> ImageUtils.load(imageStream));
+		private final LazyStruct<BufferedImage> image = LazyUtils.lazy(() ->
+			TryUtils.attemptOrBreak(() -> ImageIO.read(imageStream))
+		);
 
 
 		public Image(Pos position, InputStream imageStream) {
@@ -493,6 +564,107 @@ public abstract class Element implements Named, Ranged {
 			return imageStream;
 		}
 
+		/**
+		 * Gets the position of the image
+		 *
+		 * @return The position of the image
+		 */
+		public MutablePos getPosition() {
+			return position;
+		}
+
+		/**
+		 * Gets the dimensions of the image
+		 *
+		 * @return The size of the image
+		 */
+		public Dimension getSize() {
+			return size;
+		}
+
+		public boolean isResized() {
+			return isResized;
+		}
+
+		public void setIsResized(boolean isResized) {
+			this.isResized = isResized;
+		}
+
+	}
+
+	/**
+	 * The Gif Element
+	 */
+	public final static class GifElem extends Element {
+
+		private boolean isResized;
+
+
+		private final Gif gif;
+
+		private final Dimension size;
+
+		private final MutablePos position;
+
+		private final Gif.Frame firstFrame;
+
+
+		public GifElem(Pos position, InputStream imageStream) {
+			this(position, apply(new Gif(), (it) -> it.read(imageStream)));
+		}
+
+		public GifElem(Pos position, Gif gif) {
+			this(position, new Dimension(gif.getFrames().get(0).getImage().getWidth(), gif.getFrames().get(0).getImage().getHeight()), gif);
+		}
+
+		public GifElem(Pos position, Dimension size, Gif gif) {
+			this.gif = gif;
+			this.size = size;
+			this.position = position.toMutable();
+			this.firstFrame = requireNonNull(gif.getFrames().get(0));
+		}
+
+
+		@Override
+		public String getName() {
+			return "Image";
+		}
+
+		@Override
+		public boolean isInRange(Pos pos) {
+			// TODO
+			return true;
+		}
+
+		public boolean isInPixelRange(Pos pos) {
+			// TODO
+			return true;
+		}
+
+
+		@Override
+		public Pos getCenter() {
+
+			final double halfWidth = firstFrame.getImage().getWidth() / 2;
+			final double halfHeight = firstFrame.getImage().getHeight() / 2;
+
+			return new Pos(position.getX() + halfWidth, position.getY() + halfHeight);
+		}
+
+
+		/**
+		 * Gets the file for the image
+		 *
+		 * @return The file for the image
+		 *//*
+		public File getFile() {
+			return imageFile;
+		}*/
+
+
+		public Gif getGif() {
+			return gif;
+		}
 
 		/**
 		 * Gets the position of the image
@@ -510,6 +682,15 @@ public abstract class Element implements Named, Ranged {
 		 */
 		public Dimension getSize() {
 			return size;
+		}
+
+
+		public boolean isResized() {
+			return isResized;
+		}
+
+		public void setIsResized(boolean isResized) {
+			this.isResized = isResized;
 		}
 
 	}

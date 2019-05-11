@@ -1,6 +1,6 @@
 package me.camdenorrb.zambiegame.type;
 
-import me.camdenorrb.zambiegame.engine.gui.impl.element.Element;
+import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
 
 import java.util.List;
 
