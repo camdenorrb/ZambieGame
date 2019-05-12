@@ -28,7 +28,7 @@ public class ZambieGame extends GameStruct {
 
 
 	public ZambieGame() {
-		super(60);
+		super(120);
 	}
 
 

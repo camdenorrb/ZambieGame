@@ -1,6 +1,6 @@
 package me.camdenorrb.zambiegame.impl.pos;
 
-import me.camdenorrb.zambiegame.impl.Pair;
+import me.camdenorrb.zambiegame.engine.physics.impl.Distance;
 
 /**
  * A position implementation
@@ -35,12 +35,12 @@ public class Pos {
 	}
 
 
-	public Pair<Double, Double> distTo(Pos to) {
+	public Distance distTo(Pos to) {
 
 		final Pos fromDouble = new Pos(x, y);
 		final Pos toDouble = new Pos(to.x, to.y);
 
-		return new Pair<>(Math.abs(fromDouble.x - toDouble.x), Math.abs(fromDouble.y - toDouble.y));
+		return new Distance(Math.abs(fromDouble.x - toDouble.x), Math.abs(fromDouble.y - toDouble.y));
 		//return Math.sqrt(Math.pow(fromDouble.x - toDouble.x, 2) + Math.pow(fromDouble.y - toDouble.y, 2));
 	}
 

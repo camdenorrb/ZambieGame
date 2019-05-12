@@ -2,16 +2,20 @@ package me.camdenorrb.zambiegame.entity.impl;
 
 
 import me.camdenorrb.zambiegame.ZambieGame;
+import me.camdenorrb.zambiegame.engine.gif.Gif;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
+import me.camdenorrb.zambiegame.engine.physics.impl.Distance;
 import me.camdenorrb.zambiegame.entity.struct.EntityStruct;
-import me.camdenorrb.zambiegame.impl.Pair;
 import me.camdenorrb.zambiegame.impl.pos.MutablePos;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
+import me.camdenorrb.zambiegame.struct.LazyStruct;
 import me.camdenorrb.zambiegame.utils.ResourceUtils;
 
 import java.awt.*;
 import java.util.Collections;
 import java.util.List;
+
+import static me.camdenorrb.zambiegame.utils.GifUtils.lazyLoad;
 
 
 /**
@@ -24,32 +28,40 @@ public class Huemin extends EntityStruct {
 	public static final int HITBOX_HEIGHT = 23;
 
 
-	private static final String LEFT_WALK_PATH = "huemin/left-walk.gif";
+	protected static final String LEFT_WALK_PATH = "huemin/left-walk.gif";
 
-	private static final String RIGHT_WALK_PATH = "huemin/right-walk.gif";
+	protected static final String RIGHT_WALK_PATH = "huemin/right-walk.gif";
 
-	private static final String FORWARD_WALK_PATH = "huemin/front-walk.gif";
+	protected static final String UP_WALK_PATH = "huemin/front-walk.gif";
 
-	private static final String BACKWARDS_WALK_PATH = "huemin/back-walk.gif";
-
-
-	private Element.GifElem body;
+	protected static final String DOWN_WALK_PATH = "huemin/back-walk.gif";
 
 
+	protected static final String ATTACK_SWORD_PATH = "huemin/attack-sword.gif";
 
-	private boolean isCollided;
 
-	private boolean isMoving = true;
+	protected Element.GifElem body;
+
+
+	protected boolean isCollided;
+
+	protected boolean isMoving = true;
 
 
 	private final MutablePos hitboxCenterPos = new MutablePos(0, 0);
 
+	private final LazyStruct<Gif> upWalkGif = lazyLoad(ResourceUtils.get(UP_WALK_PATH));
+	private final LazyStruct<Gif> downWalkGif = lazyLoad(ResourceUtils.get(DOWN_WALK_PATH));
+	private final LazyStruct<Gif> leftWalkGif = lazyLoad(ResourceUtils.get(LEFT_WALK_PATH));
+	private final LazyStruct<Gif> rightWalkGif = lazyLoad(ResourceUtils.get(RIGHT_WALK_PATH));
+
+	private final LazyStruct<Gif> attackSwordGif = lazyLoad(ResourceUtils.get(ATTACK_SWORD_PATH));
 
 
 	public Huemin(ZambieGame game) {
 		super(game);
 		//final InputStream inputStream = getClass().getResource("resources/robotcat.jpeg").openStream();
-		this.body = new Element.GifElem(pos, ResourceUtils.get(RIGHT_WALK_PATH));
+		this.body = new Element.GifElem(pos, rightWalkGif.get());
 		//this.body = new Element.Rectangle(Color.BLACK, pos, new Dimension(10, 10));
 	}
 
@@ -62,9 +74,7 @@ public class Huemin extends EntityStruct {
 			isMoving = false;
 			isCollided = true;
 
-			kill();
-			this.body = new Element.GifElem(body.getPosition(), ResourceUtils.get("huemin/attack-sword.gif"));
-			spawn(pos);
+			changeBody(attackSwordGif.get());
 		});
 	}
 
@@ -120,23 +130,25 @@ public class Huemin extends EntityStruct {
 
 		if (!isMoving) return;
 
-		pos.add(1, 0);
-		bodyPos.add(1, 0);
-		hitboxCenterPos.add(1, 0);
+		moveBy(1, 0);
+
 		//pos.setX(pos.getX() + ((int) (Math.random() * 20 - 10)));
 		//pos.setY(pos.getY() + ((int) (Math.random() * 20 - 10)));
 
-		final Dimension size = game.getGui().getSize();
+		final Dimension guiSize = game.getGui().getSize();
 
-		if (bodyPos.getX() >= size.width) {
-			bodyPos.setX(0.0);
-			pos.setX(0.0);
-
+		if (bodyPos.getX() < 0) {
+			moveTo(guiSize.width, bodyPos.getY());
+		}
+		else if (bodyPos.getX() >= guiSize.width) {
+			moveTo(0, bodyPos.getY());
 		}
 
-		if (bodyPos.getY() >= size.height) {
-			bodyPos.setY(0.0);
-			pos.setX(0.0);
+		if (bodyPos.getY() < 0) {
+			moveTo(bodyPos.getX(), guiSize.getHeight());
+		}
+		else if (bodyPos.getY() >= guiSize.height) {
+			moveTo(bodyPos.getX(), 0);
 		}
 
 		/*
@@ -152,9 +164,57 @@ public class Huemin extends EntityStruct {
 
 	@Override
 	public boolean isInRange(Pos pos) {
-		final Pair<Double, Double> distance = hitboxCenterPos.distTo(pos);
-		return distance.getValue1() <= (HITBOX_WIDTH / 2) && distance.getValue2() <= (HITBOX_HEIGHT / 2);//<= Math.max(body.getSize().width, body.getSize().height);
+		final Distance distance = hitboxCenterPos.distTo(pos);
+		return distance.getX() <= (HITBOX_WIDTH / 2.0) && distance.getY() <= (HITBOX_HEIGHT / 2.0);//<= Math.max(body.getSize().width, body.getSize().height);
 	}
+
+
+	private void changeBody(Gif newBodyGif) {
+
+		final Element.GifElem newBody = new Element.GifElem(body.getPosition(), newBodyGif);
+
+		final MutablePos bodyPos = newBody.getPosition();
+
+		final Dimension size = newBody.getSize();
+		final Dimension lastSize = body.getSize();
+
+		bodyPos.setX(bodyPos.getX() + (lastSize.width - size.width));
+		bodyPos.setY(bodyPos.getY() + (lastSize.height - size.height));
+
+		kill();
+		body = newBody;
+		spawn(bodyPos);
+	}
+
+	public void moveTo(double x, double y) {
+		pos.setXY(x, y);
+		hitboxCenterPos.setXY(x, y);
+		body.getPosition().setXY(x, y);
+	}
+
+	public void moveBy(double x, double y) {
+
+		pos.add(x, y);
+		hitboxCenterPos.add(x, y);
+		body.getPosition().add(x, y);
+
+		// TODO: If negative flip
+
+		if (x < 0 && !body.getGif().equals(leftWalkGif.get())) {
+			changeBody(leftWalkGif.get());
+		}
+		else if (x > 0 && !body.getGif().equals(rightWalkGif.get())) {
+			changeBody(rightWalkGif.get());
+		}
+		else if (y < 0 && !body.getGif().equals(downWalkGif.get())) {
+			changeBody(downWalkGif.get());
+		}
+		else if (y > 0 && !body.getGif().equals(upWalkGif.get())) {
+			changeBody(upWalkGif.get());
+		}
+
+	}
+
 
 		/*
 		final Dimension size = body.getSize();

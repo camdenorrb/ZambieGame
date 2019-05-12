@@ -1,5 +1,7 @@
 package me.camdenorrb.zambiegame.engine.gui.impl;
 
+/*
+
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
 import me.camdenorrb.zambiegame.engine.gui.struct.GuiStruct;
 import org.lwjgl.BufferUtils;
@@ -175,7 +177,8 @@ public final class OpenGLGui extends GuiStruct {
 		glEnd();
 		glFlush();
 
-		/*
+		*/
+/*
 		if (element instanceof Element.Rectangle) {
 
 			final Element.Rectangle rectangle = (Element.Rectangle) element;
@@ -195,7 +198,8 @@ public final class OpenGLGui extends GuiStruct {
 
 			glEnd();
 			glFlush();
-		}*/
+		}*//*
+
 
 
 		//element.
@@ -215,3 +219,4 @@ public final class OpenGLGui extends GuiStruct {
 	}
 
 }
+*/

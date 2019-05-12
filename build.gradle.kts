@@ -1,24 +1,23 @@
-import org.gradle.internal.os.OperatingSystem
-
 plugins {
     idea
     application
     id("com.github.johnrengelman.shadow") version "5.0.0"
-    kotlin("jvm") version "1.3.31"
+    //kotlin("jvm") version "1.3.31"
 }
 
 group = "me.camdenorrb"
 version = "1.0.0"
 
-val lwjglVersion = "3.2.2"
-val jomlVersion = "1.9.14"
+//val lwjglVersion = "3.2.2"
+//val jomlVersion = "1.9.14"
 
+/*
 val lwjglNatives = when (OperatingSystem.current()) {
     OperatingSystem.LINUX   -> "natives-linux"
     OperatingSystem.MAC_OS  -> "natives-macos"
     OperatingSystem.WINDOWS -> "natives-windows"
     else -> throw Error("Unrecognized or unsupported Operating system. Please set \"lwjglNatives\" manually")
-}
+}*/
 
 repositories {
     mavenLocal()
@@ -27,14 +26,15 @@ repositories {
 
 dependencies {
 
-    implementation(kotlin("stdlib"))
-    implementation(kotlin("reflect"))
+    //implementation(kotlin("stdlib"))
+    //implementation(kotlin("reflect"))
 
     implementation("org.processing:core:+")
-    implementation("me.camdenorrb:MiniBus:+")
+    //implementation("me.camdenorrb:MiniBus:+")
 
-    implementation(files("libs/gifAnimation.jar"))
+    //implementation(files("libs/gifAnimation.jar"))
 
+    /*
     // LWJGL
     implementation("org.lwjgl", "lwjgl", lwjglVersion)
     implementation("org.lwjgl", "lwjgl-assimp", lwjglVersion)
@@ -103,7 +103,7 @@ dependencies {
     runtimeOnly("org.lwjgl", "lwjgl-xxhash", lwjglVersion, classifier = lwjglNatives)
     runtimeOnly("org.lwjgl", "lwjgl-yoga", lwjglVersion, classifier = lwjglNatives)
     runtimeOnly("org.lwjgl", "lwjgl-zstd", lwjglVersion, classifier = lwjglNatives)
-    implementation("org.joml", "joml", jomlVersion)
+    implementation("org.joml", "joml", jomlVersion)*/
 }
 
 application {

@@ -1,10 +1,8 @@
 package me.camdenorrb.zambiegame;
 
-import me.camdenorrb.minibus.MiniBus;
-
 public class Main {
 
-	private static final MiniBus MINI_BUS = new MiniBus();
+	//private static final MiniBus MINI_BUS = new MiniBus();
 
 
 	public static void main(String[] args) {

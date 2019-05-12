@@ -255,14 +255,15 @@ public class ProcGui extends GuiStruct {
 			}
 		}
 
+		public float getFrameRate() {
+			return frameRate;
+		}
+
 		public void setFrameRate(float frameRate) {
 			this.frameRate = frameRate;
 			if (isVisible()) frameRate(frameRate);
 		}
 
-		public float getFrameRate() {
-			return frameRate;
-		}
 	}
 
 }

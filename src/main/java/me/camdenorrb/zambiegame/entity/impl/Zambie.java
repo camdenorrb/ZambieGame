@@ -2,8 +2,8 @@ package me.camdenorrb.zambiegame.entity.impl;
 
 import me.camdenorrb.zambiegame.ZambieGame;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
+import me.camdenorrb.zambiegame.engine.physics.impl.Distance;
 import me.camdenorrb.zambiegame.entity.struct.EntityStruct;
-import me.camdenorrb.zambiegame.impl.Pair;
 import me.camdenorrb.zambiegame.impl.pos.MutablePos;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
 import me.camdenorrb.zambiegame.utils.ResourceUtils;
@@ -120,8 +120,8 @@ public class Zambie extends EntityStruct {
 
 	@Override
 	public boolean isInRange(Pos pos) {
-		final Pair<Double, Double> distance = hitboxCenterPos.distTo(pos);
-		return distance.getValue1() <= (HITBOX_WIDTH / 2) && distance.getValue2() <= (HITBOX_HEIGHT / 2);//<= Math.max(body.getSize().width, body.getSize().height);
+		final Distance distance = hitboxCenterPos.distTo(pos);
+		return distance.getX() <= (HITBOX_WIDTH / 2.0) && distance.getY() <= (HITBOX_HEIGHT / 2.0);//<= Math.max(body.getSize().width, body.getSize().height);
 	}
 
 

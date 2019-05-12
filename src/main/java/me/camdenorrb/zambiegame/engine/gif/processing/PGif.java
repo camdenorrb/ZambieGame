@@ -76,9 +76,9 @@ public class PGif extends PImage {
 
                 //pixels = currentFrame.getImage().getData().getPixels(0, 0, width, height, new int[width * height]);
 
-                apply(new PixelGrabber(currentFrame.getImage(), 0, 0, width, height, pixels, 0, width), (it) -> {
-                    attemptOrBreak((TypedTryBlock<Boolean>) it::grabPixels);
-                });
+                apply(new PixelGrabber(currentFrame.getImage(), 0, 0, width, height, pixels, 0, width), (it) ->
+                    attemptOrBreak((TypedTryBlock<Boolean>) it::grabPixels)
+                );
 
                 updatePixels();
 
