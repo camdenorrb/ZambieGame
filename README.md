@@ -8,4 +8,4 @@ A 2D fortress war game, Huemins vs Zambies
 
 Java profiler: https://www.ej-technologies.com/products/jprofiler/overview.html 
  
-Their products helps me make the more performant game possible, give them a try if you get a chance!
+Their products helps me make the most performant game possible, give them a try if you get a chance!
