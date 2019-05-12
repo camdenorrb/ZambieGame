@@ -32,9 +32,9 @@ public class Huemin extends EntityStruct {
 
 	protected static final String RIGHT_WALK_PATH = "huemin/right-walk.gif";
 
-	protected static final String UP_WALK_PATH = "huemin/front-walk.gif";
+	protected static final String UP_WALK_PATH = "huemin/up-walk.gif";
 
-	protected static final String DOWN_WALK_PATH = "huemin/back-walk.gif";
+	protected static final String DOWN_WALK_PATH = "huemin/down-walk.gif";
 
 
 	protected static final String ATTACK_SWORD_PATH = "huemin/attack-sword.gif";
@@ -71,10 +71,11 @@ public class Huemin extends EntityStruct {
 
 			if (isCollided) return;
 
-			isMoving = false;
-			isCollided = true;
+			//isMoving = false;
+			//isCollided = true;
 
-			changeBody(attackSwordGif.get());
+			zambie.kill();
+			//changeBody(attackSwordGif.get());
 		});
 	}
 

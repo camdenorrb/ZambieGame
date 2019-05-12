@@ -27,6 +27,11 @@ public abstract class FortStruct implements FortBase {
 	}
 
 
+	protected void onDamage() {}
+
+	protected void onTeleport(Pos toPos) {}
+
+
 	protected void onKill() {
 		game.getGui().remElements(getParts());
 	}
@@ -34,10 +39,6 @@ public abstract class FortStruct implements FortBase {
 	protected void onSpawn(Pos pos) {
 		game.getGui().addElements(getParts());
 	}
-
-	protected void onDamage() {}
-
-	protected void onTeleport(Pos toPos) {}
 
 
 	public abstract double getWidth();
@@ -47,10 +48,6 @@ public abstract class FortStruct implements FortBase {
 
 	public abstract Pos getCenter();
 
-
-	protected Pos makeEntitySpawnPos() {
-		return new Pos(getCenter().getX(), pos.getY());
-	}
 
 	@Override
 	public final int getHealth() {
@@ -101,6 +98,14 @@ public abstract class FortStruct implements FortBase {
 	@Override
 	public final boolean isSpawned() {
 		return isSpawned;
+	}
+
+	public Pos getEntitySpawnPos() {
+		return entitySpawnPos;
+	}
+
+	protected Pos makeEntitySpawnPos() {
+		return new Pos(getCenter().getX(), getHeight() - 20);
 	}
 
 }

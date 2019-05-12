@@ -2,7 +2,9 @@ package me.camdenorrb.zambiegame.utils;
 
 import me.camdenorrb.zambiegame.struct.LazyStruct;
 
+import java.io.BufferedInputStream;
 import java.io.InputStream;
+import java.util.Objects;
 
 
 public final class ResourceUtils {
@@ -13,8 +15,8 @@ public final class ResourceUtils {
 	private ResourceUtils() {}
 
 
-	public static InputStream get(String path) {
-		return loader.get().getResourceAsStream(path);
+	public static BufferedInputStream get(String path) {
+		return new BufferedInputStream(Objects.requireNonNull(loader.get().getResourceAsStream(path)));
 	}
 
 }

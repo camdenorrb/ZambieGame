@@ -3,17 +3,24 @@ package me.camdenorrb.zambiegame;
 import me.camdenorrb.zambiegame.engine.game.struct.GameStruct;
 import me.camdenorrb.zambiegame.engine.gui.impl.ProcGui;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
+import me.camdenorrb.zambiegame.engine.music.Song;
 import me.camdenorrb.zambiegame.entity.base.EntityBase;
 import me.camdenorrb.zambiegame.entity.impl.Huemin;
 import me.camdenorrb.zambiegame.entity.impl.Zambie;
 import me.camdenorrb.zambiegame.fort.impl.HueminFort;
 import me.camdenorrb.zambiegame.fort.impl.ZambieFort;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
+import me.camdenorrb.zambiegame.struct.LazyStruct;
 import me.camdenorrb.zambiegame.utils.DisplayUtils;
+import me.camdenorrb.zambiegame.utils.LazyUtils;
+import me.camdenorrb.zambiegame.utils.ResourceUtils;
 
 import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
+
+import static me.camdenorrb.zambiegame.utils.LazyUtils.*;
 
 
 /**
@@ -24,6 +31,11 @@ public class ZambieGame extends GameStruct {
 	private final Set<EntityBase> entities = new HashSet<>();
 
 	private final ProcGui gui = new ProcGui("ZambieGame", DisplayUtils.getRefreshRate(), new Dimension(1500, 750));
+
+	private final LazyStruct<Song> song = lazy(() ->
+		new Song("Meow", ResourceUtils.get("music/wav/game-background.wav")
+	));
+
 	//private final OpenGLGui gui = new OpenGLGui("ZambieGame", new Dimension(1500, 750), false);
 
 
@@ -40,6 +52,8 @@ public class ZambieGame extends GameStruct {
 
 	@Override
 	protected void onStart() {
+
+		song.get().play(true);
 
 		//spawnEntity(new Huemin(this, new Pos(0f, 0f)));
 
@@ -59,6 +73,7 @@ public class ZambieGame extends GameStruct {
 		// On the ground
 		double startingY = 500.0;
 
+		/*
 		for (int i = 0; i <= 200; i += 10) {
 			new Huemin(this).spawn(new Pos(10.0, i + startingY));
 		}
@@ -66,6 +81,7 @@ public class ZambieGame extends GameStruct {
 		for (int i = 0; i <= 200; i += 10) {
 			new Zambie(this).spawn(new Pos(size.width - 10.0, i + startingY));
 		}
+		*/
 
 		//int startingY = 500;
 
@@ -75,6 +91,7 @@ public class ZambieGame extends GameStruct {
 		final ZambieFort zambieFort = new ZambieFort(this);
 
 
+		/*
 		// TOP
 		for (double i = 0; i <= 100; i += 10) {
 			new Huemin(this).spawn(new Pos(i + 100, i + startingY));
@@ -101,12 +118,13 @@ public class ZambieGame extends GameStruct {
 
 		for (double i = 100; i <= 200; i += 10) {
 			new Zambie(this).spawn(new Pos(size.width - i - 16, (300 - i) + startingY));
-		}
-
+		}*/
 
 
 		hueminFort.spawn(new Pos(-200.0, 0.0));
 		zambieFort.spawn(new Pos(gui.getSize().width - (zambieFort.getWidth() - 200.0), 0.0));
+
+		new Huemin(this).spawn(hueminFort.getEntitySpawnPos());
 
 		gui.show();
 	}

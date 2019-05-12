@@ -23,8 +23,6 @@ public class PGif extends PImage {
 
     private final Gif gif;
 
-    private final PApplet applet;
-
 
     public PGif(Gif gif, PApplet applet) {
 
@@ -33,7 +31,6 @@ public class PGif extends PImage {
         );
 
         this.gif = gif;
-        this.applet = applet;
 
         applet.registerMethod("dispose", this);
     }
