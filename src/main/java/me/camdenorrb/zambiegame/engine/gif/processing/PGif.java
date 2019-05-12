@@ -14,12 +14,7 @@ import static me.camdenorrb.zambiegame.utils.TryUtils.attemptOrBreak;
 
 public class PGif extends PImage {
 
-    private Thread loopThread;
-
-    private boolean isPlaying;
-
     private int currentFrameIndex;
-
 
     private final Gif gif;
 
@@ -31,11 +26,10 @@ public class PGif extends PImage {
         );
 
         this.gif = gif;
-
-        applet.registerMethod("dispose", this);
     }
 
 
+    /*
     public void start() {
 
         if (isPlaying) return;
@@ -50,9 +44,33 @@ public class PGif extends PImage {
         isPlaying = false;
 
         stopLoop();
+    }*/
+
+    public int getDelayForCurrentFrame() {
+        return getFrames().get(currentFrameIndex).getDelay();
     }
 
-    private void startLoop() {
+    public void playNextFrame() {
+
+        final Gif.Frame currentFrame = getFrames().get(currentFrameIndex);
+
+
+        apply(new PixelGrabber(currentFrame.getImage(), 0, 0, width, height, pixels, 0, width), (it) ->
+            attemptOrBreak((TypedTryBlock<Boolean>) it::grabPixels)
+        );
+
+        updatePixels();
+
+
+        if (currentFrameIndex + 1 >= getFrames().size()) {
+            currentFrameIndex = 0;
+        }
+        else {
+            currentFrameIndex++;
+        }
+    }
+
+    /*private void startLoop() {
 
         loopThread = new Thread(() -> {
 
@@ -95,11 +113,7 @@ public class PGif extends PImage {
         });
 
         loopThread.start();
-    }
-
-    private void stopLoop() {
-        loopThread = null;
-    }
+    }*/
 
 
     public double getWidth() {
@@ -108,16 +122,6 @@ public class PGif extends PImage {
 
     public double getHeight() {
         return getFrames().get(currentFrameIndex).getImage().getHeight();
-    }
-
-
-    public void dispose() {
-        stop();
-    }
-
-
-    public boolean isPlaying() {
-        return isPlaying;
     }
 
 

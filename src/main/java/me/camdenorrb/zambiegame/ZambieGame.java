@@ -12,15 +12,13 @@ import me.camdenorrb.zambiegame.fort.impl.ZambieFort;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
 import me.camdenorrb.zambiegame.struct.LazyStruct;
 import me.camdenorrb.zambiegame.utils.DisplayUtils;
-import me.camdenorrb.zambiegame.utils.LazyUtils;
 import me.camdenorrb.zambiegame.utils.ResourceUtils;
 
 import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ConcurrentSkipListSet;
 
-import static me.camdenorrb.zambiegame.utils.LazyUtils.*;
+import static me.camdenorrb.zambiegame.utils.LazyUtils.lazy;
 
 
 /**
@@ -73,7 +71,7 @@ public class ZambieGame extends GameStruct {
 		// On the ground
 		double startingY = 500.0;
 
-		/*
+
 		for (int i = 0; i <= 200; i += 10) {
 			new Huemin(this).spawn(new Pos(10.0, i + startingY));
 		}
@@ -81,7 +79,7 @@ public class ZambieGame extends GameStruct {
 		for (int i = 0; i <= 200; i += 10) {
 			new Zambie(this).spawn(new Pos(size.width - 10.0, i + startingY));
 		}
-		*/
+
 
 		//int startingY = 500;
 

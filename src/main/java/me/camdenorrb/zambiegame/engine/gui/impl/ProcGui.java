@@ -4,6 +4,7 @@ package me.camdenorrb.zambiegame.engine.gui.impl;
 import me.camdenorrb.zambiegame.engine.gif.processing.PGif;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
 import me.camdenorrb.zambiegame.engine.gui.struct.GuiStruct;
+import me.camdenorrb.zambiegame.engine.manager.PGifManager;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -31,6 +32,8 @@ public class ProcGui extends GuiStruct {
 	private final Dimension size;
 
 
+	private final PGifManager gifManager = new PGifManager();
+
 	private final Map<UUID, PImage> imageCache = new HashMap<>();
 
 
@@ -56,11 +59,13 @@ public class ProcGui extends GuiStruct {
 
 	@Override
 	public void onShow() {
+		gifManager.enable();
 		applet.getSurface().setVisible(true);
 	}
 
 	@Override
 	public void onHide() {
+		gifManager.disable();
 		applet.getSurface().setVisible(false);
 	}
 
@@ -244,7 +249,7 @@ public class ProcGui extends GuiStruct {
 				final Dimension dimension = gifElem.getSize();
 
 				final PImage pImage = imageCache.computeIfAbsent(gifElem.getUUID(), (id) ->
-					apply(new PGif(gifElem.getGif(), this), PGif::start)
+					apply(new PGif(gifElem.getGif(), this), gifManager::addGif)
 				);
 
 				if (gifElem.isResized()) {

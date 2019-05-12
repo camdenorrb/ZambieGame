@@ -1,32 +1,45 @@
 package me.camdenorrb.zambiegame.engine.manager;
 
 import me.camdenorrb.zambiegame.base.ModuleBase;
+import me.camdenorrb.zambiegame.engine.game.impl.GameTimer;
 import me.camdenorrb.zambiegame.engine.gif.processing.PGif;
-import me.camdenorrb.zambiegame.utils.TimerUtils;
+import me.camdenorrb.zambiegame.struct.LazyStruct;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static me.camdenorrb.zambiegame.utils.LazyUtils.lazy;
 
 
 public class PGifManager implements ModuleBase {
 
 	private boolean isEnabled;
 
-	private Set<PGif> gifs = new HashSet<>();
+	private ConcurrentHashMap<PGif, Integer> gifs = new ConcurrentHashMap<>();
 
 
-	private final Runnable loopTask = () -> {
-		new HashSet<>(gifs).forEach((it) -> {
-			it.updatePixels();
-		});
-		//gifs
-	};
+	private final Runnable loopTask = () -> gifs.forEach((gif, wait) -> {
+		if (wait <= 0) {
+			gif.playNextFrame();
+			gifs.put(gif, gif.getDelayForCurrentFrame() * 10);
+		}
+		else {
+			gifs.put(gif, wait - 1);
+		}
+	});
+
+	private final LazyStruct<GameTimer> timer = lazy(() ->
+		new GameTimer(1, loopTask)
+	);
 
 
 	@Override
 	public void enable() {
 
 		if (isEnabled) return;
+
+		timer.get().start();
 
 		isEnabled = true;
 	}
@@ -35,6 +48,8 @@ public class PGifManager implements ModuleBase {
 	public void disable() {
 
 		if (!isEnabled) return;
+
+		timer.get().stop();
 
 		isEnabled = false;
 	}
@@ -46,35 +61,17 @@ public class PGifManager implements ModuleBase {
 	}
 
 
-	public boolean addGif(PGif gif) {
-		return gifs.add(gif);
+	public void addGif(PGif gif) {
+		gifs.put(gif, gif.getDelayForCurrentFrame() * 10);
 	}
 
-	public boolean remGif(PGif gif) {
-		return gifs.remove(gif);
-	}
-
-
-	public boolean addGif(PGif... gifs) {
-		return this.gifs.addAll(Arrays.asList(gifs));
-	}
-
-	public boolean addGif(Collection<? extends PGif> gifs) {
-		return this.gifs.addAll(gifs);
-	}
-
-
-	public boolean remGif(PGif... gifs) {
-		return this.gifs.removeAll(Arrays.asList(gifs));
-	}
-
-	public boolean remGif(Collection<PGif> gifs) {
-		return this.gifs.removeAll(gifs);
+	public void remGif(PGif gif) {
+		gifs.remove(gif);
 	}
 
 
 	public Set<PGif> getGifs() {
-		return Collections.unmodifiableSet(gifs);
+		return Collections.unmodifiableSet(gifs.keySet());
 	}
 
 }
