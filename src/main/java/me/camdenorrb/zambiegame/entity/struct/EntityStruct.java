@@ -1,6 +1,7 @@
 package me.camdenorrb.zambiegame.entity.struct;
 
 import me.camdenorrb.zambiegame.ZambieGame;
+import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Layer;
 import me.camdenorrb.zambiegame.engine.physics.impl.velocity.MutableVelocity;
 import me.camdenorrb.zambiegame.engine.physics.impl.velocity.Velocity;
 import me.camdenorrb.zambiegame.entity.base.EntityBase;
@@ -57,7 +58,7 @@ public abstract class EntityStruct implements EntityBase {
 	 */
 	protected void onSpawn(Pos pos) {
 		game.getEntities().add(this);
-		game.getGui().addElements(getParts());
+		game.getGui().addElements(Layer.ENTITY, getParts());
 	}
 
 
@@ -65,7 +66,7 @@ public abstract class EntityStruct implements EntityBase {
 	 * Handles removal of the entity parts and self
 	 */
 	protected void onRemove() {
-		game.getGui().remElements(getParts());
+		game.getGui().remElements(Layer.ENTITY, getParts());
 	}
 
 
@@ -98,7 +99,7 @@ public abstract class EntityStruct implements EntityBase {
 	}
 
 	public final <S extends Ranged> void addCollideHandler(Class<S> clazz, Consumer<S> handler) {
-		collisionHandlers.computeIfAbsent(clazz, (ignored) -> new HashSet<>()).add(handler);
+		collisionHandlers.computeIfAbsent(clazz, ignored -> new HashSet<>()).add(handler);
 	}
 
 	@SuppressWarnings("unchecked")

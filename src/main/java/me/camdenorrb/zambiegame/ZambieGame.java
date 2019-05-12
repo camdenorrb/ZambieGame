@@ -3,6 +3,7 @@ package me.camdenorrb.zambiegame;
 import me.camdenorrb.zambiegame.engine.game.struct.GameStruct;
 import me.camdenorrb.zambiegame.engine.gui.impl.ProcGui;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
+import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Layer;
 import me.camdenorrb.zambiegame.engine.music.Song;
 import me.camdenorrb.zambiegame.entity.base.EntityBase;
 import me.camdenorrb.zambiegame.entity.impl.Huemin;
@@ -65,7 +66,7 @@ public class ZambieGame extends GameStruct {
 
 		//gui.addElements(new Element.Rectangle(new Color(155, 118, 83), new Pos(0f, (float) size.height - 125), new Dimension(size.width, 125)));
 		//gui.addElements(new Element.Text("Hello how are you?", new Dimension(1000, 100), new Pos(0f, 0f)));
-		gui.addElements(new Element.Rectangle(new Color(63, 122, 77), new Pos(0.0, size.height - 250.0), new Dimension(size.width, 250)));
+		gui.addElements(Layer.BACKGROUND, new Element.Rectangle(new Color(63, 122, 77), new Pos(0.0, size.height - 250.0), new Dimension(size.width, 250)));
 
 
 		// On the ground

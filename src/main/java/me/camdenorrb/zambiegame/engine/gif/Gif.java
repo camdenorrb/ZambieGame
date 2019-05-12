@@ -63,7 +63,7 @@ public class Gif {
             ImageIO.createImageOutputStream(new FileOutputStream(file))
         );
 
-        final ImageWriter writer = apply(ImageIO.getImageWritersBySuffix("gif").next(), (it) -> {
+        final ImageWriter writer = apply(ImageIO.getImageWritersBySuffix("gif").next(), it -> {
             it.setOutput(outputStream);
             attemptOrBreak(() -> it.prepareWriteSequence(null));
         });

@@ -10,7 +10,6 @@ import processing.core.PApplet;
 import processing.core.PImage;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -142,7 +141,7 @@ public class ProcGui extends GuiStruct {
 		public void draw() {
 			frameRate(frameRate);
 			background(128, 218, 235);
-			new ArrayList<>(elements).forEach(this::draw);
+			getElements().forEach(this::draw);
 		}
 
 
@@ -231,7 +230,7 @@ public class ProcGui extends GuiStruct {
 
 				final Dimension dimension = image.getSize();
 
-				final PImage pImage = imageCache.computeIfAbsent(image.getUUID(), (id) ->
+				final PImage pImage = imageCache.computeIfAbsent(image.getUUID(), id ->
 					new PImage(image.getImage())
 				);
 
@@ -248,7 +247,7 @@ public class ProcGui extends GuiStruct {
 
 				final Dimension dimension = gifElem.getSize();
 
-				final PImage pImage = imageCache.computeIfAbsent(gifElem.getUUID(), (id) ->
+				final PImage pImage = imageCache.computeIfAbsent(gifElem.getUUID(), id ->
 					apply(new PGif(gifElem.getGif(), this), gifManager::addGif)
 				);
 

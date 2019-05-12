@@ -306,6 +306,7 @@ public abstract class Element implements ElementBase {
 		private final MutablePos position;
 
 
+		// TODO: Take in primitives as a constructor
 		public Rectangle(Color color, Pos position, Dimension size) {
 			this.size = size;
 			this.color = color;
@@ -610,7 +611,7 @@ public abstract class Element implements ElementBase {
 
 
 		public GifElem(Pos position, InputStream imageStream) {
-			this(position, apply(new Gif(), (it) -> it.read(imageStream)));
+			this(position, apply(new Gif(), it -> it.read(imageStream)));
 		}
 
 		public GifElem(Pos position, Gif gif) {

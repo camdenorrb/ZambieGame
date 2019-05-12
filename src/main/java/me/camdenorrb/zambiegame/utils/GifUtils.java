@@ -17,15 +17,15 @@ public final class GifUtils {
 
 
 	public static Gif load(File file) {
-		return apply(new Gif(), (it) -> it.read(file));
+		return apply(new Gif(), it -> it.read(file));
 	}
 
 	public static Gif load(InputStream inputStream) {
-		return apply(new Gif(), (it) -> it.read(inputStream));
+		return apply(new Gif(), it -> it.read(inputStream));
 	}
 
 	public static Gif load(ImageInputStream inputStream) {
-		return apply(new Gif(), (it) -> it.read(inputStream));
+		return apply(new Gif(), it -> it.read(inputStream));
 	}
 
 

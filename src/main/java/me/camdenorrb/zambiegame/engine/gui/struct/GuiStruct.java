@@ -2,11 +2,11 @@ package me.camdenorrb.zambiegame.engine.gui.struct;
 
 import me.camdenorrb.zambiegame.engine.gui.base.GuiBase;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
+import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Layer;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.stream.Stream;
 
 
 /**
@@ -17,8 +17,7 @@ public abstract class GuiStruct implements GuiBase {
 	private boolean isVisible, isInitialized;
 
 	//private final Set<Element> elements = new HashSet<>();
-	// TODO: Make layers List<List<Element>>, 0 being background
-	protected final List<Element> elements = new ArrayList<>();
+	protected final Map<Layer, List<Element>> elements = new ConcurrentSkipListMap<>();
 
 
 	/**
@@ -88,8 +87,8 @@ public abstract class GuiStruct implements GuiBase {
 	 *
 	 * @return The elements of the GUI
 	 */
-	public final List<Element> getElements() {
-		return Collections.unmodifiableList(elements);
+	public final Stream<Element> getElements() {
+		return elements.values().stream().flatMap(List::stream);
 	}
 
 	/**
@@ -97,8 +96,8 @@ public abstract class GuiStruct implements GuiBase {
 	 *
 	 * @param elements The elements to add to the GUI
 	 */
-	public final void addElements(List<Element> elements) {
-		this.elements.addAll(elements);
+	public final void addElements(Layer layer, List<Element> elements) {
+		this.elements.computeIfAbsent(layer, ignored -> new ArrayList<>()).addAll(elements);
 	}
 
 	/**
@@ -106,8 +105,8 @@ public abstract class GuiStruct implements GuiBase {
 	 *
 	 * @param elements The elements to add to the GUI
 	 */
-	public final void addElements(Element... elements) {
-		this.elements.addAll(Arrays.asList(elements));
+	public final void addElements(Layer layer, Element... elements) {
+		addElements(layer, Arrays.asList(elements));
 	}
 
 	/**
@@ -115,8 +114,8 @@ public abstract class GuiStruct implements GuiBase {
 	 *
 	 * @param elements The elements to remove from the GUI
 	 */
-	public final void remElements(List<Element> elements) {
-		this.elements.removeAll(elements);
+	public final void remElements(Layer layer, List<Element> elements) {
+		this.elements.get(layer).removeAll(elements);
 	}
 
 	/**
@@ -124,8 +123,8 @@ public abstract class GuiStruct implements GuiBase {
 	 *
 	 * @param elements The elements to remove from the GUI
 	 */
-	public final void remElements(Element... elements) {
-		this.elements.removeAll(Arrays.asList(elements));
+	public final void remElements(Layer layer, Element... elements) {
+		remElements(layer, Arrays.asList(elements));
 	}
 
 }

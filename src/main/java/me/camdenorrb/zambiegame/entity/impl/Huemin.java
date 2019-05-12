@@ -4,6 +4,7 @@ package me.camdenorrb.zambiegame.entity.impl;
 import me.camdenorrb.zambiegame.ZambieGame;
 import me.camdenorrb.zambiegame.engine.gif.Gif;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
+import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Layer;
 import me.camdenorrb.zambiegame.engine.physics.impl.Distance;
 import me.camdenorrb.zambiegame.entity.struct.EntityStruct;
 import me.camdenorrb.zambiegame.impl.pos.MutablePos;
@@ -104,7 +105,7 @@ public class Huemin extends EntityStruct {
 
 	@Override
 	public void onKill() {
-		game.getGui().remElements(getParts());
+		game.getGui().remElements(Layer.ENTITY, getParts());
 	}
 
 	@Override

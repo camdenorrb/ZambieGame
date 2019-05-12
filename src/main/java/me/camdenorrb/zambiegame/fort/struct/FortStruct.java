@@ -1,6 +1,7 @@
 package me.camdenorrb.zambiegame.fort.struct;
 
 import me.camdenorrb.zambiegame.ZambieGame;
+import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Layer;
 import me.camdenorrb.zambiegame.fort.base.FortBase;
 import me.camdenorrb.zambiegame.impl.pos.MutablePos;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
@@ -33,11 +34,11 @@ public abstract class FortStruct implements FortBase {
 
 
 	protected void onKill() {
-		game.getGui().remElements(getParts());
+		game.getGui().remElements(Layer.FORT, getParts());
 	}
 
 	protected void onSpawn(Pos pos) {
-		game.getGui().addElements(getParts());
+		game.getGui().addElements(Layer.FORT, getParts());
 	}
 
 
