@@ -20,7 +20,6 @@ import static me.camdenorrb.zambiegame.utils.JavaUtils.apply;
 /**
  * Processing implementation of a GUI
  */
-
 public class ProcGui extends GuiStruct {
 
 	private String title;
@@ -248,7 +247,10 @@ public class ProcGui extends GuiStruct {
 				final Dimension dimension = gifElem.getSize();
 
 				final PImage pImage = imageCache.computeIfAbsent(gifElem.getUUID(), id ->
-					apply(new PGif(gifElem.getGif(), this), gifManager::addGif)
+					apply(new PGif(gifElem.getGif()), it -> {
+						gifManager.addGif(it);
+						it.setShouldPlay(true);
+					})
 				);
 
 				if (gifElem.isResized()) {

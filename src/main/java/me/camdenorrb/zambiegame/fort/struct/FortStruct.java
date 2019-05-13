@@ -1,29 +1,29 @@
 package me.camdenorrb.zambiegame.fort.struct;
 
-import me.camdenorrb.zambiegame.ZambieGame;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Layer;
 import me.camdenorrb.zambiegame.fort.base.FortBase;
 import me.camdenorrb.zambiegame.impl.pos.MutablePos;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
+import me.camdenorrb.zambiegame.struct.game.ZambieGameStruct;
 
 
 public abstract class FortStruct implements FortBase {
 
-	private int health;
+	protected int health;
 
-	private boolean isSpawned;
+	protected boolean isSpawned;
 
-	private Pos entitySpawnPos;
+	protected Pos entitySpawnPos;
 
 
-	private final ZambieGame game;
+	protected final ZambieGameStruct game;
 
 	protected MutablePos pos = new MutablePos(0, 0);
 
 
 	//protected abstract Path getImagePath();
 
-	public FortStruct(ZambieGame game) {
+	public FortStruct(ZambieGameStruct game) {
 		this.game = game;
 	}
 
@@ -48,7 +48,6 @@ public abstract class FortStruct implements FortBase {
 
 
 	public abstract Pos getCenter();
-
 
 	@Override
 	public final int getHealth() {

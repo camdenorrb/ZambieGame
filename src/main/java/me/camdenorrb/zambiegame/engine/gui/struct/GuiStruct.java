@@ -5,6 +5,7 @@ import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Layer;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.stream.Stream;
 
@@ -17,7 +18,7 @@ public abstract class GuiStruct implements GuiBase {
 	private boolean isVisible, isInitialized;
 
 	//private final Set<Element> elements = new HashSet<>();
-	protected final Map<Layer, List<Element>> elements = new ConcurrentSkipListMap<>();
+	protected final Map<Layer, ConcurrentLinkedDeque<Element>> elements = new ConcurrentSkipListMap<>();
 
 
 	/**
@@ -88,7 +89,7 @@ public abstract class GuiStruct implements GuiBase {
 	 * @return The elements of the GUI
 	 */
 	public final Stream<Element> getElements() {
-		return elements.values().stream().flatMap(List::stream);
+		return elements.values().stream().flatMap(ConcurrentLinkedDeque::stream);
 	}
 
 	/**
@@ -97,7 +98,7 @@ public abstract class GuiStruct implements GuiBase {
 	 * @param elements The elements to add to the GUI
 	 */
 	public final void addElements(Layer layer, List<Element> elements) {
-		this.elements.computeIfAbsent(layer, ignored -> new ArrayList<>()).addAll(elements);
+		this.elements.computeIfAbsent(layer, ignored -> new ConcurrentLinkedDeque<>()).addAll(elements);
 	}
 
 	/**
@@ -125,6 +126,18 @@ public abstract class GuiStruct implements GuiBase {
 	 */
 	public final void remElements(Layer layer, Element... elements) {
 		remElements(layer, Arrays.asList(elements));
+	}
+
+	/**
+	 * Removes elements to the GUI
+	 *
+	 */
+	public final void remElements(Layer layer) {
+		this.elements.remove(layer);
+	}
+
+	public final void clear() {
+		this.elements.clear();
 	}
 
 }

@@ -1,10 +1,10 @@
 package me.camdenorrb.zambiegame.fort.impl;
 
-import me.camdenorrb.zambiegame.ZambieGame;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
 import me.camdenorrb.zambiegame.fort.struct.FortStruct;
 import me.camdenorrb.zambiegame.impl.pos.MutablePos;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
+import me.camdenorrb.zambiegame.struct.game.ZambieGameStruct;
 import me.camdenorrb.zambiegame.utils.ResourceUtils;
 
 import java.util.Collections;
@@ -16,7 +16,7 @@ public class ZambieFort extends FortStruct {
 
 
 
-    public ZambieFort(ZambieGame game) {
+    public ZambieFort(ZambieGameStruct game) {
         super(game);
     }
 

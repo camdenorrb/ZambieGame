@@ -3,7 +3,7 @@ package me.camdenorrb.zambiegame.engine.manager;
 import me.camdenorrb.zambiegame.base.ModuleBase;
 import me.camdenorrb.zambiegame.engine.game.impl.GameTimer;
 import me.camdenorrb.zambiegame.engine.gif.processing.PGif;
-import me.camdenorrb.zambiegame.struct.LazyStruct;
+import me.camdenorrb.zambiegame.struct.lazy.LazyStruct;
 
 import java.util.Collections;
 import java.util.Set;
@@ -20,6 +20,11 @@ public class PGifManager implements ModuleBase {
 
 
 	private final Runnable loopTask = () -> gifs.forEach((gif, wait) -> {
+
+		if (!gif.shouldPlay()) {
+			return;
+		}
+
 		if (wait <= 0) {
 			gif.playNextFrame();
 			gifs.put(gif, gif.getDelayForCurrentFrame() * 10);

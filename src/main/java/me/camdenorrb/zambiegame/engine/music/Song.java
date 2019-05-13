@@ -1,10 +1,7 @@
 package me.camdenorrb.zambiegame.engine.music;
 
 import me.camdenorrb.zambiegame.base.tryblock.TypedTryBlock;
-import me.camdenorrb.zambiegame.impl.Player;
-import me.camdenorrb.zambiegame.struct.LazyStruct;
 import me.camdenorrb.zambiegame.type.Named;
-import me.camdenorrb.zambiegame.utils.LazyUtils;
 import me.camdenorrb.zambiegame.utils.TryUtils;
 
 import javax.sound.sampled.*;

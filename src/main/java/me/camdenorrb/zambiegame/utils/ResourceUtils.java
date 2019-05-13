@@ -1,9 +1,8 @@
 package me.camdenorrb.zambiegame.utils;
 
-import me.camdenorrb.zambiegame.struct.LazyStruct;
+import me.camdenorrb.zambiegame.struct.lazy.LazyStruct;
 
 import java.io.BufferedInputStream;
-import java.io.InputStream;
 import java.util.Objects;
 
 

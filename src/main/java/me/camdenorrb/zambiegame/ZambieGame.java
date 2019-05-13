@@ -1,22 +1,20 @@
 package me.camdenorrb.zambiegame;
 
-import me.camdenorrb.zambiegame.engine.game.struct.GameStruct;
 import me.camdenorrb.zambiegame.engine.gui.impl.ProcGui;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Layer;
 import me.camdenorrb.zambiegame.engine.music.Song;
 import me.camdenorrb.zambiegame.entity.base.EntityBase;
 import me.camdenorrb.zambiegame.entity.impl.Huemin;
-import me.camdenorrb.zambiegame.entity.impl.Zambie;
 import me.camdenorrb.zambiegame.fort.impl.HueminFort;
 import me.camdenorrb.zambiegame.fort.impl.ZambieFort;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
-import me.camdenorrb.zambiegame.struct.LazyStruct;
+import me.camdenorrb.zambiegame.struct.game.ZambieGameStruct;
+import me.camdenorrb.zambiegame.struct.lazy.LazyStruct;
 import me.camdenorrb.zambiegame.utils.DisplayUtils;
 import me.camdenorrb.zambiegame.utils.ResourceUtils;
 
 import java.awt.*;
-import java.util.HashSet;
 import java.util.Set;
 
 import static me.camdenorrb.zambiegame.utils.LazyUtils.lazy;
@@ -25,11 +23,9 @@ import static me.camdenorrb.zambiegame.utils.LazyUtils.lazy;
 /**
  * A zambie game implementation
  */
-public class ZambieGame extends GameStruct {
+public class ZambieGame extends ZambieGameStruct {
 
-	private final Set<EntityBase> entities = new HashSet<>();
-
-	private final ProcGui gui = new ProcGui("ZambieGame", DisplayUtils.getRefreshRate(), new Dimension(1500, 750));
+	private final ProcGui gui;
 
 	private final LazyStruct<Song> song = lazy(() ->
 		new Song("Meow", ResourceUtils.get("music/wav/game-background.wav")
@@ -39,7 +35,13 @@ public class ZambieGame extends GameStruct {
 
 
 	public ZambieGame() {
+		this(new ProcGui("ZambieGame", DisplayUtils.getRefreshRate(), new Dimension(1500, 750)));
+	}
+
+	// TODO: Reuse the gui from title screen
+	public ZambieGame(ProcGui gui) {
 		super(120);
+		this.gui = gui;
 	}
 
 
@@ -52,15 +54,15 @@ public class ZambieGame extends GameStruct {
 	@Override
 	protected void onStart() {
 
-		song.get().play(true);
-
 		//spawnEntity(new Huemin(this, new Pos(0f, 0f)));
 
 		final Dimension size = gui.getSize();
 
-		/*for (int x = 0; x < size.width; x += 80) {
-			for (int y = 0; y < size.height; y += 80) {
-				spawnEntity(new Huemin(this, new Pos((float) x, (float) y)));
+
+		/*
+		for (int x = 0; x < size.width; x += 15) {
+			for (int y = 0; y < size.height; y += 15) {
+				new Huemin(this).spawn(new Pos(x, y));
 			}
 		}*/
 
@@ -73,13 +75,14 @@ public class ZambieGame extends GameStruct {
 		double startingY = 500.0;
 
 
+		/*
 		for (int i = 0; i <= 200; i += 10) {
 			new Huemin(this).spawn(new Pos(10.0, i + startingY));
 		}
 
 		for (int i = 0; i <= 200; i += 10) {
 			new Zambie(this).spawn(new Pos(size.width - 10.0, i + startingY));
-		}
+		}*/
 
 
 		//int startingY = 500;
@@ -126,12 +129,15 @@ public class ZambieGame extends GameStruct {
 		new Huemin(this).spawn(hueminFort.getEntitySpawnPos());
 
 		gui.show();
+
+		song.get().play(true);
 	}
 
 
 	@Override
 	protected void onStop() {
 		gui.hide();
+		song.get().pause();
 	}
 
 	@Override
@@ -145,6 +151,7 @@ public class ZambieGame extends GameStruct {
 	 *
 	 * @return The GUI
 	 */
+	@Override
 	public ProcGui getGui() {
 		return gui;
 	}

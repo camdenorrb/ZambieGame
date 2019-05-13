@@ -1,6 +1,6 @@
 package me.camdenorrb.zambiegame.utils;
 
-import me.camdenorrb.zambiegame.struct.LazyStruct;
+import me.camdenorrb.zambiegame.struct.lazy.LazyStruct;
 
 import java.util.function.Supplier;
 

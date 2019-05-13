@@ -1,7 +1,7 @@
 package me.camdenorrb.zambiegame.utils;
 
 import me.camdenorrb.zambiegame.engine.gif.Gif;
-import me.camdenorrb.zambiegame.struct.LazyStruct;
+import me.camdenorrb.zambiegame.struct.lazy.LazyStruct;
 
 import javax.imageio.stream.ImageInputStream;
 import java.io.File;

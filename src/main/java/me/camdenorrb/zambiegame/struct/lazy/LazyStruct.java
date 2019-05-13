@@ -1,4 +1,4 @@
-package me.camdenorrb.zambiegame.struct;
+package me.camdenorrb.zambiegame.struct.lazy;
 
 /**
  * A strict structure for lazy values

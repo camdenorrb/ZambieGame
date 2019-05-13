@@ -4,6 +4,7 @@ import me.camdenorrb.zambiegame.ZambieGame;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
 import me.camdenorrb.zambiegame.fort.struct.FortStruct;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
+import me.camdenorrb.zambiegame.struct.game.ZambieGameStruct;
 import me.camdenorrb.zambiegame.utils.ResourceUtils;
 
 import java.util.Collections;
@@ -15,7 +16,7 @@ public class HueminFort extends FortStruct {
 	private Element.Image body = new Element.Image(pos, ResourceUtils.get("fort/huemin-castle.png"));
 
 
-	public HueminFort(ZambieGame game) {
+	public HueminFort(ZambieGameStruct game) {
 		super(game);
 	}
 
@@ -53,6 +54,7 @@ public class HueminFort extends FortStruct {
 	public double getHeight() {
 		return body.getSize().height;
 	}
+
 
 	@Override
 	public List<Element> getParts() {

@@ -2,7 +2,6 @@ package me.camdenorrb.zambiegame.engine.gif.processing;
 
 import me.camdenorrb.zambiegame.base.tryblock.TypedTryBlock;
 import me.camdenorrb.zambiegame.engine.gif.Gif;
-import processing.core.PApplet;
 import processing.core.PImage;
 
 import java.awt.image.PixelGrabber;
@@ -14,18 +13,30 @@ import static me.camdenorrb.zambiegame.utils.TryUtils.attemptOrBreak;
 
 public class PGif extends PImage {
 
-    private int currentFrameIndex;
-
     private final Gif gif;
 
 
-    public PGif(Gif gif, PApplet applet) {
+    private boolean shouldPlay;
+
+    private int currentFrameIndex;
+
+
+    public PGif(Gif gif) {
 
         apply(gif.getFrames().get(0).getImage(), it ->
             super.init(it.getWidth(), it.getHeight(), 2)
         );
 
         this.gif = gif;
+    }
+
+
+    public boolean shouldPlay() {
+        return shouldPlay;
+    }
+
+    public void setShouldPlay(boolean shouldPlay) {
+        this.shouldPlay = shouldPlay;
     }
 
 

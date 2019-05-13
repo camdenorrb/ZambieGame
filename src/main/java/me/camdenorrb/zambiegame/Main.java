@@ -1,9 +1,5 @@
 package me.camdenorrb.zambiegame;
 
-import me.camdenorrb.zambiegame.engine.music.Song;
-import me.camdenorrb.zambiegame.utils.ResourceUtils;
-
-
 public class Main {
 
 	//private static final MiniBus MINI_BUS = new MiniBus();
@@ -13,8 +9,10 @@ public class Main {
 
 		//final SwingGui gui = new SwingGui("Meow", new Dimension(1000, 1000));
 
-		final ZambieGame game = new ZambieGame();
-		game.start();
+		//final ZambieGame game = new ZambieGame();
+		//game.start();
+
+		new TitleScreen().start();
 
 		//Thread.sleep(1000);
 

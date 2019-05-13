@@ -1,12 +1,12 @@
 package me.camdenorrb.zambiegame.entity.struct;
 
-import me.camdenorrb.zambiegame.ZambieGame;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Layer;
 import me.camdenorrb.zambiegame.engine.physics.impl.velocity.MutableVelocity;
 import me.camdenorrb.zambiegame.engine.physics.impl.velocity.Velocity;
 import me.camdenorrb.zambiegame.entity.base.EntityBase;
 import me.camdenorrb.zambiegame.impl.pos.MutablePos;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
+import me.camdenorrb.zambiegame.struct.game.ZambieGameStruct;
 import me.camdenorrb.zambiegame.type.Ranged;
 
 import java.util.HashMap;
@@ -29,13 +29,25 @@ public abstract class EntityStruct implements EntityBase {
 	private boolean isSpawned;
 
 
-	protected final ZambieGame game;
+	protected final ZambieGameStruct game;
+
 
 	protected final MutablePos pos = new MutablePos(0.0, 0.0);
 
 	protected final MutableVelocity velocity = new MutableVelocity(0, 0);
 
+	// Entity class --> Consumer
 	protected final Map<Class, Set<Consumer<?>>> collisionHandlers = new HashMap<>();
+
+
+	public EntityStruct(ZambieGameStruct game) {
+		this(DEFAULT_HEALTH, game);
+	}
+
+	public EntityStruct(int initHealth, ZambieGameStruct game) {
+		this.game = game;
+		this.health = initHealth;
+	}
 
 
 	public abstract Pos getCenter();
@@ -83,15 +95,6 @@ public abstract class EntityStruct implements EntityBase {
 		spawn(newPos);
 	}
 
-
-	public EntityStruct(ZambieGame game) {
-		this(DEFAULT_HEALTH, game);
-	}
-
-	public EntityStruct(int initHealth, ZambieGame game) {
-		this.game = game;
-		this.health = initHealth;
-	}
 
 
 	public final void remove() {

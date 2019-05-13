@@ -1,7 +1,6 @@
 package me.camdenorrb.zambiegame.entity.impl;
 
 
-import me.camdenorrb.zambiegame.ZambieGame;
 import me.camdenorrb.zambiegame.engine.gif.Gif;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Layer;
@@ -9,7 +8,8 @@ import me.camdenorrb.zambiegame.engine.physics.impl.Distance;
 import me.camdenorrb.zambiegame.entity.struct.EntityStruct;
 import me.camdenorrb.zambiegame.impl.pos.MutablePos;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
-import me.camdenorrb.zambiegame.struct.LazyStruct;
+import me.camdenorrb.zambiegame.struct.game.ZambieGameStruct;
+import me.camdenorrb.zambiegame.struct.lazy.LazyStruct;
 import me.camdenorrb.zambiegame.utils.ResourceUtils;
 
 import java.awt.*;
@@ -51,15 +51,15 @@ public class Huemin extends EntityStruct {
 
 	private final MutablePos hitboxCenterPos = new MutablePos(0, 0);
 
-	private final LazyStruct<Gif> upWalkGif = lazyLoad(ResourceUtils.get(UP_WALK_PATH));
-	private final LazyStruct<Gif> downWalkGif = lazyLoad(ResourceUtils.get(DOWN_WALK_PATH));
-	private final LazyStruct<Gif> leftWalkGif = lazyLoad(ResourceUtils.get(LEFT_WALK_PATH));
-	private final LazyStruct<Gif> rightWalkGif = lazyLoad(ResourceUtils.get(RIGHT_WALK_PATH));
+	protected final LazyStruct<Gif> upWalkGif = lazyLoad(ResourceUtils.get(UP_WALK_PATH));
+	protected final LazyStruct<Gif> downWalkGif = lazyLoad(ResourceUtils.get(DOWN_WALK_PATH));
+	protected final LazyStruct<Gif> leftWalkGif = lazyLoad(ResourceUtils.get(LEFT_WALK_PATH));
+	protected final LazyStruct<Gif> rightWalkGif = lazyLoad(ResourceUtils.get(RIGHT_WALK_PATH));
 
 	private final LazyStruct<Gif> attackSwordGif = lazyLoad(ResourceUtils.get(ATTACK_SWORD_PATH));
 
 
-	public Huemin(ZambieGame game) {
+	public Huemin(ZambieGameStruct game) {
 		super(game);
 		//final InputStream inputStream = getClass().getResource("resources/robotcat.jpeg").openStream();
 		this.body = new Element.GifElem(pos, rightWalkGif.get());

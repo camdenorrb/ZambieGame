@@ -1,6 +1,6 @@
 package me.camdenorrb.zambiegame.engine.gif;
 
-import me.camdenorrb.zambiegame.struct.LazyStruct;
+import me.camdenorrb.zambiegame.struct.lazy.LazyStruct;
 import me.camdenorrb.zambiegame.utils.LazyUtils;
 import me.camdenorrb.zambiegame.utils.TryUtils;
 import org.w3c.dom.Node;
