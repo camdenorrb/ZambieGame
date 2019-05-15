@@ -25,10 +25,10 @@ import static me.camdenorrb.zambiegame.utils.JavaUtils.apply;
  */
 public abstract class Element implements ElementBase {
 
-	private Element() {}
-
-
 	private final UUID uuid = UUID.randomUUID();
+
+
+	private Element() {}
 
 
 	public abstract Pos getCenter();
@@ -628,7 +628,7 @@ public abstract class Element implements ElementBase {
 
 		@Override
 		public String getName() {
-			return "Image";
+			return "Gif";
 		}
 
 		@Override

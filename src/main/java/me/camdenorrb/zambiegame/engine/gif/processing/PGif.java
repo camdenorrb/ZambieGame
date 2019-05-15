@@ -39,6 +39,9 @@ public class PGif extends PImage {
         this.shouldPlay = shouldPlay;
     }
 
+    public void setCurrentFrameIndex(int currentFrameIndex) {
+        this.currentFrameIndex = currentFrameIndex;
+    }
 
     /*
     public void start() {

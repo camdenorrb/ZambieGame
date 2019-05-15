@@ -1,6 +1,7 @@
 package me.camdenorrb.zambiegame;
 
 
+import me.camdenorrb.zambiegame.engine.game.impl.GameTimer;
 import me.camdenorrb.zambiegame.engine.gui.impl.ProcGui;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Layer;
@@ -29,7 +30,12 @@ import static me.camdenorrb.zambiegame.utils.LazyUtils.lazy;
 
 public class TitleScreen extends ZambieGameStruct {
 
-	private final ProcGui gui = new ProcGui("ZambieGame", DisplayUtils.getRefreshRate(), new Dimension(1500, 750));
+	public static final int TPS = 120;
+
+	public static final int CANVAS_WIDTH = 1500;
+	public static final int CANVAS_HEIGHT = 750;
+
+	private final ProcGui gui = new ProcGui("ZambieGame", DisplayUtils.getRefreshRate(), new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
 	//private final OpenGLGui gui = new OpenGLGui("ZambieGame", new Dimension(1500, 750), false);
 
 	private final LazyStruct<Song> song = lazy(() ->
@@ -38,7 +44,7 @@ public class TitleScreen extends ZambieGameStruct {
 
 
 	public TitleScreen() {
-		super(120);
+		super(TPS);
 	}
 
 
@@ -80,7 +86,7 @@ public class TitleScreen extends ZambieGameStruct {
 			public void run() {
 				onStop();
 			}
-		}, 10000);
+		}, 1000);
 	}
 
 	@Override
@@ -89,11 +95,15 @@ public class TitleScreen extends ZambieGameStruct {
 		song.get().pause();
 
 		gui.clear();
+		entities.clear();
+
+		//System.gc();
+
 		new ZambieGame(gui).start();
 	}
 
 	@Override
-	protected void onTick() {
+	protected void onTick(GameTimer timer) {
 		entities.forEach(EntityBase::tick);
 	}
 

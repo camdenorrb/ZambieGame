@@ -42,4 +42,8 @@ public class Velocity {
 		return new MutableVelocity(x, y);
 	}
 
+	@Override
+	public String toString() {
+		return "Velocity(" + x + ", " + y + ')';
+	}
 }

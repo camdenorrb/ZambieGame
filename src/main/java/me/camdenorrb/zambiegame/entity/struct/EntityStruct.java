@@ -24,9 +24,9 @@ public abstract class EntityStruct implements EntityBase {
 	private static final int DEFAULT_HEALTH = 20;
 
 
-	private int health;
+	private volatile int health;
 
-	private boolean isSpawned;
+	private volatile boolean isSpawned;
 
 
 	protected final ZambieGameStruct game;
@@ -58,6 +58,12 @@ public abstract class EntityStruct implements EntityBase {
 	protected abstract void onTick();
 
 
+	public void moveBy(double x, double y) {
+		pos.add(x, y);
+	}
+
+
+
 	/**
 	 * Handles death of the entity
 	 */
@@ -78,6 +84,7 @@ public abstract class EntityStruct implements EntityBase {
 	 * Handles removal of the entity parts and self
 	 */
 	protected void onRemove() {
+		game.getEntities().remove(this);
 		game.getGui().remElements(Layer.ENTITY, getParts());
 	}
 
@@ -85,14 +92,8 @@ public abstract class EntityStruct implements EntityBase {
 	/**
 	 * Handles teleporting of the entity
 	 */
-	protected void onTeleport(Pos newPos) {
-
-		remove();
-
-		pos.setX(newPos.getX());
-		pos.setY(newPos.getY());
-
-		spawn(newPos);
+	protected void onTeleport(double x, double y) {
+		pos.setXY(x, y);
 	}
 
 
@@ -122,7 +123,7 @@ public abstract class EntityStruct implements EntityBase {
 	@Override
 	public void setHealth(int health) {
 		this.health = health;
-		if (health <= 0 && !isSpawned) kill();
+		if (health <= 0 && isSpawned) kill();
 	}
 
 	public final void tick() {
@@ -160,12 +161,8 @@ public abstract class EntityStruct implements EntityBase {
 
 
 	@Override
-	public final void teleport(Pos pos) {
-
-		this.pos.setX(pos.getX());
-		this.pos.setY(pos.getY());
-
-		onTeleport(pos);
+	public final void teleport(double x, double y) {
+		onTeleport(x, y);
 	}
 
 	@Override
@@ -188,6 +185,5 @@ public abstract class EntityStruct implements EntityBase {
 		this.velocity.setX(velocity.getX());
 		this.velocity.setY(velocity.getY());
 	}
-
 
 }

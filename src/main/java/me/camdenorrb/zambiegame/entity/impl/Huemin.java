@@ -1,6 +1,7 @@
 package me.camdenorrb.zambiegame.entity.impl;
 
 
+import me.camdenorrb.zambiegame.engine.game.impl.GameTimer;
 import me.camdenorrb.zambiegame.engine.gif.Gif;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Layer;
@@ -44,9 +45,9 @@ public class Huemin extends EntityStruct {
 	protected Element.GifElem body;
 
 
-	protected boolean isCollided;
+	protected volatile boolean isCollided;
 
-	protected boolean isMoving = true;
+	protected volatile boolean isMoving = true;
 
 
 	private final MutablePos hitboxCenterPos = new MutablePos(0, 0);
@@ -72,11 +73,25 @@ public class Huemin extends EntityStruct {
 
 			if (isCollided) return;
 
-			//isMoving = false;
-			//isCollided = true;
+			isMoving = false;
+			isCollided = true;
 
-			zambie.kill();
-			//changeBody(attackSwordGif.get());
+			//zambie.kill();
+			changeBody(attackSwordGif.get());
+
+			new GameTimer(440, (timer) -> {
+
+				if (zambie.isDead()) {
+					timer.stop();
+					isMoving = true;
+					isCollided = false;
+					return;
+				}
+
+				System.out.println("Here");
+				zambie.damage(5);
+
+			}).start();
 		});
 	}
 
@@ -103,10 +118,6 @@ public class Huemin extends EntityStruct {
 		super.onSpawn(pos);
 	}
 
-	@Override
-	public void onKill() {
-		game.getGui().remElements(Layer.ENTITY, getParts());
-	}
 
 	@Override
 	public List<Element> getParts() {
@@ -140,17 +151,17 @@ public class Huemin extends EntityStruct {
 		final Dimension guiSize = game.getGui().getSize();
 
 		if (bodyPos.getX() < 0) {
-			moveTo(guiSize.width, bodyPos.getY());
+			teleport(guiSize.width, bodyPos.getY());
 		}
 		else if (bodyPos.getX() >= guiSize.width) {
-			moveTo(0, bodyPos.getY());
+			teleport(0, bodyPos.getY());
 		}
 
 		if (bodyPos.getY() < 0) {
-			moveTo(bodyPos.getX(), guiSize.getHeight());
+			teleport(bodyPos.getX(), guiSize.getHeight());
 		}
 		else if (bodyPos.getY() >= guiSize.height) {
-			moveTo(bodyPos.getX(), 0);
+			teleport(bodyPos.getX(), 0);
 		}
 
 		/*
@@ -175,48 +186,56 @@ public class Huemin extends EntityStruct {
 
 		final Element.GifElem newBody = new Element.GifElem(body.getPosition(), newBodyGif);
 
-		final MutablePos bodyPos = newBody.getPosition();
+		/*final MutablePos bodyPos = newBody.getPosition();
 
 		final Dimension size = newBody.getSize();
 		final Dimension lastSize = body.getSize();
 
-		bodyPos.setX(bodyPos.getX() + (lastSize.width - size.width));
-		bodyPos.setY(bodyPos.getY() + (lastSize.height - size.height));
-
-		kill();
+		bodyPos.add(lastSize.width - size.width, lastSize.height - size.height);*/
+		if (body != null) game.getGui().remElements(Layer.ENTITY, body);
 		body = newBody;
-		spawn(bodyPos);
+		game.getGui().addElements(Layer.ENTITY, newBody);
 	}
 
-	public void moveTo(double x, double y) {
-		pos.setXY(x, y);
+	@Override
+	protected void onTeleport(double x, double y) {
+
 		hitboxCenterPos.setXY(x, y);
 		body.getPosition().setXY(x, y);
+
+		super.onTeleport(x, y);
 	}
 
+	@Override
 	public void moveBy(double x, double y) {
 
-		pos.add(x, y);
+		super.moveBy(x, y);
+
 		hitboxCenterPos.add(x, y);
 		body.getPosition().add(x, y);
 
-		// TODO: If negative flip
 
-		if (x < 0 && !body.getGif().equals(leftWalkGif.get())) {
-			changeBody(leftWalkGif.get());
+		if (x < 0) {
+			if (!body.getGif().equals(leftWalkGif.get())) {
+				changeBody(leftWalkGif.get());
+			}
 		}
-		else if (x > 0 && !body.getGif().equals(rightWalkGif.get())) {
-			changeBody(rightWalkGif.get());
+		else if (x > 0) {
+			if (!body.getGif().equals(rightWalkGif.get())) {
+				changeBody(rightWalkGif.get());
+			}
 		}
-		else if (y < 0 && !body.getGif().equals(downWalkGif.get())) {
-			changeBody(downWalkGif.get());
+		else if (y < 0) {
+			if ( !body.getGif().equals(downWalkGif.get())) {
+				changeBody(upWalkGif.get());
+			}
 		}
-		else if (y > 0 && !body.getGif().equals(upWalkGif.get())) {
-			changeBody(upWalkGif.get());
+		else if (y > 0) {
+			if (!body.getGif().equals(upWalkGif.get())) {
+				changeBody(downWalkGif.get());
+			}
 		}
-
 	}
-
 
 		/*
 		final Dimension size = body.getSize();

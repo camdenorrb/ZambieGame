@@ -1,11 +1,15 @@
 package me.camdenorrb.zambiegame;
 
+import me.camdenorrb.zambiegame.engine.game.impl.GameTimer;
 import me.camdenorrb.zambiegame.engine.gui.impl.ProcGui;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Layer;
 import me.camdenorrb.zambiegame.engine.music.Song;
 import me.camdenorrb.zambiegame.entity.base.EntityBase;
+import me.camdenorrb.zambiegame.entity.impl.Cloud;
+import me.camdenorrb.zambiegame.entity.impl.Hero;
 import me.camdenorrb.zambiegame.entity.impl.Huemin;
+import me.camdenorrb.zambiegame.entity.impl.Zambie;
 import me.camdenorrb.zambiegame.fort.impl.HueminFort;
 import me.camdenorrb.zambiegame.fort.impl.ZambieFort;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
@@ -15,7 +19,7 @@ import me.camdenorrb.zambiegame.utils.DisplayUtils;
 import me.camdenorrb.zambiegame.utils.ResourceUtils;
 
 import java.awt.*;
-import java.util.Set;
+import java.util.Deque;
 
 import static me.camdenorrb.zambiegame.utils.LazyUtils.lazy;
 
@@ -24,6 +28,13 @@ import static me.camdenorrb.zambiegame.utils.LazyUtils.lazy;
  * A zambie game implementation
  */
 public class ZambieGame extends ZambieGameStruct {
+
+	public static final int TPS = 120;
+
+	public static final int CANVAS_WIDTH = 1500;
+	public static final int CANVAS_HEIGHT = 750;
+
+	public static final double FLOOR_HEIGHT = 250;
 
 	private final ProcGui gui;
 
@@ -35,12 +46,12 @@ public class ZambieGame extends ZambieGameStruct {
 
 
 	public ZambieGame() {
-		this(new ProcGui("ZambieGame", DisplayUtils.getRefreshRate(), new Dimension(1500, 750)));
+		this(new ProcGui("ZambieGame", DisplayUtils.getRefreshRate(), new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT)));
 	}
 
 	// TODO: Reuse the gui from title screen
 	public ZambieGame(ProcGui gui) {
-		super(120);
+		super(TPS);
 		this.gui = gui;
 	}
 
@@ -68,21 +79,29 @@ public class ZambieGame extends ZambieGameStruct {
 
 		//gui.addElements(new Element.Rectangle(new Color(155, 118, 83), new Pos(0f, (float) size.height - 125), new Dimension(size.width, 125)));
 		//gui.addElements(new Element.Text("Hello how are you?", new Dimension(1000, 100), new Pos(0f, 0f)));
-		gui.addElements(Layer.BACKGROUND, new Element.Rectangle(new Color(63, 122, 77), new Pos(0.0, size.height - 250.0), new Dimension(size.width, 250)));
+		new Cloud(this, .1).spawn(new Pos(0, 0));
+		new Cloud(this, -.1).spawn(new Pos(gui.getSize().width - Cloud.WIDTH, gui.getSize().height));
+
+		gui.addElements(Layer.BACKGROUND,
+				new Element.Rectangle(new Color(63, 122, 77), new Pos(0.0, size.height - FLOOR_HEIGHT), new Dimension(size.width, 250))
+		);
 
 
 		// On the ground
 		double startingY = 500.0;
 
 
+
+
+
 		/*
 		for (int i = 0; i <= 200; i += 10) {
 			new Huemin(this).spawn(new Pos(10.0, i + startingY));
-		}
+		}*/
 
 		for (int i = 0; i <= 200; i += 10) {
 			new Zambie(this).spawn(new Pos(size.width - 10.0, i + startingY));
-		}*/
+		}
 
 
 		//int startingY = 500;
@@ -91,6 +110,7 @@ public class ZambieGame extends ZambieGameStruct {
 
 		final HueminFort hueminFort = new HueminFort(this);
 		final ZambieFort zambieFort = new ZambieFort(this);
+
 
 
 		/*
@@ -126,7 +146,9 @@ public class ZambieGame extends ZambieGameStruct {
 		hueminFort.spawn(new Pos(-200.0, 0.0));
 		zambieFort.spawn(new Pos(gui.getSize().width - (zambieFort.getWidth() - 200.0), 0.0));
 
+		new Hero(this).spawn(new Pos(gui.getSize().width / 3, gui.getSize().height - FLOOR_HEIGHT));
 		new Huemin(this).spawn(hueminFort.getEntitySpawnPos());
+		//new Zambie(this).spawn(zambieFort.getEntitySpawnPos());
 
 		gui.show();
 
@@ -141,7 +163,7 @@ public class ZambieGame extends ZambieGameStruct {
 	}
 
 	@Override
-	protected void onTick() {
+	protected void onTick(GameTimer timer) {
 		entities.forEach(EntityBase::tick);
 	}
 
@@ -157,7 +179,7 @@ public class ZambieGame extends ZambieGameStruct {
 	}
 
 
-	public Set<EntityBase> getEntities() {
+	public Deque<EntityBase> getEntities() {
 		return entities;
 	}
 

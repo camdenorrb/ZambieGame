@@ -2,7 +2,6 @@ package me.camdenorrb.zambiegame.fort.impl;
 
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
 import me.camdenorrb.zambiegame.fort.struct.FortStruct;
-import me.camdenorrb.zambiegame.impl.pos.MutablePos;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
 import me.camdenorrb.zambiegame.struct.game.ZambieGameStruct;
 import me.camdenorrb.zambiegame.utils.ResourceUtils;
@@ -13,7 +12,6 @@ import java.util.List;
 public class ZambieFort extends FortStruct {
 
     private Element.Image body = new Element.Image(pos, ResourceUtils.get("fort/destroyed-castle.png"));
-
 
 
     public ZambieFort(ZambieGameStruct game) {
@@ -39,14 +37,9 @@ public class ZambieFort extends FortStruct {
     }
 
     @Override
-    protected void onTeleport(Pos toPos) {
-
-        if (!isSpawned()) return;
-
-        final MutablePos bodyPos = body.getPosition();
-
-        bodyPos.setX(toPos.getX());
-        bodyPos.setY(toPos.getY());
+    protected void onTeleport(double x, double y) {
+        body.getPosition().setXY(x, y);
+        super.onTeleport(x, y);
     }
 
     @Override

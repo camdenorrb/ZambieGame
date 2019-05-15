@@ -2,6 +2,8 @@ package me.camdenorrb.zambiegame.entity.base;
 
 import me.camdenorrb.zambiegame.type.*;
 
+import java.util.UUID;
+
 /**
  * The basics for an Entity
  */

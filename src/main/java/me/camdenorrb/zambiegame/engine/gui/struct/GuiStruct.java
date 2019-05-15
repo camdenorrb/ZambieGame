@@ -3,6 +3,7 @@ package me.camdenorrb.zambiegame.engine.gui.struct;
 import me.camdenorrb.zambiegame.engine.gui.base.GuiBase;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Layer;
+import me.camdenorrb.zambiegame.listener.base.KeyListenerBase;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -18,6 +19,9 @@ public abstract class GuiStruct implements GuiBase {
 	private boolean isVisible, isInitialized;
 
 	//private final Set<Element> elements = new HashSet<>();
+
+	protected final Set<KeyListenerBase> keyListeners = new HashSet<>();
+
 	protected final Map<Layer, ConcurrentLinkedDeque<Element>> elements = new ConcurrentSkipListMap<>();
 
 
@@ -36,6 +40,11 @@ public abstract class GuiStruct implements GuiBase {
 	 * Handles the hiding of the GUI
 	 */
 	protected abstract void onHide();
+
+
+	protected void onAdd(Element element) {}
+
+	protected void onRemove(Element element) {}
 
 
 	/**
@@ -98,7 +107,13 @@ public abstract class GuiStruct implements GuiBase {
 	 * @param elements The elements to add to the GUI
 	 */
 	public final void addElements(Layer layer, List<Element> elements) {
+		elements.forEach(this::onAdd);
 		this.elements.computeIfAbsent(layer, ignored -> new ConcurrentLinkedDeque<>()).addAll(elements);
+	}
+
+	public final void replaceElement(Layer layer, Element fromElement, Element toElement) {
+		addElements(layer, toElement);
+		remElements(layer, fromElement);
 	}
 
 	/**
@@ -116,6 +131,7 @@ public abstract class GuiStruct implements GuiBase {
 	 * @param elements The elements to remove from the GUI
 	 */
 	public final void remElements(Layer layer, List<Element> elements) {
+		elements.forEach(this::onRemove);
 		this.elements.get(layer).removeAll(elements);
 	}
 
@@ -133,11 +149,25 @@ public abstract class GuiStruct implements GuiBase {
 	 *
 	 */
 	public final void remElements(Layer layer) {
-		this.elements.remove(layer);
+		this.elements.remove(layer).forEach(this::onRemove);
 	}
 
-	public final void clear() {
+	public void clear() {
 		this.elements.clear();
 	}
+
+	public void addKeyListener(KeyListenerBase listener) {
+		keyListeners.add(listener);
+	}
+
+	public void remKeyListener(KeyListenerBase listener) {
+		keyListeners.remove(listener);
+	}
+
+
+	public Set<KeyListenerBase> getKeyListeners() {
+		return keyListeners;
+	}
+
 
 }

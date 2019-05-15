@@ -1,11 +1,12 @@
 package me.camdenorrb.zambiegame.engine.gif;
 
 import me.camdenorrb.zambiegame.struct.lazy.LazyStruct;
-import me.camdenorrb.zambiegame.utils.LazyUtils;
 import me.camdenorrb.zambiegame.utils.TryUtils;
 import org.w3c.dom.Node;
 
 import javax.imageio.metadata.*;
+
+import static me.camdenorrb.zambiegame.utils.LazyUtils.*;
 
 
 public class GifFrameMeta {
@@ -13,12 +14,16 @@ public class GifFrameMeta {
 	private IIOMetadata metadata;
 
 
-	private final LazyStruct<IIOMetadataNode> metadataTree = LazyUtils.lazy(() ->
+	private final LazyStruct<IIOMetadataNode> metadataTree = lazy(() ->
 		(IIOMetadataNode) metadata.getAsTree(getNativeMetadataFormatName())
 	);
 
-	private final LazyStruct<IIOMetadataNode> firstNode = LazyUtils.lazy(() ->
+	private final LazyStruct<IIOMetadataNode> firstNode = lazy(() ->
 		(IIOMetadataNode) metadataTree.get().item(1)
+	);
+
+	private final LazyStruct<IIOMetadataNode> graphicControlExt = lazy(() ->
+			findNode("GraphicControlExtension")
 	);
 
 
@@ -93,16 +98,16 @@ public class GifFrameMeta {
 	}
 
 	public void setDelay(int value) {
-		firstNode.get().setAttribute("delayTime", String.valueOf(value));
+		graphicControlExt.get().setAttribute("delayTime", String.valueOf(value));
 	}
 
 	public int getDelay() {
-		final IIOMetadataNode node = getNode("GraphicControlExtension");
+		final IIOMetadataNode node = graphicControlExt.get();
 		final String delay = node.getAttribute("delayTime");
 		return TryUtils.attemptOrDefault(0, () -> Integer.valueOf(delay));
 	}
 
-	public IIOMetadataNode getNode(String nodeName) {
+	public IIOMetadataNode findNode(String nodeName) {
 
 		final int nodeLength = metadataTree.get().getLength();
 

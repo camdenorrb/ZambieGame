@@ -30,7 +30,9 @@ public abstract class FortStruct implements FortBase {
 
 	protected void onDamage() {}
 
-	protected void onTeleport(Pos toPos) {}
+	protected void onTeleport(double x, double y) {
+		pos.setXY(x, y);
+	}
 
 
 	protected void onKill() {
@@ -62,12 +64,8 @@ public abstract class FortStruct implements FortBase {
 
 
 	@Override
-	public final void teleport(Pos pos) {
-
-		this.pos = pos.toMutable();
-
-		onTeleport(pos);
-
+	public final void teleport(double x, double y) {
+		onTeleport(x, y);
 		entitySpawnPos = makeEntitySpawnPos();
 	}
 

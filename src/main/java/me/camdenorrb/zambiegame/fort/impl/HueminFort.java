@@ -1,6 +1,5 @@
 package me.camdenorrb.zambiegame.fort.impl;
 
-import me.camdenorrb.zambiegame.ZambieGame;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
 import me.camdenorrb.zambiegame.fort.struct.FortStruct;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
@@ -40,9 +39,9 @@ public class HueminFort extends FortStruct {
 	}
 
 	@Override
-	protected void onTeleport(Pos toPos) {
-		if (!isSpawned()) return;
-		body.getPosition().setXY(toPos.getX(), toPos.getY());
+	protected void onTeleport(double x, double y) {
+		body.getPosition().setXY(x, y);
+		super.onTeleport(x, y);
 	}
 
 	@Override

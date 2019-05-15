@@ -38,7 +38,7 @@ public abstract class GameStruct implements GameBase {
 	/**
 	 * Handles tick
 	 */
-	protected abstract void onTick();
+	protected abstract void onTick(GameTimer timer);
 
 
 	@Override

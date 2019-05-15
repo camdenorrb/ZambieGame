@@ -1,30 +1,28 @@
 package me.camdenorrb.zambiegame.entity.impl;
 
-import me.camdenorrb.zambiegame.engine.gif.Gif;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
 import me.camdenorrb.zambiegame.entity.struct.EntityStruct;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
 import me.camdenorrb.zambiegame.struct.game.ZambieGameStruct;
-import me.camdenorrb.zambiegame.struct.lazy.LazyStruct;
 import me.camdenorrb.zambiegame.utils.ResourceUtils;
 
+import java.awt.*;
 import java.util.Collections;
 import java.util.List;
-
-import static me.camdenorrb.zambiegame.utils.GifUtils.lazyLoad;
 
 
 public class Cloud extends EntityStruct {
 
-	protected static final String CLOUD_PATH = "huemin/cloud.gif";
+	public static final double WIDTH = 128;
+	public static final double HEIGHT = 128;
 
-	protected final LazyStruct<Gif> cloudGif = lazyLoad(ResourceUtils.get(CLOUD_PATH));
+	protected static final String CLOUD1_PATH = "cloud/cloud-1.png";
 
-	protected Element.GifElem body = new Element.GifElem(pos, cloudGif.get());
+	protected Element.Image body = new Element.Image(pos, ResourceUtils.get(CLOUD1_PATH));
 
-
-	public Cloud(ZambieGameStruct game) {
+	public Cloud(ZambieGameStruct game, double xVel) {
 		super(Integer.MAX_VALUE, game);
+		velocity.setX(xVel);
 	}
 
 	@Override
@@ -39,11 +37,29 @@ public class Cloud extends EntityStruct {
 
 	@Override
 	public Pos getCenter() {
-		return null;
+		return body.getCenter();
 	}
 
 	@Override
 	protected void onTick() {
+
+		moveBy(velocity.getX(), 0);
+
+		final Dimension guiSize = game.getGui().getSize();
+
+		if (pos.getX() < 0) {
+			teleport(guiSize.width, pos.getY());
+		}
+		else if (pos.getX() >= guiSize.width) {
+			teleport(0, pos.getY());
+		}
+
+		if (pos.getY() < 0) {
+			teleport(pos.getX(), guiSize.getHeight());
+		}
+		else if (pos.getY() >= guiSize.height) {
+			teleport(pos.getX(), 0);
+		}
 
 	}
 
@@ -59,7 +75,18 @@ public class Cloud extends EntityStruct {
 
 	@Override
 	public boolean isInRange(Pos pos) {
-		// TODO
 		return false;
+	}
+
+	@Override
+	public void moveBy(double x, double y) {
+		super.moveBy(x, y);
+		body.getPosition().add(x, y);
+	}
+
+	@Override
+	protected void onTeleport(double x, double y) {
+		super.onTeleport(x, y);
+		body.getPosition().setXY(x, y);
 	}
 }

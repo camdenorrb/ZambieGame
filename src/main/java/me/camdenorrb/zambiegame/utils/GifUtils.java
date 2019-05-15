@@ -1,6 +1,8 @@
 package me.camdenorrb.zambiegame.utils;
 
 import me.camdenorrb.zambiegame.engine.gif.Gif;
+import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
+import me.camdenorrb.zambiegame.impl.pos.Pos;
 import me.camdenorrb.zambiegame.struct.lazy.LazyStruct;
 
 import javax.imageio.stream.ImageInputStream;
@@ -39,6 +41,18 @@ public final class GifUtils {
 
 	public static LazyStruct<Gif> lazyLoad(ImageInputStream inputStream) {
 		return lazy(() -> load(inputStream));
+	}
+
+	public static LazyStruct<Element.GifElem> lazyLoadElem(File file) {
+		return lazy(() -> new Element.GifElem(new Pos(0, 0), load(file)));
+	}
+
+	public static LazyStruct<Element.GifElem> lazyLoadElem(InputStream inputStream) {
+		return lazy(() -> new Element.GifElem(new Pos(0, 0), load(inputStream)));
+	}
+
+	public static LazyStruct<Element.GifElem> lazyLoadElem(ImageInputStream inputStream) {
+		return lazy(() -> new Element.GifElem(new Pos(0, 0), load(inputStream)));
 	}
 
 }

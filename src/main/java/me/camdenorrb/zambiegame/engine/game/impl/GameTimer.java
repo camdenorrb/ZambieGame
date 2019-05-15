@@ -5,6 +5,9 @@ import me.camdenorrb.zambiegame.engine.game.struct.GameTimerStruct;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+
+import static me.camdenorrb.zambiegame.utils.TryUtils.attemptOrPrintErr;
 
 
 /**
@@ -15,12 +18,12 @@ public class GameTimer extends GameTimerStruct {
 	private long tempo;
 
 
-	private final Runnable onTick;
+	private final Consumer<GameTimer> onTick;
 
 	private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
 
-	public GameTimer(long tempo, Runnable onTick) {
+	public GameTimer(long tempo, Consumer<GameTimer> onTick) {
 		this.tempo = tempo;
 		this.onTick = onTick;
 	}
@@ -28,7 +31,7 @@ public class GameTimer extends GameTimerStruct {
 
 	@Override
 	protected void onStart() {
-		executor.scheduleAtFixedRate(onTick, tempo, tempo, TimeUnit.MILLISECONDS);
+		executor.scheduleAtFixedRate(() -> attemptOrPrintErr(() -> onTick.accept(this)), tempo, tempo, TimeUnit.MILLISECONDS);
 	}
 
 	@Override
@@ -46,7 +49,7 @@ public class GameTimer extends GameTimerStruct {
 
 		if (isRunning()) {
 			executor.shutdownNow();
-			executor.scheduleAtFixedRate(onTick, tempo, tempo, TimeUnit.MILLISECONDS);
+			executor.scheduleAtFixedRate(() -> attemptOrPrintErr(() -> onTick.accept(this)), tempo, tempo, TimeUnit.MILLISECONDS);
 		}
 
 		this.tempo = tempo;

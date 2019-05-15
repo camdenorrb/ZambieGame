@@ -12,6 +12,7 @@ public class Main {
 		//final ZambieGame game = new ZambieGame();
 		//game.start();
 
+		//new ZambieGame().start();
 		new TitleScreen().start();
 
 		//Thread.sleep(1000);

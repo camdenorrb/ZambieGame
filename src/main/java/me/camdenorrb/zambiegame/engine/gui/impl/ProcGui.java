@@ -8,13 +8,10 @@ import me.camdenorrb.zambiegame.engine.manager.PGifManager;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
 import processing.core.PApplet;
 import processing.core.PImage;
+import processing.event.KeyEvent;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import static me.camdenorrb.zambiegame.utils.JavaUtils.apply;
+import java.util.*;
 
 
 /**
@@ -34,12 +31,14 @@ public class ProcGui extends GuiStruct {
 
 	private final Map<UUID, PImage> imageCache = new HashMap<>();
 
+	private final Map<UUID, PGif> gifCache = new HashMap<>();
+
 
 
 	public ProcGui(String title, float frameRate, Dimension size) {
 		this.size = size;
 		this.title = title;
-		this.applet = new Applet(frameRate);
+		this.applet = new Applet(this, frameRate);
 	}
 
 
@@ -65,6 +64,22 @@ public class ProcGui extends GuiStruct {
 	public void onHide() {
 		gifManager.disable();
 		applet.getSurface().setVisible(false);
+	}
+
+
+	@Override
+	protected void onRemove(Element element) {
+		if (element instanceof Element.GifElem) {
+
+			final PGif gif = gifCache.get(element.getUUID());
+			if (gif == null) return;
+
+			gifManager.remGif(gif);
+			gif.setCurrentFrameIndex(0);
+		}
+		/*if (element instanceof Element.Image || element instanceof Element.GifElem) {
+			imageCache.remove(element.getUUID());
+		}*/
 	}
 
 
@@ -111,16 +126,35 @@ public class ProcGui extends GuiStruct {
 		return applet;
 	}
 
+	@Override
+	public void clear() {
+
+		gifCache.clear();
+		gifManager.clear();
+		imageCache.clear();
+
+		super.clear();
+	}
+
+
+	public Set<Character> getKeysPressed() {
+		return applet.getKeysPressed();
+	}
 
 	/**
 	 * The Applet used in the backend of the GUI
 	 */
-	private class Applet extends PApplet {
+	public class Applet extends PApplet {
 
 		private float frameRate;
 
+		private final ProcGui gui;
 
-		public Applet(float frameRate) {
+		private Set<Character> keysPressed = new HashSet<>();
+
+
+		private Applet(ProcGui gui, float frameRate) {
+			this.gui = gui;
 			this.frameRate = frameRate;
 		}
 
@@ -143,6 +177,25 @@ public class ProcGui extends GuiStruct {
 			getElements().forEach(this::draw);
 		}
 
+		@Override
+		public void keyPressed(KeyEvent event) {
+			super.keyPressed(event);
+
+			final char key = event.getKey();
+
+			keysPressed.add(key);
+			keyListeners.forEach(it -> it.onKeyPress(gui, key));
+		}
+
+		@Override
+		public void keyReleased(KeyEvent event) {
+			super.keyReleased();
+
+			final char key = event.getKey();
+
+			keysPressed.remove(key);
+			keyListeners.forEach(it -> it.onKeyRelease(gui, key));
+		}
 
 		private void drawRect(Pos pos, Color color, Dimension dimensions) {
 			fill(color.getRGB());
@@ -246,18 +299,20 @@ public class ProcGui extends GuiStruct {
 
 				final Dimension dimension = gifElem.getSize();
 
-				final PImage pImage = imageCache.computeIfAbsent(gifElem.getUUID(), id ->
-					apply(new PGif(gifElem.getGif()), it -> {
-						gifManager.addGif(it);
-						it.setShouldPlay(true);
-					})
+				final PGif pGif = gifCache.computeIfAbsent(gifElem.getUUID(), id ->
+					new PGif(gifElem.getGif())
 				);
 
-				if (gifElem.isResized()) {
-					pImage.resize(dimension.width, dimension.height);
+				if (!gifManager.contains(pGif)) {
+					gifManager.addGif(pGif);
+					pGif.setShouldPlay(true);
 				}
 
-				drawImage(gifElem.getPosition(), pImage);
+				if (gifElem.isResized()) {
+					pGif.resize(dimension.width, dimension.height);
+				}
+
+				drawImage(gifElem.getPosition(), pGif);
 			}
 		}
 
@@ -268,6 +323,10 @@ public class ProcGui extends GuiStruct {
 		public void setFrameRate(float frameRate) {
 			this.frameRate = frameRate;
 			if (isVisible()) frameRate(frameRate);
+		}
+
+		public Set<Character> getKeysPressed() {
+			return Collections.unmodifiableSet(keysPressed);
 		}
 
 	}

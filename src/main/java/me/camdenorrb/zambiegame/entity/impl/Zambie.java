@@ -49,6 +49,7 @@ public class Zambie extends EntityStruct {
 
 	{
 		addCollideHandler(Huemin.class, huemin -> isMoving = false);
+		//addCollideHandler(HueminFort.class, fort -> {}/*TODO Game over*/);
 	}
 
 
@@ -87,9 +88,7 @@ public class Zambie extends EntityStruct {
 
 		if (!isMoving) return;
 
-		pos.sub(1, 0);
-		bodyPos.sub(1, 0);
-		hitboxCenterPos.sub(1, 0);
+		moveBy(-1, 0);
 
 		//pos.setX(pos.getX() + ((int) (Math.random() * 20 - 10)));
 		//pos.setY(pos.getY() + ((int) (Math.random() * 20 - 10)));
@@ -97,8 +96,9 @@ public class Zambie extends EntityStruct {
 		final Dimension size = game.getGui().getSize();
 
 		if (pos.getX() <= 0) {
-			bodyPos.setX(size.getWidth());
-			pos.setX(size.getWidth());
+			// TODO: Play game over screen
+			//bodyPos.setX(size.getWidth());
+			//pos.setX(size.getWidth());
 		}
 
 		if (bodyPos.getY() >= size.height) {
@@ -151,4 +151,12 @@ public class Zambie extends EntityStruct {
 		return Math.abs(x1 - x2) <= size.width && Math.abs(y1 - y2) <= size.height;
 	}*/
 
+	@Override
+	public void moveBy(double x, double y) {
+
+		super.moveBy(x, y);
+
+		hitboxCenterPos.add(x, y);
+		body.getPosition().add(x, y);
+	}
 }
