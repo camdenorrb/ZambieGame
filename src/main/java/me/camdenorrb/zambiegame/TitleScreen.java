@@ -38,9 +38,7 @@ public class TitleScreen extends ZambieGameStruct {
 	private final ProcGui gui = new ProcGui("ZambieGame", DisplayUtils.getRefreshRate(), new Size(CANVAS_WIDTH, CANVAS_HEIGHT));
 	//private final OpenGLGui gui = new OpenGLGui("ZambieGame", new Dimension(1500, 750), false);
 
-	private final LazyStruct<Song> song = lazy(() ->
-		new Song("Title Background", ResourceUtils.get("music/wav/title-background.wav")
-	));
+	private final LazyStruct<Song> song = lazy(() -> new Song("Title Background", () -> ResourceUtils.get("music/wav/title-background.wav")));
 
 
 	/**
@@ -90,7 +88,7 @@ public class TitleScreen extends ZambieGameStruct {
 
 		gui.show();
 
-		song.get().play(true);
+		song.get().play();
 
 		apply(new TitleMenu(this), MenuStruct::build).show();
 	}
@@ -101,7 +99,7 @@ public class TitleScreen extends ZambieGameStruct {
 	@Override
 	protected void onStop() {
 		//gui.hide();
-		song.get().close();
+		song.get().stop();
 
 		gui.clear();
 		entities.clear();

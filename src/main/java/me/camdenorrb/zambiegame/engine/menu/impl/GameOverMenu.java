@@ -56,7 +56,6 @@ public class GameOverMenu extends MenuStruct {
         addPart(new Element.Button(new Element.Rectangle(Color.GREEN.darker(), restartButtonPos, new Size(100, 50)), () -> {
             game.stop();
             game.start();
-            game.resume();
         }));
 
         addPart(new Element.Text("Restart", 20, new Size(70, 30), restartTextPos));

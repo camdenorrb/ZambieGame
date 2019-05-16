@@ -51,9 +51,7 @@ public class ZambieGame extends ZambieGameStruct {
 
 	private final ProcGui gui;
 
-	private final LazyStruct<Song> song = lazy(() ->
-		new Song("Game Background", ResourceUtils.get("music/wav/game-background.wav")
-	));
+	private final LazyStruct<Song> song = lazy(() -> new Song("Game Background", () -> ResourceUtils.get("music/wav/game-background.wav")));
 
 	//private final OpenGLGui gui = new OpenGLGui("ZambieGame", new Dimension(1500, 750), false);
 
@@ -206,7 +204,7 @@ public class ZambieGame extends ZambieGameStruct {
 
 		//gui.show();
 
-		song.get().play(true);
+		song.get().play();
 	}
 
 
@@ -222,7 +220,7 @@ public class ZambieGame extends ZambieGameStruct {
 		timer.stop();
 		zambieTimer.stop();
 
-		song.get().close();
+		song.get().stop();
 	}
 
 
