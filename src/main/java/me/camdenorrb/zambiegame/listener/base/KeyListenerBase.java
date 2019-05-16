@@ -7,8 +7,20 @@ import me.camdenorrb.zambiegame.engine.gui.struct.GuiStruct;
  */
 public interface KeyListenerBase {
 
-    default void onKeyPress(GuiStruct gui, char key) {}
+    /**
+     * Handles key pressing
+     *
+     * @param gui The gui pressed on
+     * @param keyCode The keycode pressed
+     */
+    default void onKeyPress(GuiStruct gui, int keyCode) {}
 
-    default void onKeyRelease(GuiStruct gui, char key) {}
+    /**
+     * Handles key release
+     *
+     * @param gui The gui released on
+     * @param keyCode The keycode released
+     */
+    default void onKeyRelease(GuiStruct gui, int keyCode) {}
 
 }

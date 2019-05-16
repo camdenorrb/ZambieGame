@@ -10,6 +10,12 @@ public class Pos {
 	protected double x, y;
 
 
+	/**
+	 * Constructs a Position
+	 *
+	 * @param x The x position
+	 * @param y The y position
+	 */
 	public Pos(double x, double y) {
 		this.x = x;
 		this.y = y;
@@ -35,7 +41,30 @@ public class Pos {
 	}
 
 
+	/**
+	 * The distance between this position and another
+	 *
+	 * @param to The other position
+	 *
+	 * @return The distance between this and the other position
+	 */
 	public Distance distTo(Pos to) {
+
+		final Pos fromDouble = new Pos(x, y);
+		final Pos toDouble = new Pos(to.x, to.y);
+
+		return new Distance(fromDouble.x - toDouble.x, fromDouble.y - toDouble.y);
+		//return Math.sqrt(Math.pow(fromDouble.x - toDouble.x, 2) + Math.pow(fromDouble.y - toDouble.y, 2));
+	}
+
+	/**
+	 * The absolute distance between this position and another
+	 *
+	 * @param to The other position
+	 *
+	 * @return The absolute distance between this and the other position
+	 */
+	public Distance distAbsTo(Pos to) {
 
 		final Pos fromDouble = new Pos(x, y);
 		final Pos toDouble = new Pos(to.x, to.y);
@@ -53,6 +82,11 @@ public class Pos {
 		return new MutablePos(x, y);
 	}
 
+	/**
+	 * A human readable form of this class
+	 *
+	 * @return The human readable form of this class
+	 */
 	@Override
 	public String toString() {
 		return "Pos(" + x + ", " + y + ")";

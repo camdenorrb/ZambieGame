@@ -20,6 +20,9 @@ import static me.camdenorrb.zambiegame.utils.GifUtils.lazyLoadElem;
 import static me.camdenorrb.zambiegame.utils.JavaUtils.apply;
 
 
+/**
+ * Represents a Hero entity
+ */
 public class Hero extends EntityStruct {
 
     protected volatile boolean isAttacking;
@@ -55,6 +58,11 @@ public class Hero extends EntityStruct {
     protected final LazyStruct<Element.GifElem> attackSwordGif = lazyLoadElem(ResourceUtils.get(ATTACK_SWORD_PATH));
 
 
+    /**
+     * Constructs a Hero entity
+     *
+     * @param game The game for the entity to spawn in
+     */
     public Hero(ZambieGameStruct game) {
 
         super(game);
@@ -65,6 +73,11 @@ public class Hero extends EntityStruct {
     }
 
 
+    /**
+     * Handles the spawning of the Entity
+     *
+     * @param pos The position to spawn at
+     */
     @Override
     protected void onSpawn(Pos pos) {
         super.onSpawn(pos);
@@ -77,73 +90,120 @@ public class Hero extends EntityStruct {
         //hitboxCenterPos.setXY(pos.getX() + Math.round(HITBOX_WIDTH / 2.0), pos.getY() + Math.round(HITBOX_HEIGHT / 2.0));
     }
 
+    /**
+     * Handles the removing of the Entity
+     */
     @Override
     protected void onRemove() {
         super.onRemove();
     }
 
+    /**
+     * Gets the center of the Entity
+     *
+     * @return The center of the Entity
+     */
     @Override
     public Pos getCenter() {
         return body.getCenter();
     }
 
+    /**
+     * Handles the ticking of the Entity
+     */
     @Override
     protected void onTick() {
 
-        final Set<Character> keysPressed = game.getGui().getKeysPressed();
+        final Set<Integer> keysPressed = game.getGui().getKeysPressed();
 
         double changeX = 0;
         double changeY = 0;
 
-        if (keysPressed.contains('w')) {
+        //System.out.println(keysPressed.stream().map(it -> {return ((int) it) + "";}).collect(Collectors.joining()));
+
+        // UP
+        if (keysPressed.contains(87) || keysPressed.contains(38)) {
             changeY = -1;
         }
-        else if (keysPressed.contains('s')) {
+        // DOWN
+        else if (keysPressed.contains(83) || keysPressed.contains(40)) {
             changeY = 1;
         }
-
-        if (keysPressed.contains('a')) {
+        // LEFT
+        if (keysPressed.contains(65) || keysPressed.contains(37)) {
             changeX = -1;
         }
-
-        else if (keysPressed.contains('d')) {
+        // RIGHT
+        else if (keysPressed.contains(68) || keysPressed.contains(39)) {
             changeX = 1;
         }
 
-        isAttacking = keysPressed.contains(' ');
+        isAttacking = keysPressed.contains((int) ' ');
 
         moveBy(changeX, changeY);
     }
 
 
+    /**
+     * Gets the name of the Entity
+     *
+     * @return The name of the Entity
+     */
     @Override
     public String getName() {
         return "Hero";
     }
 
+    /**
+     * Gets the parts of the Entity
+     *
+     * @return The parts of the Entity
+     */
     @Override
     public List<Element> getParts() {
         return Collections.singletonList(body);
     }
 
+    /**
+     * Checks if the position is in range of the Entity
+     *
+     * @param pos The position to check
+     *
+     * @return If the position is in range
+     */
     @Override
     public boolean isInRange(Pos pos) {
-        final Distance distance = hitboxCenterPos.distTo(pos);
+        final Distance distance = hitboxCenterPos.distAbsTo(pos);
         return distance.getX() <= attackSwordGif.get().getSize().getWidth() && distance.getY() <= getHeight() / 3;
     }
 
+    /**
+     * Gets the width of the Entity
+     *
+     * @return The width of the Entity
+     */
     @Override
     public double getWidth() {
-        return body.getSize().width;
+        return body.getSize().getWidth();
     }
 
+    /**
+     * Gets the height of the Entity
+     *
+     * @return The height of the Entity
+     */
     @Override
     public double getHeight() {
-        return body.getSize().height;
+        return body.getSize().getHeight();
     }
 
 
-
+    /**
+     * Move the Entity by a certain amount
+     *
+     * @param x The x distance to move by
+     * @param y The y distance to move by
+     */
     @Override
     public void moveBy(double x, double y) {
 
@@ -215,6 +275,9 @@ public class Hero extends EntityStruct {
         }
     }
 
+    /**
+     * Handles the starting of attacking
+     */
     private void onStartAttacking() {
 
         game.getEntities().stream()
@@ -223,9 +286,17 @@ public class Hero extends EntityStruct {
                 .forEach(Killable::kill);
     }
 
+    /**
+     * Handles the stopping of attacking
+     */
     private void onStopAttacking() {
     }
 
+    /**
+     * Changes the body to a different gif
+     *
+     * @param newBody The new body gif
+     */
     private void changeBody(Element.GifElem newBody) {
 
         final Element.GifElem oldBody = body;

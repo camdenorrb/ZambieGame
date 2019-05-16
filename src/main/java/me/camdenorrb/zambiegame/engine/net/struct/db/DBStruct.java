@@ -22,6 +22,9 @@ public abstract class DBStruct implements DBBase {
     protected abstract void onDisconnect();
 
 
+    /**
+     * Connects to the database
+     */
     @Override
     public void connect() {
 
@@ -31,6 +34,9 @@ public abstract class DBStruct implements DBBase {
         isConnected = true;
     }
 
+    /**
+     * Disconnects from the database
+     */
     @Override
     public void disconnect() {
 
@@ -41,6 +47,11 @@ public abstract class DBStruct implements DBBase {
     }
 
 
+    /**
+     * Checks if it is connected to the database
+     *
+     * @return If it is connected to the database
+     */
     @Override
     public boolean isConnected() {
         return isConnected;

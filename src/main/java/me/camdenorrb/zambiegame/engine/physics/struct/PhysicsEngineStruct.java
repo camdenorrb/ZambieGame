@@ -24,6 +24,13 @@ public abstract class PhysicsEngineStruct implements PhysicsEngineBase {
 	private int pixelsPerMeter;
 
 
+	/**
+	 * Constructs a Physics Engine instance
+	 *
+	 * @param fps The frames per second
+	 * @param gravity The magnitude of gravity
+	 * @param pixelsPerMeter The pixels per meter ratio
+	 */
 	public PhysicsEngineStruct(int fps, double gravity, int pixelsPerMeter) {
 		this.fps = fps;
 		this.gravity = gravity;

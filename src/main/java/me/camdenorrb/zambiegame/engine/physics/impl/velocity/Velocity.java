@@ -8,6 +8,12 @@ public class Velocity {
 	protected double x, y;
 
 
+	/**
+	 * Constructs a Velocity instance
+	 *
+	 * @param x The x magnitude
+	 * @param y The y magnitude
+	 */
 	public Velocity(double x, double y) {
 		this.x = x;
 		this.y = y;
@@ -42,6 +48,11 @@ public class Velocity {
 		return new MutableVelocity(x, y);
 	}
 
+	/**
+	 * Converts this into a human readable string
+	 *
+	 * @return The human readable string
+	 */
 	@Override
 	public String toString() {
 		return "Velocity(" + x + ", " + y + ')';

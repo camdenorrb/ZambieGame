@@ -7,13 +7,13 @@ import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Layer;
 import me.camdenorrb.zambiegame.engine.physics.impl.Distance;
 import me.camdenorrb.zambiegame.entity.struct.EntityStruct;
+import me.camdenorrb.zambiegame.impl.Size;
 import me.camdenorrb.zambiegame.impl.pos.MutablePos;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
 import me.camdenorrb.zambiegame.struct.game.ZambieGameStruct;
 import me.camdenorrb.zambiegame.struct.lazy.LazyStruct;
 import me.camdenorrb.zambiegame.utils.ResourceUtils;
 
-import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 
@@ -59,7 +59,11 @@ public class Huemin extends EntityStruct {
 
 	private final LazyStruct<Gif> attackSwordGif = lazyLoad(ResourceUtils.get(ATTACK_SWORD_PATH));
 
-
+	/**
+	 * Constructs a Huemin instance
+	 *
+	 * @param game The game for the entity to spawn in
+	 */
 	public Huemin(ZambieGameStruct game) {
 		super(game);
 		//final InputStream inputStream = getClass().getResource("resources/robotcat.jpeg").openStream();
@@ -67,7 +71,7 @@ public class Huemin extends EntityStruct {
 		//this.body = new Element.Rectangle(Color.BLACK, pos, new Dimension(10, 10));
 	}
 
-
+	// Init
 	{
 		addCollideHandler(Zambie.class, zambie -> {
 
@@ -88,7 +92,6 @@ public class Huemin extends EntityStruct {
 					return;
 				}
 
-				System.out.println("Here");
 				zambie.damage(5);
 
 			}).start();
@@ -96,17 +99,32 @@ public class Huemin extends EntityStruct {
 	}
 
 
+	/**
+	 * Gets the name of the Entity
+	 *
+	 * @return The name of the Entity
+	 */
 	@Override
 	public String getName() {
 		return "Huemin";
 	}
 
+	/**
+	 * Gets the center of the Entity
+	 *
+	 * @return The center of the Entity
+	 */
 	@Override
 	public Pos getCenter() {
 		return body.getCenter();
 	}
 
 
+	/**
+	 * Handles the spawning of an Entity
+	 *
+	 * @param pos The position to spawn at
+	 */
 	@Override
 	protected void onSpawn(Pos pos) {
 
@@ -119,23 +137,41 @@ public class Huemin extends EntityStruct {
 	}
 
 
+	/**
+	 * Gets the parts of the Entity
+	 *
+	 * @return The parts of the Entity
+	 */
 	@Override
 	public List<Element> getParts() {
 		return Collections.singletonList(body);
 	}
 
 
+	/**
+	 * Gets the width of the Entity
+	 *
+	 * @return The width of the Entity
+	 */
 	@Override
 	public double getWidth() {
-		return body.getSize().width;
+		return body.getSize().getWidth();
 	}
 
+	/**
+	 * Gets the height of the Entity
+	 *
+	 * @return The height of the Entity
+	 */
 	@Override
 	public double getHeight() {
-		return body.getSize().height;
+		return body.getSize().getHeight();
 	}
 
 
+	/**
+	 * Handles the ticking of an Entity
+	 */
 	@Override
 	public void onTick() {
 
@@ -148,19 +184,19 @@ public class Huemin extends EntityStruct {
 		//pos.setX(pos.getX() + ((int) (Math.random() * 20 - 10)));
 		//pos.setY(pos.getY() + ((int) (Math.random() * 20 - 10)));
 
-		final Dimension guiSize = game.getGui().getSize();
+		final Size guiSize = game.getGui().getSize();
 
 		if (bodyPos.getX() < 0) {
-			teleport(guiSize.width, bodyPos.getY());
+			teleport(guiSize.getWidth(), bodyPos.getY());
 		}
-		else if (bodyPos.getX() >= guiSize.width) {
+		else if (bodyPos.getX() >= guiSize.getWidth()) {
 			teleport(0, bodyPos.getY());
 		}
 
 		if (bodyPos.getY() < 0) {
 			teleport(bodyPos.getX(), guiSize.getHeight());
 		}
-		else if (bodyPos.getY() >= guiSize.height) {
+		else if (bodyPos.getY() >= guiSize.getHeight()) {
 			teleport(bodyPos.getX(), 0);
 		}
 
@@ -175,13 +211,25 @@ public class Huemin extends EntityStruct {
 		 */
 	}
 
+	/**
+	 * Checks if the Entity is in range
+	 *
+	 * @param pos The position to check
+	 *
+	 * @return If the position is in range
+	 */
 	@Override
 	public boolean isInRange(Pos pos) {
-		final Distance distance = hitboxCenterPos.distTo(pos);
+		final Distance distance = hitboxCenterPos.distAbsTo(pos);
 		return distance.getX() <= (HITBOX_WIDTH / 2.0) && distance.getY() <= (HITBOX_HEIGHT / 2.0);//<= Math.max(body.getSize().width, body.getSize().height);
 	}
 
 
+	/**
+	 * Changes the body to a different gif
+	 *
+	 * @param newBodyGif The new gif to change to
+	 */
 	private void changeBody(Gif newBodyGif) {
 
 		final Element.GifElem newBody = new Element.GifElem(body.getPosition(), newBodyGif);
@@ -197,6 +245,12 @@ public class Huemin extends EntityStruct {
 		game.getGui().addElements(Layer.ENTITY, newBody);
 	}
 
+	/**
+	 * Handles the teleporting of an Entity
+	 *
+	 * @param x The x coordinate to teleport to
+	 * @param y The y coordinate to teleport to
+	 */
 	@Override
 	protected void onTeleport(double x, double y) {
 
@@ -206,6 +260,12 @@ public class Huemin extends EntityStruct {
 		super.onTeleport(x, y);
 	}
 
+	/**
+	 * Moves the Entity by a certain amount
+	 *
+	 * @param x The x distance to move by
+	 * @param y The y distance to move by
+	 */
 	@Override
 	public void moveBy(double x, double y) {
 

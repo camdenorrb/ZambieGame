@@ -5,6 +5,12 @@ package me.camdenorrb.zambiegame.engine.physics.impl.velocity;
  */
 public class MutableVelocity extends Velocity {
 
+	/**
+	 * Constructs a MutableVelocity instance
+	 *
+	 * @param x The x magnitude
+	 * @param y The y magnitude
+	 */
 	public MutableVelocity(double x, double y) {
 		super(x, y);
 	}

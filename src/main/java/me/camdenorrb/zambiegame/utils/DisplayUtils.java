@@ -2,11 +2,23 @@ package me.camdenorrb.zambiegame.utils;
 
 import java.awt.*;
 
+
+/**
+ * Utilities to help with Display related things
+ */
 public final class DisplayUtils {
 
+    /**
+     * Constructs DisplayUtils
+     */
     private DisplayUtils() {}
 
 
+    /**
+     * Gets the refresh rate of the main monitor
+     *
+     * @return The refresh rate of the main monitor
+     */
     public static int getRefreshRate() {
 
         final GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();

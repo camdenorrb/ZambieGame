@@ -1,5 +1,6 @@
 package me.camdenorrb.zambiegame.impl;
 
+/*
 public class Pair<T1, T2> {
 
     private final T1 value1;
@@ -18,3 +19,4 @@ public class Pair<T1, T2> {
         return value2;
     }
 }
+*/

@@ -10,6 +10,9 @@ import java.util.function.Supplier;
  */
 public final class LazyUtils {
 
+	/**
+	 * Constructs LazyUtils
+	 */
 	private LazyUtils() {}
 
 

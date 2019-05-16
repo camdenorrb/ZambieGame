@@ -16,6 +16,8 @@ public interface Spawnable {
 
 	/**
 	 * Handle spawning
+	 *
+	 * @param pos The position to spawn at
 	 */
 	void spawn(Pos pos);
 }

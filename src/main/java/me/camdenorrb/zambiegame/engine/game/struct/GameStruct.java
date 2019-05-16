@@ -14,11 +14,16 @@ public abstract class GameStruct implements GameBase {
 	private boolean isStarted;
 
 
-	private final GameTimer timer;
+	protected final GameTimer timer;
 
 	private static final int MILLIS_IN_SEC = 1_000;
 
 
+	/**
+	 * Constructs a GameStruct
+	 *
+	 * @param tps The TPS the game will run at
+	 */
 	public GameStruct(long tps) {
 		this.tps = tps;
 		this.timer = new GameTimer(MILLIS_IN_SEC / tps, this::onTick);
@@ -41,6 +46,9 @@ public abstract class GameStruct implements GameBase {
 	protected abstract void onTick(GameTimer timer);
 
 
+	/**
+	 * Handles the starting of the GameStruct
+	 */
 	@Override
 	public final void start() {
 
@@ -52,17 +60,29 @@ public abstract class GameStruct implements GameBase {
 		isStarted = true;
 	}
 
+	/**
+	 * Handles the stopping of the GameStruct
+	 */
 	@Override
 	public final void stop() {
 
 		if (!isStarted) return;
 
-		timer.stop();
 		onStop();
+		timer.stop();
 
 		isStarted = false;
 	}
 
+
+	/**
+	 * Gets the timer for the GameStruct
+	 *
+	 * @return The GameStruct's timer
+	 */
+	public GameTimer getTimer() {
+		return timer;
+	}
 
 	/**
 	 * Tells whether or not it's started

@@ -20,20 +20,37 @@ public class GameTimer extends GameTimerStruct {
 
 	private final Consumer<GameTimer> onTick;
 
-	private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+	private ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
 
+	/**
+	 * Constructs a GameTimer
+	 *
+	 * @param tempo The tempo at which the timer will run, in milliseconds
+	 * @param onTick The method to call each tick
+	 */
 	public GameTimer(long tempo, Consumer<GameTimer> onTick) {
 		this.tempo = tempo;
 		this.onTick = onTick;
 	}
 
 
+	/**
+	 * Handles the starting of the timer
+	 */
 	@Override
 	protected void onStart() {
+
+		if (executor.isShutdown()) {
+			executor = Executors.newSingleThreadScheduledExecutor();
+		}
+
 		executor.scheduleAtFixedRate(() -> attemptOrPrintErr(() -> onTick.accept(this)), tempo, tempo, TimeUnit.MILLISECONDS);
 	}
 
+	/**
+	 * Handles the stopping of the timer
+	 */
 	@Override
 	protected void onStop() {
 		executor.shutdownNow();
@@ -49,10 +66,15 @@ public class GameTimer extends GameTimerStruct {
 
 		if (isRunning()) {
 			executor.shutdownNow();
+			executor = Executors.newSingleThreadScheduledExecutor();
 			executor.scheduleAtFixedRate(() -> attemptOrPrintErr(() -> onTick.accept(this)), tempo, tempo, TimeUnit.MILLISECONDS);
 		}
 
 		this.tempo = tempo;
+	}
+
+	public long getTempo() {
+		return tempo;
 	}
 
 }

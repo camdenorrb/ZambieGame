@@ -1,5 +1,8 @@
 package me.camdenorrb.zambiegame;
 
+/**
+ * The Main Class
+ */
 public class Main {
 
 	//private static final MiniBus MINI_BUS = new MiniBus();

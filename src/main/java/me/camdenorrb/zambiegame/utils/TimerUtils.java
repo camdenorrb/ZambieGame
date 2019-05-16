@@ -10,6 +10,9 @@ import java.util.TimerTask;
  */
 public final class TimerUtils {
 
+	/**
+	 * Constructs TimerUtils
+	 */
 	private TimerUtils() {}
 
 
@@ -22,6 +25,7 @@ public final class TimerUtils {
 	/**
 	 * Schedules a repeating task
 	 *
+	 * @param timer The timer to utilize
 	 * @param delay The delay to run the task with
 	 * @param period The period to run the task
 	 * @param block The task
@@ -39,6 +43,7 @@ public final class TimerUtils {
 	/**
 	 * Schedules a repeating task
 	 *
+	 * @param timer The timer to utilize
 	 * @param time The time to start at
 	 * @param period The period to run the task
 	 * @param block The task

@@ -14,6 +14,9 @@ import java.util.function.Consumer;
 import static me.camdenorrb.zambiegame.utils.LazyUtils.lazy;
 
 
+/**
+ * Handles the processing for Gifs
+ */
 public class PGifManager implements ModuleBase {
 
 	private boolean isEnabled;
@@ -41,6 +44,9 @@ public class PGifManager implements ModuleBase {
 	);
 
 
+	/**
+	 * Enables the PGifManager
+	 */
 	@Override
 	public void enable() {
 
@@ -51,6 +57,9 @@ public class PGifManager implements ModuleBase {
 		isEnabled = true;
 	}
 
+	/**
+	 * Disables the PGifManager
+	 */
 	@Override
 	public void disable() {
 
@@ -62,38 +71,79 @@ public class PGifManager implements ModuleBase {
 	}
 
 
+	/**
+	 * Checks if the manager is enabled
+	 *
+	 * @return If the manager is enabled
+	 */
 	@Override
 	public boolean isEnabled() {
 		return isEnabled;
 	}
 
 
+	/**
+	 * Adds a Gif to the manager
+	 *
+	 * @param gif The gif to add
+	 */
 	public void addGif(PGif gif) {
 		gifs.put(gif, gif.getDelayForCurrentFrame() * 10);
 	}
 
+	/**
+	 * Removes a Gif from the manager
+	 *
+	 * @param gif The gif to remove
+	 */
 	public void remGif(PGif gif) {
 		gifs.remove(gif);
 	}
 
+	/**
+	 * Removes a Gif from the manager
+	 *
+	 * @param gif The gif to remove
+	 */
 	public void remGif(Gif gif) {
 		gifs.entrySet().removeIf(it -> it.getKey().getGif().equals(gif));
 	}
 
 
+	/**
+	 * Checks if the manager contains a gif
+	 *
+	 * @param gif The gif to look for
+	 *
+	 * @return If the gif exists in the manager
+	 */
 	public boolean contains(PGif gif) {
 		return gifs.containsKey(gif);
 	}
 
+	/**
+	 * Checks if the manager contains a gif
+	 *
+	 * @param gif The gif to look for
+	 *
+	 * @return If the gif exists in the manager
+	 */
 	public boolean contains(Gif gif) {
 		return gifs.keySet().stream().anyMatch(it -> it.getGif().equals(gif));
 	}
 
+	/**
+	 * Clears the manager of all gifs
+	 */
 	public void clear() {
 		gifs.clear();
 	}
 
 
+	/**
+	 * Gets all the gifs in the manager
+	 * @return
+	 */
 	public Set<PGif> getGifs() {
 		return Collections.unmodifiableSet(gifs.keySet());
 	}

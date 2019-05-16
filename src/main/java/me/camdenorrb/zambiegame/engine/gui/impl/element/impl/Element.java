@@ -2,6 +2,9 @@ package me.camdenorrb.zambiegame.engine.gui.impl.element.impl;
 
 import me.camdenorrb.zambiegame.engine.gif.Gif;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.base.ElementBase;
+import me.camdenorrb.zambiegame.engine.physics.impl.Distance;
+import me.camdenorrb.zambiegame.event.base.ClickEventHandlerBase;
+import me.camdenorrb.zambiegame.impl.Size;
 import me.camdenorrb.zambiegame.impl.pos.MutablePos;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
 import me.camdenorrb.zambiegame.struct.lazy.LazyStruct;
@@ -14,7 +17,6 @@ import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.util.UUID;
 
-import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.util.Objects.requireNonNull;
 import static me.camdenorrb.zambiegame.utils.JavaUtils.apply;
@@ -28,20 +30,53 @@ public abstract class Element implements ElementBase {
 	private final UUID uuid = UUID.randomUUID();
 
 
+	/**
+	 * Constructs an element instance
+	 */
 	private Element() {}
 
 
+	/**
+	 * Gets the center of the element
+	 *
+	 * @return The center of the element
+	 */
 	public abstract Pos getCenter();
 
-	public abstract Dimension getSize();
+	/**
+	 * Gets the size of the element
+	 *
+	 * @return The size of the element
+	 */
+	public abstract Size getSize();
 
 
+	/**
+	 * Gets the UUID (Universally Unique Identifier) of the element
+	 *
+	 * @return The UUID of the element
+	 */
 	public UUID getUUID() {
 		return uuid;
 	}
 
+	/**
+	 * Gets the position of the element
+	 *
+	 * @return The position of the element
+	 */
 	public abstract MutablePos getPosition();
 
+
+	/**
+	 * Converts the element to a human readable string
+	 *
+	 * @return The human readable string
+	 */
+	@Override
+	public String toString() {
+		return getName();
+	}
 
 	/**
 	 * The Text Element
@@ -51,26 +86,67 @@ public abstract class Element implements ElementBase {
 		private String data;
 
 
-		private final Dimension size;
+		private final Size size;
+
+		private final float fontSize;
 
 		private final MutablePos position;
 
 
-		public Text(String data, Dimension size, Pos position) {
+		/**
+		 * Constructs a text instance
+		 *
+		 * @param data The data for the text
+		 * @param size The size of the text holder
+		 * @param position The position of the text
+		 */
+		public Text(String data, Size size, Pos position) {
+			this(data, 14, size, position);
+		}
+
+		/**
+		 * Constructs a text instance
+		 *
+		 * @param data The data for the text
+		 * @param fontSize The font size of the text
+		 * @param size The size of the text holder
+		 * @param position The position of the text
+		 */
+		public Text(String data, float fontSize, Size size, Pos position) {
 			this.data = data;
 			this.size = size;
+			this.fontSize = fontSize;
 			this.position = position.toMutable();
 		}
 
 
+		/**
+		 * Gets the name of the element
+		 *
+		 * @return The name of the element
+		 */
 		@Override
 		public String getName() {
 			return "Text";
 		}
 
+		/**
+		 * Checks if a position is in range of this element
+		 *
+		 * @param pos The position to check
+		 *
+		 * @return If it is in range of the element
+		 */
 		@Override
 		public boolean isInRange(Pos pos) {
-			return abs(position.getX() - pos.getX()) >= size.width && abs(position.getY() - pos.getY()) >= size.height;
+
+			final Distance distance = pos.distTo(position);
+
+			final double distX = distance.getX();
+			final double distY = distance.getY();
+
+			return distX > 0 && distX <= size.getWidth()
+				&& distY > 0 && distY <= size.getHeight();
 		}
 
 
@@ -88,8 +164,17 @@ public abstract class Element implements ElementBase {
 		 *
 		 * @return The size of the text
 		 */
-		public Dimension getSize() {
+		public Size getSize() {
 			return size;
+		}
+
+		/**
+		 * Gets the font size of the text
+		 *
+		 * @return The font size of the text
+		 */
+		public float getFontSize() {
+			return fontSize;
 		}
 
 		/**
@@ -111,6 +196,11 @@ public abstract class Element implements ElementBase {
 			this.data = data;
 		}
 
+		/**
+		 * Gets the center of the text
+		 *
+		 * @return The center of the text
+		 */
 		@Override
 		public Pos getCenter() {
 			// TODO
@@ -128,19 +218,37 @@ public abstract class Element implements ElementBase {
 		private final MutablePos start, end;
 
 
+		/**
+		 * Constructs a Line instance
+		 *
+		 * @param color The color of the line
+		 * @param start The start of the line
+		 * @param end The end of the line
+		 */
 		public Line(Color color, Pos start, Pos end) {
 			this.start = start.toMutable();
 			this.end = end.toMutable();
 			this.color = color;
 		}
 
-
+		/**
+		 * Gets the name of the element
+		 *
+		 * @return The name of the element
+		 */
 		@Override
 		public String getName() {
 			return "Line";
 		}
 
 
+		/**
+		 * Checks if a position is in range of this element
+		 *
+		 * @param pos The position to check
+		 *
+		 * @return If it is in range of the element
+		 */
 		@Override
 		public boolean isInRange(Pos pos) {
 
@@ -172,10 +280,20 @@ public abstract class Element implements ElementBase {
 		}
 
 
+		/**
+		 * Gets the width of the element
+		 *
+		 * @return The width of the element
+		 */
 		private double getWidth() {
 			return end.getX() - start.getX();
 		}
 
+		/**
+		 * Gets the height of the element
+		 *
+		 * @return The height of the element
+		 */
 		private double getHeight() {
 			return end.getY() - start.getY();
 		}
@@ -199,17 +317,32 @@ public abstract class Element implements ElementBase {
 		}
 
 
+		/**
+		 * Gets the position of the element
+		 *
+		 * @return The position of the element
+		 */
 		@Override
 		public MutablePos getPosition() {
 			return getStart();
 		}
 
 
+		/**
+		 * Gets the size of the element
+		 *
+		 * @return The size of the element
+		 */
 		@Override
-		public Dimension getSize() {
-			return new Dimension((int) getWidth(), (int) getHeight());
+		public Size getSize() {
+			return new Size((int) getWidth(), (int) getHeight());
 		}
 
+		/**
+		 * Gets the center of the element
+		 *
+		 * @return The center of the element
+		 */
 		@Override
 		public Pos getCenter() {
 			return new Pos(start.getX() + (getWidth() / 2), start.getY() + (getHeight() / 2));
@@ -226,22 +359,40 @@ public abstract class Element implements ElementBase {
 		private Color color;
 
 
-		private final Dimension size;
+		private final Size size;
 
 		private final MutablePos position;
 
 
-		public Oval(Pos position, Dimension size) {
+		/**
+		 * Constructs an Oval instance
+		 *
+		 * @param position The position of the Oval
+		 * @param size The size of the Oval
+		 */
+		public Oval(Pos position, Size size) {
 			this.size = size;
 			this.position = position.toMutable();
 		}
 
 
+		/**
+		 * Gets the name of the element
+		 *
+		 * @return The name of the element
+		 */
 		@Override
 		public String getName() {
 			return "Oval";
 		}
 
+		/**
+		 * Checks if a position is in range of this element
+		 *
+		 * @param pos The position to check
+		 *
+		 * @return If it is in range of the element
+		 */
 		@Override
 		public boolean isInRange(Pos pos) {
 			// Can just be distance from center
@@ -262,7 +413,7 @@ public abstract class Element implements ElementBase {
 		 *
 		 * @return The dimensions of the oval
 		 */
-		public Dimension getSize() {
+		public Size getSize() {
 			return size;
 		}
 
@@ -285,6 +436,11 @@ public abstract class Element implements ElementBase {
 			this.color = color;
 		}
 
+		/**
+		 * Gets the center of the element
+		 *
+		 * @return The center of the element
+		 */
 		@Override
 		public Pos getCenter() {
 			// TODO
@@ -301,19 +457,32 @@ public abstract class Element implements ElementBase {
 		private Color color;
 
 
-		private final Dimension size;
+		private final Size size;
 
 		private final MutablePos position;
 
 
 		// TODO: Take in primitives as a constructor
-		public Rectangle(Color color, Pos position, Dimension size) {
+
+		/**
+		 * Constructs a Rectangle instance
+		 *
+		 * @param color The color of the rectangle
+		 * @param position The position of the rectangle
+		 * @param size The size of the rectangle
+		 */
+		public Rectangle(Color color, Pos position, Size size) {
 			this.size = size;
 			this.color = color;
 			this.position = position.toMutable();
 		}
 
 
+		/**
+		 * Gets the name of the element
+		 *
+		 * @return The name of the element
+		 */
 		@Override
 		public String getName() {
 			return "Rectangle";
@@ -334,7 +503,7 @@ public abstract class Element implements ElementBase {
 		 *
 		 * @return The dimensions of the rectangle
 		 */
-		public Dimension getSize() {
+		public Size getSize() {
 			return size;
 		}
 
@@ -358,37 +527,79 @@ public abstract class Element implements ElementBase {
 		}
 
 
+		/**
+		 * Gets the top left of the element
+		 *
+		 * @return The top left of the element
+		 */
 		public Pos getTopLeft() {
 			return position;
 		}
 
+		/**
+		 * Gets the top right of the element
+		 *
+		 * @return The top right of the element
+		 */
 		public Pos getTopRight() {
-			return new Pos(position.getX() + size.width, position.getY());
+			return new Pos(position.getX() + size.getWidth(), position.getY());
 		}
 
+		/**
+		 * Gets the bottom left of the element
+		 *
+		 * @return The bottom left of the element
+		 */
 		public Pos getBottomLeft() {
-			return new Pos(position.getX(), position.getY() + size.height);
+			return new Pos(position.getX(), position.getY() + size.getHeight());
 		}
 
+		/**
+		 * Gets the bottom right of the element
+		 *
+		 * @return The bottom right of the element
+		 */
 		public Pos getBottomRight() {
 			return new Pos(position.getX() + size.getWidth(), position.getY() + size.getHeight());
 		}
 
+		/**
+		 * Gets the corners of the rectangle
+		 *
+		 * @return The corners of the rectangle
+		 */
 		public Pos[] getCorners() {
 			return new Pos[] { getTopLeft(), getTopRight(), getBottomLeft(), getBottomRight() };
 		}
 
 
+		/**
+		 * Checks if a position is in range of this element
+		 *
+		 * @param pos The position to check
+		 *
+		 * @return If it is in range of the element
+		 */
 		@Override
 		public boolean isInRange(Pos pos) {
-			// TODO
-			return false;
+
+			final Distance distance = pos.distTo(position);
+
+			final double distX = distance.getX();
+			final double distY = distance.getY();
+
+			return distX > 0 && distX <= size.getWidth()
+				&& distY > 0 && distY <= size.getHeight();
 		}
 
+		/**
+		 * Gets the center of the rectangle
+		 *
+		 * @return The center of the rectangle
+		 */
 		@Override
 		public Pos getCenter() {
-			// TODO
-			return null;
+			return new Pos(position.getX() + (size.getWidth() / 2), position.getY() + (size.getHeight() / 2));
 		}
 	}
 
@@ -404,7 +615,13 @@ public abstract class Element implements ElementBase {
 
 		private final MutablePos left, middle, right;
 
-
+		/**
+		 * Constructs a Triangle instance
+		 *
+		 * @param left The left point of the triangle
+		 * @param middle The middle point of the triangle
+		 * @param right The right point of the triangle
+		 */
 		public Triangle(MutablePos left, MutablePos middle, MutablePos right) {
 			this.left = left;
 			this.middle = middle;
@@ -412,6 +629,11 @@ public abstract class Element implements ElementBase {
 		}
 
 
+		/**
+		 * Gets the name of the element
+		 *
+		 * @return The name of the element
+		 */
 		@Override
 		public String getName() {
 			return "Triangle";
@@ -464,26 +686,48 @@ public abstract class Element implements ElementBase {
 			this.color = color;
 		}
 
+		/**
+		 * Checks if a position is in range of this element
+		 *
+		 * @param pos The position to check
+		 *
+		 * @return If it is in range of the element
+		 */
 		@Override
 		public boolean isInRange(Pos pos) {
 			// TODO
 			return false;
 		}
 
+		/**
+		 * Gets the center for the triangle
+		 *
+		 * @return The center of the triangle
+		 */
 		@Override
 		public Pos getCenter() {
 			// TODO
 			return null;
 		}
 
+		/**
+		 * Gets the position for the triangle
+		 *
+		 * @return The position of the triangle
+		 */
 		@Override
 		public MutablePos getPosition() {
 			return getLeft();
 		}
 
+		/**
+		 * Gets the size for the triangle
+		 *
+		 * @return The size of the triangle
+		 */
 		@Override
-		public Dimension getSize() {
-			return new Dimension((int) (right.getX() - left.getX()), (int) (max(left.getY(), right.getY()) - middle.getY()));
+		public Size getSize() {
+			return new Size((int) (right.getX() - left.getX()), (int) (max(left.getY(), right.getY()) - middle.getY()));
 		}
 	}
 
@@ -498,7 +742,7 @@ public abstract class Element implements ElementBase {
 		private InputStream imageStream;
 
 
-		private final Dimension size;
+		private final Size size;
 
 		private final MutablePos position;
 
@@ -508,37 +752,69 @@ public abstract class Element implements ElementBase {
 		);
 
 
+		/**
+		 * Constructs an Image instance
+		 *
+		 * @param position The position of the Image
+		 * @param imageStream An input stream for the Image
+		 */
 		public Image(Pos position, InputStream imageStream) {
 
 			this.imageStream = imageStream;
 			this.position = position.toMutable();
 
-			this.size = new Dimension(image.get().getWidth(), image.get().getHeight());
+			this.size = new Size(image.get().getWidth(), image.get().getHeight());
 		}
 
-		public Image(Pos position, Dimension size, InputStream imageStream) {
+		/**
+		 * Constructs an Image instance
+		 *
+		 * @param position The position of the Image
+		 * @param size The size of the image
+		 * @param imageStream An input stream for the Image
+		 */
+		public Image(Pos position, Size size, InputStream imageStream) {
 			this.size = size;
 			this.imageStream = imageStream;
 			this.position = position.toMutable();
 		}
 
 
+		/**
+		 * Gets the name of the element
+		 *
+		 * @return The name of the element
+		 */
 		@Override
 		public String getName() {
 			return "Image";
 		}
 
+		/**
+		 * Checks if a position is in range of this element
+		 *
+		 * @param pos The position to check
+		 *
+		 * @return If it is in range of the element
+		 */
 		@Override
 		public boolean isInRange(Pos pos) {
 			// TODO
 			return true;
 		}
 
+		/*
 		public boolean isInPixelRange(Pos pos) {
 			// TODO
 			return true;
 		}
+		*/
 
+		/**
+		 * Gets the center for the image
+		 *
+		 * @return The center of the image
+		 */
 		@Override
 		public Pos getCenter() {
 
@@ -557,10 +833,20 @@ public abstract class Element implements ElementBase {
 			return imageFile;
 		}*/
 
+		/**
+		 * Gets the buffered image for the image
+		 *
+		 * @return The buffered image of the image
+		 */
 		public BufferedImage getImage() {
 			return image.get();
 		}
 
+		/**
+		 * Gets the input stream for the image
+		 *
+		 * @return The input stream of the image
+		 */
 		public InputStream getImageStream() {
 			return imageStream;
 		}
@@ -579,14 +865,24 @@ public abstract class Element implements ElementBase {
 		 *
 		 * @return The size of the image
 		 */
-		public Dimension getSize() {
+		public Size getSize() {
 			return size;
 		}
 
+		/**
+		 * Checks if the image is resized
+		 *
+		 * @return If the image is resized
+		 */
 		public boolean isResized() {
 			return isResized;
 		}
 
+		/**
+		 * Sets if the image is resized
+		 *
+		 * @param isResized Whether or not the image is resized
+		 */
 		public void setIsResized(boolean isResized) {
 			this.isResized = isResized;
 		}
@@ -603,22 +899,41 @@ public abstract class Element implements ElementBase {
 
 		private final Gif gif;
 
-		private final Dimension size;
+		private final Size size;
 
 		private final MutablePos position;
 
 		private final Gif.Frame firstFrame;
 
 
+		/**
+		 * Construct a Gif Element instance
+		 *
+		 * @param position The position of the Gif Element
+		 * @param imageStream The input stream of the Gif Element
+		 */
 		public GifElem(Pos position, InputStream imageStream) {
 			this(position, apply(new Gif(), it -> it.read(imageStream)));
 		}
 
+		/**
+		 * Construct a Gif Element instance
+		 *
+		 * @param position The position of the Gif Element
+		 * @param gif The gif of the Gif Element
+		 */
 		public GifElem(Pos position, Gif gif) {
-			this(position, new Dimension(gif.getFrames().get(0).getImage().getWidth(), gif.getFrames().get(0).getImage().getHeight()), gif);
+			this(position, new Size(gif.getFrames().get(0).getImage().getWidth(), gif.getFrames().get(0).getImage().getHeight()), gif);
 		}
 
-		public GifElem(Pos position, Dimension size, Gif gif) {
+		/**
+		 * Construct a Gif Element instance
+		 *
+		 * @param position The position of the Gif Element
+		 * @param size The size of the Gif Element
+		 * @param gif The gif of the Gif Element
+		 */
+		public GifElem(Pos position, Size size, Gif gif) {
 			this.gif = gif;
 			this.size = size;
 			this.position = position.toMutable();
@@ -626,23 +941,41 @@ public abstract class Element implements ElementBase {
 		}
 
 
+		/**
+		 * Gets the name of the element
+		 *
+		 * @return The name of the element
+		 */
 		@Override
 		public String getName() {
 			return "Gif";
 		}
 
+		/**
+		 * Checks if a position is in range of this element
+		 *
+		 * @param pos The position to check
+		 *
+		 * @return If it is in range of the element
+		 */
 		@Override
 		public boolean isInRange(Pos pos) {
 			// TODO
 			return true;
 		}
 
+		/*
 		public boolean isInPixelRange(Pos pos) {
 			// TODO
 			return true;
 		}
+		*/
 
-
+		/**
+		 * Gets the center for the gif
+		 *
+		 * @return The center of the gif
+		 */
 		@Override
 		public Pos getCenter() {
 
@@ -663,6 +996,11 @@ public abstract class Element implements ElementBase {
 		}*/
 
 
+		/**
+		 * Gets the gif for the GifElem
+		 *
+		 * @return The gif of the GifElem
+		 */
 		public Gif getGif() {
 			return gif;
 		}
@@ -681,17 +1019,120 @@ public abstract class Element implements ElementBase {
 		 *
 		 * @return The size of the image
 		 */
-		public Dimension getSize() {
+		public Size getSize() {
 			return size;
 		}
 
 
+		/**
+		 * Checks if the gif is resized
+		 *
+		 * @return If the gif is resized
+		 */
 		public boolean isResized() {
 			return isResized;
 		}
 
+		/**
+		 * Sets if the gif is resized
+		 *
+		 * @param isResized If the gif is resized
+		 */
 		public void setIsResized(boolean isResized) {
 			this.isResized = isResized;
+		}
+
+	}
+
+	/**
+	 * The Button Element
+	 */
+	public final static class Button extends Element {
+
+		private final Element element;
+
+		private final ClickEventHandlerBase handler;
+
+
+		/**
+		 * Construct a Button instance
+		 *
+		 * @param element The element for the Button
+		 * @param handler The handler for the Button
+		 */
+		public Button(Element element, ClickEventHandlerBase handler) {
+			this.element = element;
+			this.handler = handler;
+		}
+
+
+		/**
+		 * Gets the name of the element
+		 *
+		 * @return The name of the element
+		 */
+		@Override
+		public String getName() {
+			return "Button [" + element.getName() + ']';
+		}
+
+		/**
+		 * Checks if a position is in range of this element
+		 *
+		 * @param pos The position to check
+		 *
+		 * @return If it is in range of the element
+		 */
+		@Override
+		public boolean isInRange(Pos pos) {
+			return element.isInRange(pos);
+		}
+
+
+		/**
+		 * Gets the center of the element
+		 *
+		 * @return The center of the element
+		 */
+		@Override
+		public Pos getCenter() {
+			return element.getCenter();
+		}
+
+		/**
+		 * Handles the clicking of the button
+		 */
+		public void handleClick() {
+			handler.onClick();
+		}
+
+
+		/**
+		 * Gets the position of the button
+		 *
+		 * @return The position of the image
+		 */
+		public MutablePos getPosition() {
+			return element.getPosition();
+		}
+
+		/**
+		 * Gets the dimensions of the button
+		 *
+		 * @return The size of the image
+		 */
+		public Size getSize() {
+			return element.getSize();
+		}
+
+
+		/**
+		 * Gets the element of the button
+		 *
+		 * @return The element of the button
+		 */
+		public Element getElement() {
+			return element;
 		}
 
 	}

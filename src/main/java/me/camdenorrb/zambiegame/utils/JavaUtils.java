@@ -4,10 +4,13 @@ import java.util.function.Consumer;
 
 
 /**
- * Utils to make my life easier
+ * Utilities to make my life easier
  */
 public final class JavaUtils {
 
+	/**
+	 * Constructs JavaUtils
+	 */
 	private JavaUtils() {}
 
 

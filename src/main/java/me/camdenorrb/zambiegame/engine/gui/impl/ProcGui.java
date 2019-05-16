@@ -5,10 +5,12 @@ import me.camdenorrb.zambiegame.engine.gif.processing.PGif;
 import me.camdenorrb.zambiegame.engine.gui.impl.element.impl.Element;
 import me.camdenorrb.zambiegame.engine.gui.struct.GuiStruct;
 import me.camdenorrb.zambiegame.engine.manager.PGifManager;
+import me.camdenorrb.zambiegame.impl.Size;
 import me.camdenorrb.zambiegame.impl.pos.Pos;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.event.KeyEvent;
+import processing.event.MouseEvent;
 
 import java.awt.*;
 import java.util.*;
@@ -24,7 +26,7 @@ public class ProcGui extends GuiStruct {
 
 	private final Applet applet;
 
-	private final Dimension size;
+	private final Size size;
 
 
 	private final PGifManager gifManager = new PGifManager();
@@ -34,32 +36,52 @@ public class ProcGui extends GuiStruct {
 	private final Map<UUID, PGif> gifCache = new HashMap<>();
 
 
-
-	public ProcGui(String title, float frameRate, Dimension size) {
+	/**
+	 * Constructs a Processing GUI instance
+	 *
+	 * @param title The title for the GUI
+	 * @param frameRate The frame rate for the GUI
+	 * @param size The size for the GUI
+	 */
+	public ProcGui(String title, float frameRate, Size size) {
 		this.size = size;
 		this.title = title;
 		this.applet = new Applet(this, frameRate);
 	}
 
 
+	/**
+	 * Gets the name of the GUI
+	 *
+	 * @return The name of the GUI
+	 */
 	@Override
 	public String getName() {
 		return "Processing GUI";
 	}
 
 
+	/**
+	 * Handles initialization of the GUI
+	 */
 	@Override
 	protected void onInit() {
 		PApplet.runSketch(new String[] { Applet.class.getName() }, applet);
 		setTitle(title);
 	}
 
+	/**
+	 * Handles the showing of the GUI
+	 */
 	@Override
 	public void onShow() {
 		gifManager.enable();
 		applet.getSurface().setVisible(true);
 	}
 
+	/**
+	 * Handles the hiding of the GUI
+	 */
 	@Override
 	public void onHide() {
 		gifManager.disable();
@@ -67,6 +89,11 @@ public class ProcGui extends GuiStruct {
 	}
 
 
+	/**
+	 * Handles the removing of an element on the GUI
+	 *
+	 * @param element The element to remove
+	 */
 	@Override
 	protected void onRemove(Element element) {
 		if (element instanceof Element.GifElem) {
@@ -83,10 +110,20 @@ public class ProcGui extends GuiStruct {
 	}
 
 
+	/**
+	 * Sets the frame rate of the GUI
+	 *
+	 * @param frameRate The new frame rate
+	 */
 	public void setFrameRate(float frameRate) {
 		applet.setFrameRate(frameRate);
 	}
 
+	/**
+	 * Gets the frame rate of the GUI
+	 *
+	 * @return The frame rate of the GUI
+	 */
 	public float getFrameRate() {
 		return applet.getFrameRate();
 	}
@@ -106,7 +143,7 @@ public class ProcGui extends GuiStruct {
 	 *
 	 * @return The size
 	 */
-	public Dimension getSize() {
+	public Size getSize() {
 		return size;
 	}
 
@@ -116,16 +153,23 @@ public class ProcGui extends GuiStruct {
 	 *
 	 * @param title The new Title
 	 */
-
 	public void setTitle(String title) {
 		applet.getSurface().setTitle(title);
 		this.title = title;
 	}
 
+	/**
+	 * Gets the applet of the GUI
+	 *
+	 * @return The applet
+	 */
 	public Applet getApplet() {
 		return applet;
 	}
 
+	/**
+	 * Clears the GUI of all elements
+	 */
 	@Override
 	public void clear() {
 
@@ -136,8 +180,12 @@ public class ProcGui extends GuiStruct {
 		super.clear();
 	}
 
-
-	public Set<Character> getKeysPressed() {
+	/**
+	 * Gets the keys pressed on the GUI
+	 *
+	 * @return The keys pressed
+	 */
+	public Set<Integer> getKeysPressed() {
 		return applet.getKeysPressed();
 	}
 
@@ -150,26 +198,41 @@ public class ProcGui extends GuiStruct {
 
 		private final ProcGui gui;
 
-		private Set<Character> keysPressed = new HashSet<>();
+		private Set<Integer> keysPressed = new HashSet<>();
 
 
+		/**
+		 * Constructs a Processing Applet
+		 *
+		 * @param gui The Processing GUI
+		 * @param frameRate The frame rate for the Applet
+		 */
 		private Applet(ProcGui gui, float frameRate) {
 			this.gui = gui;
 			this.frameRate = frameRate;
 		}
 
 
+		/**
+		 * Sets the settings of the Applet
+		 */
 		@Override
 		public void settings() {
-			size(size.width, size.height/*, FX2D*/);
+			size((int) size.getWidth(), (int) size.getHeight()/*, FX2D*/);
 		}
 
+		/**
+		 * Sets up the Applet
+		 */
 		@Override
 		public void setup() {
 			hint(ENABLE_STROKE_PURE);
 			hint(ENABLE_ASYNC_SAVEFRAME);
 		}
 
+		/**
+		 * Draws the Applet
+		 */
 		@Override
 		public void draw() {
 			frameRate(frameRate);
@@ -177,52 +240,127 @@ public class ProcGui extends GuiStruct {
 			getElements().forEach(this::draw);
 		}
 
+		/**
+		 * Handles the clicking of a mouse on the Applet
+		 *
+		 * @param event The mouse click event
+		 */
+		@Override
+		public void mouseClicked(MouseEvent event) {
+			super.mouseClicked(event);
+
+			final Pos pos = new Pos(event.getX(), event.getY());
+
+			elements.values().stream()
+				.flatMap(Collection::parallelStream)
+				.filter(it -> it instanceof Element.Button)
+				.filter(it -> it.isInRange(pos))
+				.forEach(it -> ((Element.Button) it).handleClick());
+		}
+
+		/**
+		 * Handles the key pressed on an Applet
+		 *
+		 * @param event The key press event
+		 */
 		@Override
 		public void keyPressed(KeyEvent event) {
 			super.keyPressed(event);
 
-			final char key = event.getKey();
+			final int keyCode = event.getKeyCode();
 
-			keysPressed.add(key);
-			keyListeners.forEach(it -> it.onKeyPress(gui, key));
+			keysPressed.add(keyCode);
+			keyListeners.forEach(it -> it.onKeyPress(gui, keyCode));
 		}
 
+		/**
+		 * Handles the key released on an Applet
+		 *
+		 * @param event The key release event
+		 */
 		@Override
 		public void keyReleased(KeyEvent event) {
 			super.keyReleased();
 
-			final char key = event.getKey();
+			final int keyCode = event.getKeyCode();
 
-			keysPressed.remove(key);
-			keyListeners.forEach(it -> it.onKeyRelease(gui, key));
+			keysPressed.remove(keyCode);
+			keyListeners.forEach(it -> it.onKeyRelease(gui, keyCode));
 		}
 
-		private void drawRect(Pos pos, Color color, Dimension dimensions) {
+
+		/**
+		 * Draws a Rectangle on the Applet
+		 *
+		 * @param pos The position
+		 * @param color The color
+		 * @param size The size
+		 */
+		private void drawRect(Pos pos, Color color, Size size) {
 			fill(color.getRGB());
-			rect((float) pos.getX(), (float) pos.getY(), (float) dimensions.width, (float) dimensions.height);
+			rect((float) pos.getX(), (float) pos.getY(), (float) size.getWidth(), (float) size.getHeight());
 			noFill();
 		}
 
-		private void drawOval(Pos pos, Color color, Dimension dimensions) {
+		/**
+		 * Draws a Oval on the Applet
+		 *
+		 * @param pos The position
+		 * @param color The color
+		 * @param size The size
+		 */
+		private void drawOval(Pos pos, Color color, Size size) {
 			fill(color.getRGB());
-			ellipse((float) pos.getX(), (float) pos.getY(), (float) dimensions.width, (float) dimensions.height);
+			ellipse((float) pos.getX(), (float) pos.getY(), (float) size.getWidth(), (float) size.getHeight());
 			noFill();
 		}
 
-		private void drawText(Pos pos, String content, Dimension dimensions) {
-			text(content, (float) pos.getX(), (float) pos.getY(), (float) dimensions.width, (float) dimensions.height);
+		/**
+		 * Draws Text on the Applet
+		 *
+		 * @param pos The position
+		 * @param fontSize The font size
+		 * @param content The content
+		 * @param size The size of the box
+		 */
+		private void drawText(Pos pos, float fontSize, String content, Size size) {
+			fill(Color.BLACK.getRGB());
+			textSize(fontSize);
+			text(content, (float) pos.getX(), (float) pos.getY(), (float) size.getWidth(), (float) size.getHeight());
+			noFill();
 		}
 
+		/**
+		 * Draws a Line on the Applet
+		 *
+		 * @param start The starting position
+		 * @param end The ending position
+		 * @param color The color
+		 */
 		private void drawLine(Pos start, Pos end, Color color) {
 			stroke(color.getRGB());
 			line((float) start.getX(), (float) start.getY(), (float) end.getX(), (float) end.getY());
 			noStroke();
 		}
 
+		/**
+		 * Draws an Image on the Applet
+		 *
+		 * @param pos The position of the image
+		 * @param image The image to draw
+		 */
 		private void drawImage(Pos pos, PImage image) {
 			image(image, (float) pos.getX(), (float) pos.getY());
 		}
 
+		/**
+		 * Draws a Triangle on teh Applet
+		 *
+		 * @param left The left point
+		 * @param middle The middle point
+		 * @param right The right point
+		 * @param color The color
+		 */
 		private void drawTriangle(Pos left, Pos middle, Pos right, Color color) {
 			fill(color.getRGB());
 			triangle((float) left.getX(), (float) left.getY(), (float) middle.getX(), (float) middle.getY(), (float) right.getX(), (float) right.getY());
@@ -237,11 +375,15 @@ public class ProcGui extends GuiStruct {
 		 */
 		private void draw(Element element) {
 
+			if (element instanceof Element.Button) {
+				draw(((Element.Button) element).getElement());
+				return;
+			}
 			if (element instanceof Element.Text) {
 
 				final Element.Text text = (Element.Text) element;
 
-				drawText(text.getPosition(), text.getData(), text.getSize());
+				drawText(text.getPosition(), text.getFontSize(), text.getData(), text.getSize());
 			}
 
 			else if (element instanceof Element.Line) {
@@ -280,14 +422,14 @@ public class ProcGui extends GuiStruct {
 
 				final Element.Image image = (Element.Image) element;
 
-				final Dimension dimension = image.getSize();
+				final Size size = image.getSize();
 
 				final PImage pImage = imageCache.computeIfAbsent(image.getUUID(), id ->
 					new PImage(image.getImage())
 				);
 
 				if (image.isResized()) {
-					pImage.resize(dimension.width, dimension.height);
+					pImage.resize((int) size.getWidth(), (int) size.getHeight());
 				}
 
 				drawImage(image.getPosition(), pImage);
@@ -297,7 +439,7 @@ public class ProcGui extends GuiStruct {
 
 				final Element.GifElem gifElem = (Element.GifElem) element;
 
-				final Dimension dimension = gifElem.getSize();
+				final Size size = gifElem.getSize();
 
 				final PGif pGif = gifCache.computeIfAbsent(gifElem.getUUID(), id ->
 					new PGif(gifElem.getGif())
@@ -309,23 +451,38 @@ public class ProcGui extends GuiStruct {
 				}
 
 				if (gifElem.isResized()) {
-					pGif.resize(dimension.width, dimension.height);
+					pGif.resize((int) size.getWidth(), (int) size.getHeight());
 				}
 
 				drawImage(gifElem.getPosition(), pGif);
 			}
 		}
 
+		/**
+		 * Gets the frame rate of the Applet
+		 *
+		 * @return The frame rate of the Applet
+		 */
 		public float getFrameRate() {
 			return frameRate;
 		}
 
+		/**
+		 * Sets the frame rate of the Applet
+		 *
+		 * @param frameRate The frame rate
+		 */
 		public void setFrameRate(float frameRate) {
 			this.frameRate = frameRate;
 			if (isVisible()) frameRate(frameRate);
 		}
 
-		public Set<Character> getKeysPressed() {
+		/**
+		 * Gets the keys pressed on the Applet
+		 *
+		 * @return The keys pressed
+		 */
+		public Set<Integer> getKeysPressed() {
 			return Collections.unmodifiableSet(keysPressed);
 		}
 

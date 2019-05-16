@@ -22,6 +22,9 @@ public abstract class GameTimerStruct implements GameTimerBase {
 	protected abstract void onStop();
 
 
+	/**
+	 * Handles the starting of the GameStruct
+	 */
 	@Override
 	public final void start() {
 
@@ -31,6 +34,9 @@ public abstract class GameTimerStruct implements GameTimerBase {
 		isRunning = true;
 	}
 
+	/**
+	 * Handles the stopping of the GameStruct
+	 */
 	@Override
 	public final void stop() {
 
@@ -41,6 +47,11 @@ public abstract class GameTimerStruct implements GameTimerBase {
 	}
 
 
+	/**
+	 * Returns whether or not the timer is running
+	 *
+	 * @return If the timer is running
+	 */
 	@Override
 	public final boolean isRunning() {
 		return isRunning;
