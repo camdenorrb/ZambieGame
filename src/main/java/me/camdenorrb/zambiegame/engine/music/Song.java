@@ -62,7 +62,7 @@ public class Song implements Named {
 	}
 
 	public void stop() {
-		if (!clip.isActive()) {
+		if (clip == null || !clip.isActive()) {
 			return;
 		}
 
@@ -71,7 +71,7 @@ public class Song implements Named {
 
 
 	public void pause() {
-		if (!clip.isActive()) {
+		if (clip == null || !clip.isActive()) {
 			return;
 		}
 
@@ -79,7 +79,7 @@ public class Song implements Named {
 	}
 
 	public void resume() {
-		if (clip.isActive()) {
+		if (clip == null || clip.isActive()) {
 			return;
 		}
 
@@ -87,7 +87,9 @@ public class Song implements Named {
 	}
 
 	public void reset() {
-		clip.close();
+		if (clip != null) {
+			clip.close();
+		}
 
 		play();
 	}
@@ -99,7 +101,7 @@ public class Song implements Named {
 	 * @return If the Song should play
 	 */
 	public boolean isPlaying() {
-		return clip.isActive();
+		return clip != null && clip.isActive();
 	}
 
 
