@@ -287,7 +287,6 @@ public class ZambieGame extends ZambieGameStruct {
 
 		if (!isPaused) return;
 
-		System.out.println(Thread.currentThread().getName());
 		timer.start();
 		zambieTimer.start();
 		song.get().resume();

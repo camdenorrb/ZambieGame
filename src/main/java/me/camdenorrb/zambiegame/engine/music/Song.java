@@ -25,6 +25,12 @@ public class Song implements Named {
 	private final Supplier<AudioInputStream> inputStreamSupplier;
 
 
+	/**
+	 * Construct a Song
+	 *
+	 * @param name The name of the song
+	 * @param inputStreamSupplier The input stream supplier for the song
+	 */
 	public Song(String name, Supplier<InputStream> inputStreamSupplier) {
 		this.name = name;
 		this.inputStreamSupplier = () -> attemptOrBreak(() -> AudioSystem.getAudioInputStream(inputStreamSupplier.get()));
@@ -42,14 +48,17 @@ public class Song implements Named {
 	}
 
 	/**
-	 * blah blah
-	 * @return blah
+	 * Gets the input stream supplier
+	 *
+	 * @return The audio input stream supplier
 	 */
 	public Supplier<AudioInputStream> getInputStreamSupplier() {
 		return inputStreamSupplier;
 	}
 
-
+	/**
+	 * Plays the song
+	 */
 	public void play() {
 		if (clip != null && clip.isActive()) {
 			return;
@@ -61,6 +70,10 @@ public class Song implements Named {
 		clip.start();
 	}
 
+
+	/**
+	 * Stops the song
+	 */
 	public void stop() {
 		if (clip == null || !clip.isActive()) {
 			return;
@@ -70,6 +83,9 @@ public class Song implements Named {
 	}
 
 
+	/**
+	 * Pauses the song
+	 */
 	public void pause() {
 		if (clip == null || !clip.isActive()) {
 			return;
@@ -78,6 +94,9 @@ public class Song implements Named {
 		clip.stop();
 	}
 
+	/**
+	 * Resumes the song
+	 */
 	public void resume() {
 		if (clip == null || clip.isActive()) {
 			return;
@@ -86,6 +105,9 @@ public class Song implements Named {
 		clip.start();
 	}
 
+	/**
+	 * Resets the song
+	 */
 	public void reset() {
 		if (clip != null) {
 			clip.close();
@@ -105,10 +127,20 @@ public class Song implements Named {
 	}
 
 
+	/**
+	 * Gets the audio input stream
+	 *
+	 * @return The audio input stream
+	 */
 	private Optional<AudioInputStream> getAudioInputStream() {
 		return Optional.ofNullable(this.inputStreamSupplier.get());
 	}
 
+	/**
+	 * Creates a new audio clip
+	 *
+	 * @return The new audio clip
+	 */
 	private Optional<Clip> createNewAudioClip() {
 
 		final Optional<AudioInputStream> stream = getAudioInputStream();
@@ -118,16 +150,16 @@ public class Song implements Named {
 		}
 
 		try {
-			Clip clip = AudioSystem.getClip();
+			final Clip clip = AudioSystem.getClip();
 			clip.open(stream.get());
 
 			return Optional.of(clip);
 		}
 		catch (IOException ex) {
-			System.out.println("shit broked [0]");
+			System.out.println("IOException [0]");
 		}
 		catch (LineUnavailableException ex) {
-			System.out.println("shit broked [1]");
+			System.out.println("LineUnavailable [1]");
 		}
 
 		return Optional.empty();
