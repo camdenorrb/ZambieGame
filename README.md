@@ -1,5 +1,6 @@
 # ZambieGame
-A 2D fortress war game, Huemins vs Zambies
+A 2D fortress war game, Huemins vs Zambies that I made as a high school project
+
 
 
 ### Special thanks to:
