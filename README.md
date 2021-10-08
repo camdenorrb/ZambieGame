@@ -15,6 +15,9 @@ A 2D fortress war game, Huemins vs Zambies that I made as a high school project
 ### Music
 * Skepz
 
+### Contributors
+* [Sxtanna](https://github.com/Sxtanna)
+
 ### Tools
 [![JProfiler](https://www.ej-technologies.com/images/product_banners/jprofiler_large.png)]()
 
