@@ -1,7 +1,7 @@
 plugins {
     idea
     application
-    id("com.github.johnrengelman.shadow") version "5.0.0"
+    id("com.github.johnrengelman.shadow") version "7.0.0"
     //kotlin("jvm") version "1.3.31"
 }
 
@@ -29,7 +29,7 @@ dependencies {
     //implementation(kotlin("stdlib"))
     //implementation(kotlin("reflect"))
 
-    implementation("org.processing:core:+")
+    implementation("org.processing:core:3.3.7")
     //implementation("me.camdenorrb:MiniBus:+")
 
     //implementation(files("libs/gifAnimation.jar"))
