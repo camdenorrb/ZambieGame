@@ -10,13 +10,15 @@ public class Main {
 
 	public static void main(String[] args) {
 
+		new TitleScreen().start();
+
+
 		//final SwingGui gui = new SwingGui("Meow", new Dimension(1000, 1000));
 
 		//final ZambieGame game = new ZambieGame();
 		//game.start();
 
 		//new ZambieGame().start();
-		new TitleScreen().start();
 
 		//Thread.sleep(1000);
 
