@@ -34,33 +34,55 @@ public class TitleMenu extends MenuStruct {
 	@Override
 	public void onBuild() {
 
-		final double halfGuiWidth = ZambieGame.CANVAS_WIDTH / 2;
-		final double halfGuiHeight = ZambieGame.CANVAS_HEIGHT / 2;
+		final double halfGuiWidth = ZambieGame.CANVAS_WIDTH / 2.0;
+		final double halfGuiHeight = ZambieGame.CANVAS_HEIGHT / 2.0;
 
 		final Pos centerPos = new Pos(halfGuiWidth, halfGuiHeight);
-		final Pos rectPos = new Pos(centerPos.getX() - (halfGuiWidth / 2), centerPos.getY() - (halfGuiHeight / 2));
-		final Pos titleTextPos = new Pos(centerPos.getX() - 67.5, centerPos.getY() - 100);
 
-		final Pos startTextPos = new Pos(centerPos.getX() - 22.5, centerPos.getY() - 15);
-		final Pos startButtonPos = new Pos(centerPos.getX() - 50, centerPos.getY() - 25);
-
-		final Pos exitTextPos = new Pos(centerPos.getX() - 18.5, centerPos.getY() - 15 + 70);
-		final Pos exitButtonPos = new Pos(centerPos.getX() - 50, centerPos.getY() - 25 + 70);
-
-		addPart(new Element.Rectangle(Color.CYAN.darker(), rectPos, new Size(halfGuiWidth, halfGuiHeight)));
-
-		addPart(new Element.Text("Zambie Game", 20, new Size(135, 30), titleTextPos));
-
-		addPart(new Element.Button(new Element.Rectangle(Color.GREEN.darker(), startButtonPos, new Size(100, 50)), titleScreen::stop));
-
-		addPart(new Element.Text("Start", 20, new Size(45, 30), startTextPos));
-
-		addPart(new Element.Button(new Element.Rectangle(Color.RED.darker(), exitButtonPos, new Size(100, 50)), () ->
-			System.exit(0))
+		addPart(
+			new Element.Rectangle(Color.CYAN.darker(), new Pos(centerPos.getX() - (halfGuiWidth / 2), centerPos.getY() - (halfGuiHeight / 2)), new Size(halfGuiWidth, halfGuiHeight))
 		);
 
-		addPart(new Element.Text("Exit", 20, new Size(37, 30), exitTextPos));
+		addPart(
+			new Element.Text("Zambie Game", 20, new Pos(centerPos.getX() - 67.5, centerPos.getY() - 100))
+		);
 
+		addPart(
+			new Element.Button(
+				new Element.Rectangle(
+					Color.GREEN.darker(),
+					new Pos(centerPos.getX() - 50, centerPos.getY() - 25),
+					new Size(100, 50)
+				),
+				titleScreen::stop
+			)
+		);
+
+		addPart(
+			new Element.Text(
+				"Start",
+				20,
+				new Pos(centerPos.getX() - 22.5, centerPos.getY() + 5)
+			)
+		);
+
+		addPart(
+			new Element.Button(
+				new Element.Rectangle(
+					Color.RED.darker(),
+					new Pos(centerPos.getX() - 50, centerPos.getY() - 25 + 70), new Size(100, 50)
+				),
+				() -> System.exit(0)
+			)
+		);
+
+		addPart(
+			new Element.Text(
+				"Exit",
+				20,
+				new Pos(centerPos.getX() - 18.5, centerPos.getY() + 75)
+			)
+		);
 	}
 
 }

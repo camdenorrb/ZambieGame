@@ -86,8 +86,6 @@ public abstract class Element implements ElementBase {
 		private String data;
 
 
-		private final Size size;
-
 		private final float fontSize;
 
 		private final MutablePos position;
@@ -97,11 +95,10 @@ public abstract class Element implements ElementBase {
 		 * Constructs a text instance
 		 *
 		 * @param data The data for the text
-		 * @param size The size of the text holder
 		 * @param position The position of the text
 		 */
-		public Text(String data, Size size, Pos position) {
-			this(data, 14, size, position);
+		public Text(String data, Pos position) {
+			this(data, 14, position);
 		}
 
 		/**
@@ -109,12 +106,10 @@ public abstract class Element implements ElementBase {
 		 *
 		 * @param data The data for the text
 		 * @param fontSize The font size of the text
-		 * @param size The size of the text holder
 		 * @param position The position of the text
 		 */
-		public Text(String data, float fontSize, Size size, Pos position) {
+		public Text(String data, float fontSize, Pos position) {
 			this.data = data;
-			this.size = size;
 			this.fontSize = fontSize;
 			this.position = position.toMutable();
 		}
@@ -140,13 +135,16 @@ public abstract class Element implements ElementBase {
 		@Override
 		public boolean isInRange(Pos pos) {
 
+			/*
 			final Distance distance = pos.distTo(position);
 
 			final double distX = distance.getX();
 			final double distY = distance.getY();
 
-			return distX > 0 && distX <= size.getWidth()
+			return distX > 0 && distX <= .getWidth()
 				&& distY > 0 && distY <= size.getHeight();
+				*/
+			return false;
 		}
 
 
@@ -165,7 +163,7 @@ public abstract class Element implements ElementBase {
 		 * @return The size of the text
 		 */
 		public Size getSize() {
-			return size;
+			return null;
 		}
 
 		/**

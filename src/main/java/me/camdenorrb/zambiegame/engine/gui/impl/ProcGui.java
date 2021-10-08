@@ -321,12 +321,11 @@ public class ProcGui extends GuiStruct {
 		 * @param pos The position
 		 * @param fontSize The font size
 		 * @param content The content
-		 * @param size The size of the box
 		 */
-		private void drawText(Pos pos, float fontSize, String content, Size size) {
+		private void drawText(Pos pos, float fontSize, String content) {
 			fill(Color.BLACK.getRGB());
 			textSize(fontSize);
-			text(content, (float) pos.getX(), (float) pos.getY(), (float) size.getWidth(), (float) size.getHeight());
+			text(content, (float) pos.getX(), (float) pos.getY());
 			noFill();
 		}
 
@@ -383,7 +382,7 @@ public class ProcGui extends GuiStruct {
 
 				final Element.Text text = (Element.Text) element;
 
-				drawText(text.getPosition(), text.getFontSize(), text.getData(), text.getSize());
+				drawText(text.getPosition(), text.getFontSize(), text.getData());
 			}
 
 			else if (element instanceof Element.Line) {
