@@ -6,8 +6,16 @@ A 2D fortress war game, Huemins vs Zambies that I made as a high school project
     <img src="https://github.com/camdenorrb/ZambieGame/raw/master/screenshots/ZambieGamePlay.png" alt="Gameplay">
 </p>
 
-### Special thanks to:
+## Special thanks to:
 
+### Artwork
+* Ryan Kafka
+* Jason Floyd
+
+### Music
+* Skepz
+
+### Tools
 [![JProfiler](https://www.ej-technologies.com/images/product_banners/jprofiler_large.png)]()
 
 Java profiler: https://www.ej-technologies.com/products/jprofiler/overview.html 
