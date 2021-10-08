@@ -1,7 +1,10 @@
 # ZambieGame
 A 2D fortress war game, Huemins vs Zambies that I made as a high school project
 
-
+<p align="center">
+    <img src="https://github.com/camdenorrb/ZambieGame/raw/master/screenshots/ZambieTitleScreen.png" alt="Title Screen">
+    <img src="https://github.com/camdenorrb/ZambieGame/raw/master/screenshots/ZambieGamePlay.png" alt="Gameplay">
+</p>
 
 ### Special thanks to:
 
