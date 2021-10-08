@@ -107,8 +107,9 @@ public class ZambieGame extends ZambieGameStruct {
 		new Cloud(this, .1).spawn(new Pos(0, 0));
 		new Cloud(this, -.1).spawn(new Pos(gui.getSize().getWidth() - Cloud.WIDTH, gui.getSize().getHeight()));
 
-		gui.addElements(Layer.BACKGROUND,
-				new Element.Rectangle(new Color(63, 122, 77), new Pos(0.0, size.getHeight() - FLOOR_HEIGHT), new Size(size.getWidth(), 250))
+		gui.addElements(
+			Layer.BACKGROUND,
+			new Element.Rectangle(new Color(63, 122, 77), new Pos(0.0, size.getHeight() - FLOOR_HEIGHT), new Size(size.getWidth(), 250))
 		);
 
 

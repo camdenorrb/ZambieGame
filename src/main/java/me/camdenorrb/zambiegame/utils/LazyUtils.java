@@ -25,7 +25,7 @@ public final class LazyUtils {
 	 * @return A lazy reference for the value
 	 */
 	public static <T> LazyStruct<T> lazy(Supplier<T> supplier) {
-		return new LazyStruct<T>() {
+		return new LazyStruct<>() {
 			@Override
 			protected T onGet() {
 				return supplier.get();

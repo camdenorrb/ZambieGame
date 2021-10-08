@@ -52,7 +52,7 @@ public final class TryUtils {
      * Attempts to do an action or prints if failed
      *
      * @param block The block to run
-\    */
+     */
     public static void attemptOrPrintErr(TryBlock block) {
         try {
             block.attempt();

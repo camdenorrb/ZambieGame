@@ -286,7 +286,7 @@ public class Huemin extends EntityStruct {
 			}
 		}
 		else if (y < 0) {
-			if ( !body.getGif().equals(downWalkGif.get())) {
+			if (!body.getGif().equals(downWalkGif.get())) {
 				changeBody(upWalkGif.get());
 			}
 		}
