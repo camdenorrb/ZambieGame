@@ -1,4 +1,7 @@
 # ZambieGame (Old high school project)
+
+[![Build Status](https://drone.12oclock.dev/api/badges/camdenorrb/ZambieGame/status.svg)](https://drone.12oclock.dev/camdenorrb/ZambieGame)
+
 A 2D fortress game, Huemins vs Zambies that I made as a high school project
 
 <p align="center">
