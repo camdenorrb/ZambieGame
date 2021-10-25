@@ -1,4 +1,4 @@
-# ZambieGame
+# ZambieGame (Old high school project)
 A 2D fortress game, Huemins vs Zambies that I made as a high school project
 
 <p align="center">
@@ -11,6 +11,7 @@ A 2D fortress game, Huemins vs Zambies that I made as a high school project
 ### Artwork
 * Ryan Kafka
 * Jason Floyd
+* Skepz (Castles)
 
 ### Music
 * Skepz
