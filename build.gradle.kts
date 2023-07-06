@@ -107,5 +107,5 @@ dependencies {
 }
 
 application {
-    mainClassName = "me.camdenorrb.zambiegame.Main"
+    mainClass.set("me.camdenorrb.zambiegame.Main")
 }
