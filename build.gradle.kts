@@ -1,7 +1,7 @@
 plugins {
     idea
     application
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
     //kotlin("jvm") version "1.3.31"
 }
 
@@ -107,5 +107,5 @@ dependencies {
 }
 
 application {
-    mainClassName = "me.camdenorrb.zambiegame.Main"
+    mainClass.set("me.camdenorrb.zambiegame.Main")
 }
