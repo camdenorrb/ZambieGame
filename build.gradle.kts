@@ -29,7 +29,7 @@ dependencies {
     //implementation(kotlin("stdlib"))
     //implementation(kotlin("reflect"))
 
-    implementation("org.processing:core:4.3.2")
+    implementation("org.processing:core:4.3.3")
     //implementation("me.camdenorrb:MiniBus:+")
 
     //implementation(files("libs/gifAnimation.jar"))
